@@ -18,10 +18,11 @@
     <!--Seeecion de los clientes (Inicio)-->
     <div id="MasterClients" class="divMaster" style="display:none;">
         
-        <div>
-            <h3>Panel principal de clientes</h3>
-            <div id="btnsClients">
-                <button class="btnActions"><i class="fa-regular fa-floppy-disk"></i></button>
+        <div class="row">
+            <h3 class="col-4">Panel principal de clientes</h3>
+            <div id="btnsClients" class="btnsActions_ col-8">                
+                <button class="btnActions" id="btnClientNew"><i class="fa-solid fa-plus"></i></button>
+                <button class="btnActions" id="btnClientSave" onclick="fnBtnClientSave()"><i class="fa-regular fa-floppy-disk"></i></button>
             </div>
             
         </div>
@@ -77,8 +78,8 @@
                 </div>
 
                 <div>
-                    <label for="TxtDniCliente">Documento</label>
-                    <input type="text" id="TxtDniCliente" />
+                    <label for="TxtDocumCliente">Documento</label>
+                    <input type="text" id="TxtDocumCliente" />
                 </div>
 
                 <div>
@@ -96,6 +97,12 @@
 
                     </select>
                 </div>
+
+                <div>
+                    <label for="TxtCommentCliente">Comentario</label>
+                    <input type="text" id="TxtCommentCliente" />
+                </div>
+
             </div>
 
         </div>
