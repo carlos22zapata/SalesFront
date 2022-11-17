@@ -1,0 +1,24 @@
+.divMaster {
+    background-color: rgba(0, 0, 0, 0.425);
+    border-radius: 20px;
+    padding:20px;
+    color: white;
+}
+
+.divPrincipal {
+    margin:20px;
+    
+}
+
+.clientInfo label {
+    width: 100px;
+}
+
+.txtLarge {
+    width: 100px;
+}
+
+.txtSmall{
+    width:50px;
+    
+}

@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "_LayoutEmpty";
+    ViewData["Title"] = "Home Page";
+}
+
+<link rel="stylesheet" href="./css/Login.css" />
+<script src="./js/login.js"></script>
+
+<div class="text-center">
+    <!-- LOGIN CAZA INICIO-->
+
+    <div id="datosLogIn" class="login" >
+            
+        <div class="rows centerLogo">
+            <img src="./img/login2.png" style="width:100px;height:100px;">
+        </div>            
+        
+        <div class="rows justify-content-center" >            
+            <h2 class="titulo" >Login</h2>
+        </div>            
+        
+        <div >    
+            <div class="container">                
+                <div>
+                    <input  id="logInUser" value="" class="login-field col-md-12" type="text" name="txtUser" required="required" placeholder="Nombre de usuario"/>                                   
+                </div> 
+                
+                <div>
+                    <input  id="logInPass" value="" class="login-field col-md-12" type="password" name="txtPassword" required="required" placeholder="Password"/> 
+                                      
+                </div>
+
+                <div>
+                    <button id="botonAceptar" type="button" class="BtnSearch col-md-12" onclick="LogIn(logInUser,logInPass)">INGRESAR</button>                    
+                    @*<a class="col-12" asp-area="" asp-controller="Principal" asp-action="Principal">Ingresar</a>*@
+                </div>
+            </div>
+            
+        </div>
+
+        <label id="lblMessages" style="display:none;">Password invalido !!!</label>
+        
+    </div>    
+
+    <!-- LOGIN CAZA FIN-->
+</div>
+
+

@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewData["Title"] = "Principal";
+}
+
+<link rel="stylesheet" href="~/css/MasterRecords.css" />
+
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Bienvenido al sistema de control de ventas...</p>
+
+
+
+
+<div id="PanelPrincipal" class="divPrincipal">
+
+    <!--Seeecion de los clientes (Inicio)-->
+    <div id="MasterClients" class="divMaster" style="display:none;">
+        
+        <div>
+            <h3>Panel principal de clientes</h3>
+            <div id="btnsClients">
+                <button class="btnActions"><i class="fa-regular fa-floppy-disk"></i></button>
+            </div>
+            
+        </div>
+        
+        <hr />
+        <div class="clientInfo row">
+            <div class="col-6">
+                <div>
+                    <label for="TxtIdCliente">Id</label>
+                    <input type="text" class="txtSmall" id="TxtIdCliente" value="0" readonly/>
+                </div>
+
+                <div>
+                    <label for="TxtFirstNameCliente">Nombre</label>
+                    <input type="text" id="TxtFirstNameCliente" />
+                </div>
+
+                <div>
+                    <label for="TxtLastNameIdCliente">Apellido</label>
+                    <input type="text" id="TxtLastNameIdCliente" />
+                </div>
+
+                <div>
+                    <label for="TxtEmail1Cliente">Correo 1</label>
+                    <input type="text" id="TxtEmail1Cliente" />
+                </div>
+
+                <div>
+                    <label for="TxtEmail2Cliente">Correo 2</label>
+                    <input type="text" id="TxtEmail2Cliente" />
+                </div>
+
+                <div>
+                    <label for="TxtPhone1Cliente">Teléfono 1</label>
+                    <input type="text" id="TxtPhone1Cliente" />
+                </div>
+
+                <div>
+                    <label for="TxtPhone2Cliente">Teléfono 2</label>
+                    <input type="text" id="TxtPhone2Cliente" />
+                </div>
+            </div>
+            
+            <div class="col-6">               
+                <div>
+                    <label for="typeDocumentSelect">Tipo de documento</label>
+                    <select id="typeDocumentSelect">
+                        <option>DNI</option>
+                        <option>Cédula</option>
+                        <option>Pasaporte</option>
+                        <option>Licencia</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="TxtDniCliente">Documento</label>
+                    <input type="text" id="TxtDniCliente" />
+                </div>
+
+                <div>
+                    <label for="TxtAdressCliente">Dirección</label>
+                    <input type="text" id="TxtAdressCliente" />
+                </div>
+
+                <div>
+                    <label for="TxtNationalitySelect">Nacionalidad</label>
+                    <select id="TxtNationalitySelect">
+                        <option>Argentina</option>
+                        <option>Colombia</option>
+                        <option>Ecuador</option>
+                        <option>Perú</option>
+
+                    </select>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--Seeecion de los clientes (Fin)-->
+
+
+    <div id="MasterBranches" class="divMaster" style="display:none;">
+        <h3>Panel principal de sucursales</h3>
+        <hr />
+    </div>
+
+    <div id="MasterCoins" class="divMaster" style="display:none;">
+        <h3>Panel principal de monedas</h3>
+        <hr />
+    </div>
+
+    <div id="MasterChannels" class="divMaster" style="display:none;">
+        <h3>Panel principal de canales</h3>
+        <hr />
+    </div>
+
+    <div id="MasterSellers" class="divMaster" style="display:none;">
+        <h3>Panel principal de vendedores</h3>
+        <hr />
+    </div>
+
+    <div id="MasterEnvelope" class="divMaster" style="display:none;">
+        <h3>Panel principal de sobres</h3>
+        <hr />
+    </div>
+</div>
+
+
+<!--Seeecion de los clientes (Inicio)-->
+

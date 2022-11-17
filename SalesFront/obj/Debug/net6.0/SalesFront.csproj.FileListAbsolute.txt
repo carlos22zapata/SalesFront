@@ -1,0 +1,61 @@
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\appsettings.Development.json
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\appsettings.json
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.staticwebassets.runtime.json
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.exe
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.deps.json
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.runtimeconfig.json
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.dll
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.pdb
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.csproj.AssemblyReference.cache
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.AssemblyInfoInputs.cache
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.AssemblyInfo.cs
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.csproj.CoreCompileInputs.cache
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.RazorAssemblyInfo.cache
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.RazorAssemblyInfo.cs
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\staticwebassets.build.json
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\staticwebassets.development.json
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\scopedcss\bundle\SalesFront.styles.css
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\scopedcss\projectbundle\SalesFront.bundle.scp.css
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.dll
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\refint\SalesFront.dll
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.pdb
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.genruntimeconfig.cache
+C:\Users\MyHP\source\repos\Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\ref\SalesFront.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\appsettings.Development.json
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\appsettings.json
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.staticwebassets.runtime.json
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.exe
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.deps.json
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.runtimeconfig.json
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\SalesFront.pdb
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.csproj.AssemblyReference.cache
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.GeneratedMSBuildEditorConfig.editorconfig
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.AssemblyInfoInputs.cache
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.AssemblyInfo.cs
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.csproj.CoreCompileInputs.cache
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.MvcApplicationPartsAssemblyInfo.cache
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.RazorAssemblyInfo.cache
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.RazorAssemblyInfo.cs
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\staticwebassets.build.json
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\staticwebassets.development.json
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\scopedcss\Views\Shared\_LayoutEmpty.cshtml.rz.scp.css
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\scopedcss\bundle\SalesFront.styles.css
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\scopedcss\projectbundle\SalesFront.bundle.scp.css
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.csproj.CopyComplete
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\refint\SalesFront.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.pdb
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.genruntimeconfig.cache
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\ref\SalesFront.dll

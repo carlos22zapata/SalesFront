@@ -1,0 +1,14 @@
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\SalesFront.exe
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\appsettings.json
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\SalesFront.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\SalesFront.deps.json
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\SalesFront.runtimeconfig.json
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\SalesFront.pdb
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.JsonWebTokens.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Logging.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Protocols.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\Microsoft.IdentityModel.Tokens.dll
+T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Release\net6.0\PubTmp\Out\System.IdentityModel.Tokens.Jwt.dll
