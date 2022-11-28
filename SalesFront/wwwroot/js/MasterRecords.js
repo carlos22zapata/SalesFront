@@ -1,7 +1,8 @@
-﻿//ApiBackEndUrl = 'https://mlapp.tecnovoz.com.ar:8092/api/';
-ApiBackEndUrl = 'https://localhost:44384/api/';
-//FrontEnd = 'https://mlapp.tecnovoz.com.ar:8090/';
-FrontEnd = 'https://localhost:7119/';
+﻿ApiBackEndUrl = 'https://mlapp.tecnovoz.com.ar:8092/api/';
+FrontEnd = 'https://mlapp.tecnovoz.com.ar:8090/';
+
+//ApiBackEndUrl = 'https://localhost:44384/api/';
+//FrontEnd = 'https://localhost:7119/';
 
 var condition = true;
 
@@ -32,19 +33,72 @@ function fnBtnClientSave() {
     let data = [];
     var obj = {};
 
+    var fName = $('#TxtFirstNameCliente').val();
+    var sName = $('#TxtLastNameIdCliente').val();
+    var email1 = $('#TxtEmail1Cliente').val();
+    var email2 = $('#TxtEmail2Cliente').val();
+    var phone1 = $('#TxtPhone1Cliente').val();
+    var phone2 = $('#TxtPhone2Cliente').val();
+    var comment = $('#TxtCommentCliente').val();
+    var documentNumber = $('#TxtDocumCliente').val();
+    var typeDocument = $('#typeDocumentSelect').val();
+    var address = $('#TxtAdressCliente').val();
+    var nationality = $('#TxtNationalitySelect').val();
+
+    if (fName == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el nombre.'
+        });
+        return;
+    }
+    else if (sName == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el apellido.'
+        });
+        return;
+    }
+    else if (email1 == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'Debe incluir al menos un correo electrónico.'
+        });
+        return;
+    }
+    else if (phone1 == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'Debe incluir al menos un teléfono válido.'
+        });
+        return;
+    }
+    else if (documentNumber == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'Debe incluir el número de documento.'
+        });
+        return;
+    }
+
     data.push({
         "clienId": 0,
-        "firstName": $('#TxtFirstNameCliente').val(),
-        "lastName": $('#TxtLastNameIdCliente').val(),
-        "email1": $('#TxtEmail1Cliente').val(),
-        "email2": $('#TxtEmail2Cliente').val(),
-        "phone1": $('#TxtPhone1Cliente').val(),
-        "phone2": $('#TxtPhone2Cliente').val(),
-        "comment": $('#TxtCommentCliente').val(),
-        "documentNumber": "123456",
-        "typeDocument": $('#typeDocumentSelect').val(),
-        "address": "prueba",
-        "nationality": $('#TxtNationalitySelect').val(),
+        "firstName": fName,
+        "lastName": sName,
+        "email1": email1,
+        "email2": email2,
+        "phone1": phone1,
+        "phone2": phone2,
+        "comment": comment,
+        "documentNumber": documentNumber,
+        "typeDocument": typeDocument,
+        "address": address,
+        "nationality": nationality,
         "insertUser": "Admin",
         "dateinsertUser": new Date(),
         "updateUser": "Admin",
@@ -59,15 +113,18 @@ function fnBtnClientSave() {
     let response = fetch(url,
         {
             method: 'POST',
-            body: {
-                client: data[0]
-            }
+            headers: {
+                'Content-Type':
+                    'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data[0])
+
         })
         .then(
             response => response.json())
         .then(
             result => {
-                alert('Aquí');
-            })
+                alert(result);
+            });
 
 }
