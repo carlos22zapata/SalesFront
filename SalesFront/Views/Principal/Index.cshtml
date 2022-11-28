@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Principal";
 }
 
@@ -17,21 +16,22 @@
 
     <!--Seeecion de los clientes (Inicio)-->
     <div id="MasterClients" class="divMaster" style="display:none;">
-        
-        <div>
-            <h3>Panel principal de clientes</h3>
-            <div id="btnsClients">
-                <button class="btnActions"><i class="fa-regular fa-floppy-disk"></i></button>
+
+        <div class="row">
+            <h3 class="col-4">Panel principal de clientes</h3>
+            <div id="btnsClients" class="btnsActions_ col-8">
+                <button class="btnActions" id="btnClientNew"><i class="fa-solid fa-plus"></i></button>
+                <button class="btnActions" id="btnClientSave" onclick="fnBtnClientSave()"><i class="fa-regular fa-floppy-disk"></i></button>
             </div>
-            
+
         </div>
-        
+
         <hr />
         <div class="clientInfo row">
             <div class="col-6">
                 <div>
                     <label for="TxtIdCliente">Id</label>
-                    <input type="text" class="txtSmall" id="TxtIdCliente" value="0" readonly/>
+                    <input type="text" class="txtSmall" id="TxtIdCliente" value="0" readonly />
                 </div>
 
                 <div>
@@ -64,8 +64,8 @@
                     <input type="text" id="TxtPhone2Cliente" />
                 </div>
             </div>
-            
-            <div class="col-6">               
+
+            <div class="col-6">
                 <div>
                     <label for="typeDocumentSelect">Tipo de documento</label>
                     <select id="typeDocumentSelect">
@@ -77,8 +77,8 @@
                 </div>
 
                 <div>
-                    <label for="TxtDniCliente">Documento</label>
-                    <input type="text" id="TxtDniCliente" />
+                    <label for="TxtDocumCliente">Documento</label>
+                    <input type="text" id="TxtDocumCliente" />
                 </div>
 
                 <div>
@@ -96,6 +96,12 @@
 
                     </select>
                 </div>
+
+                <div>
+                    <label for="TxtCommentCliente">Comentario</label>
+                    <input type="text" id="TxtCommentCliente" />
+                </div>
+
             </div>
 
         </div>
@@ -131,4 +137,3 @@
 
 
 <!--Seeecion de los clientes (Inicio)-->
-
