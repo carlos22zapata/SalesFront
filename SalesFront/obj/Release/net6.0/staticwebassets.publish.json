@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ElfzB/wBv5R+X1zO/C928j4zs1fjbV577zHNdX/yXP0=",
+  "Hash": "2YCxU/+zWJkyZmChO/RXTasPT7zzfKjReRJWlxwIE8g=",
   "Source": "SalesFront",
   "BasePath": "_content/SalesFront",
   "Mode": "Default",
@@ -119,6 +119,40 @@
       "OriginalItemSpec": "wwwroot\\css\\site.css"
     },
     {
+      "Identity": "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\wwwroot\\css\\TablesStyle.css",
+      "SourceId": "SalesFront",
+      "SourceType": "Discovered",
+      "ContentRoot": "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\wwwroot\\",
+      "BasePath": "_content/SalesFront",
+      "RelativePath": "css/TablesStyle.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\TablesStyle.css"
+    },
+    {
+      "Identity": "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\wwwroot\\css\\Tooltips.css",
+      "SourceId": "SalesFront",
+      "SourceType": "Discovered",
+      "ContentRoot": "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\wwwroot\\",
+      "BasePath": "_content/SalesFront",
+      "RelativePath": "css/Tooltips.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\Tooltips.css"
+    },
+    {
       "Identity": "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\wwwroot\\favicon.ico",
       "SourceId": "SalesFront",
       "SourceType": "Discovered",
@@ -134,6 +168,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\wwwroot\\img\\Bariloche.png",
+      "SourceId": "SalesFront",
+      "SourceType": "Discovered",
+      "ContentRoot": "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\wwwroot\\",
+      "BasePath": "_content/SalesFront",
+      "RelativePath": "img/Bariloche.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\Bariloche.png"
     },
     {
       "Identity": "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\wwwroot\\img\\login1.png",

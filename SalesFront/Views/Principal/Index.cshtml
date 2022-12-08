@@ -3,72 +3,214 @@
 }
 
 <link rel="stylesheet" href="~/css/MasterRecords.css" />
+<link rel="stylesheet" href="~/css/TablesStyle.css" />
 
 
 <h1>@ViewData["Title"]</h1>
 
 <p>Bienvenido al sistema de control de ventas...</p>
 
-
-
-
 <div id="PanelPrincipal" class="divPrincipal">
 
-    <!--Seeecion de los clientes (Inicio)-->
+    <!--Seleción de los clientes (Inicio)-->
     <div id="MasterClients" class="divMaster" style="display:none;">
 
         <div class="row">
             <h3 class="col-4">Panel principal de clientes</h3>
             <div id="btnsClients" class="btnsActions_ col-8">
-                <button class="btnActions" id="btnClientNew"><i class="fa-solid fa-plus"></i></button>
-                <button class="btnActions" id="btnClientSave" onclick="fnBtnClientSave()"><i class="fa-regular fa-floppy-disk"></i></button>
+                <button class="btnActions" id="btnClientSearch" onclick="fnSearchClient()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnClientSearch" onclick="fnSearchAdvanced()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
+                <button class="btnActions" id="btnClientNew" onclick="fnAddClient()"><i class="fa-solid fa-plus"></i></button>
+                              
             </div>
+
+            <br />
+            <hr />
 
         </div>
 
-        <hr />
-        <div class="clientInfo row">
+        
+
+        <!-- Modal de clientes (Inicio) -->
+
+        <div class="modal fade" id="ModalClients" tabindex="-1" aria-labelledby="ModalClients1" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Nuevo cliente</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <button class="btnActions" id="btnClientSave" onclick="fnBtnClientSave()"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnClientSave" onclick="fnCleanClient()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        
+                        <div class="clientInfo">
+                            <div id="clientIdModal" style="display:none">
+                                <label for="TxtIdCliente">Id</label>
+                                <input type="text" class="txtSmall" id="TxtIdCliente" value="0" readonly style="display:none" />
+                            </div>
+
+                            <div>
+                                <label for="TxtFirstNameCliente">Nombre &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtFirstNameCliente" />
+                            </div>
+
+                            <div>
+                                <label for="TxtLastNameIdCliente">Apellido  &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtLastNameIdCliente" />
+                            </div>
+
+                            <div>
+                                <label for="TxtEmail1Cliente">Correo 1  &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtEmail1Cliente" />
+                            </div>
+
+                            <div>
+                                <label for="TxtEmail2Cliente">Correo 2</label>
+                                <input type="text" id="TxtEmail2Cliente" />
+                            </div>
+
+                            <div>
+                                <label for="TxtPhone1Cliente">Teléfono 1  &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtPhone1Cliente" />
+                            </div>
+
+                            <div>
+                                <label for="TxtPhone2Cliente">Teléfono 2</label>
+                                <input type="text" id="TxtPhone2Cliente" />
+                            </div>
+
+                            <div>
+                                <label for="typeDocumentSelect">Tipo de documento</label>
+                                <select id="typeDocumentSelect" class="selectControl">
+                                    <option>DNI</option>
+                                    <option>Cédula</option>
+                                    <option>Pasaporte</option>
+                                    <option>Licencia</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="TxtNationalitySelect">Nacionalidad</label>
+                                <select id="TxtNationalitySelect" class="selectControl">
+                                    <option>Argentina</option>
+                                    <option>Colombia</option>
+                                    <option>Ecuador</option>
+                                    <option>Perú</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                               @* <label for="TxtDocumCliente">Documento  <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtDocumCliente" class="col-5" />*@
+
+                                <label for="TxtDocumCliente">Documento</label>
+                                <input type="text" id="TxtDocumCliente" />
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="TxtAdressCliente" class="col-4">Dirección</label>
+                                <input type="text" id="TxtAdressCliente" class="col-7" />
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="TxtCommentCliente" class="col-4">Comentario</label>
+                                <input type="text" id="TxtCommentCliente" class="col-7" />
+                            </div>
+                        </div>                        
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <h5 class="col-md-4 alignRight">Id2: </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+        <!-- Modal de clientes (Fin) -->
+
+        <div id="divSearchClient" class="row SearchGeneral">
+
+            <h3>Busqueda</h3>
+
+            <div class="clientInfo row">
+                <div class="col-4">
+                    <label for="TxtFirstNameClienteBasicSearch">Nombre &nbsp; </label>
+                    <input type="text" id="TxtFirstNameClientBasicSearch" />
+                </div>
+                
+                <div class="col-4">
+                    <label for="TxtLastNameIdClientBasicSearch">Apellido  &nbsp; </label>
+                    <input type="text" id="TxtLastNameIdClientBasicSearch" />
+                </div>
+                
+                <div class="col-4">
+                    <label for="TxtDocumClientBasicSearch">Documento </label>
+                    <input type="text" id="TxtDocumClientBasicSearch" />
+                </div>
+                                                
+            </div>           
+
+            <br />
+            <br />
+            <hr />
+
+        </div>
+        
+        <div id="divSearchClientAdvanced" class="clientInfo row" style="display:none;">
+            
+            <h3>Busqueda avanzada</h3>
+            
             <div class="col-6">
-                <div>
-                    <label for="TxtIdCliente">Id</label>
-                    <input type="text" class="txtSmall" id="TxtIdCliente" value="0" readonly />
+                <div style="display:none;">
+                    <label for="TxtIdClientAdvanced">Id</label>
+                    <input type="text" class="txtSmall" id="TxtIdClientAdvanced" value="0" readonly />
                 </div>
 
                 <div>
-                    <label for="TxtFirstNameCliente">Nombre &nbsp; <a style="color:#A52A2A;">*</a></label>
-                    <input type="text" id="TxtFirstNameCliente" />
+                    <label for="TxtFirstNameClientAdvanced">Nombre &nbsp; </label>
+                    <input type="text" id="TxtFirstNameClientAdvanced" />
                 </div>
 
                 <div>
-                    <label for="TxtLastNameIdCliente">Apellido  &nbsp; <a style="color:#A52A2A;">*</a></label>
-                    <input type="text" id="TxtLastNameIdCliente" />
+                    <label for="TxtLastNameIdClientAdvanced">Apellido  &nbsp; </label>
+                    <input type="text" id="TxtLastNameIdClientAdvanced" />
                 </div>
 
                 <div>
-                    <label for="TxtEmail1Cliente">Correo 1  &nbsp; <a style="color:#A52A2A;">*</a></label>
-                    <input type="text" id="TxtEmail1Cliente" />
+                    <label for="TxtEmail1ClientAdvanced">Correo 1  &nbsp; </label>
+                    <input type="text" id="TxtEmail1ClientAdvanced" />
                 </div>
 
                 <div>
-                    <label for="TxtEmail2Cliente">Correo 2</label>
-                    <input type="text" id="TxtEmail2Cliente" />
+                    <label for="TxtEmail2ClientAdvanced">Correo 2</label>
+                    <input type="text" id="TxtEmail2ClientAdvanced" />
                 </div>
 
-                <div>
-                    <label for="TxtPhone1Cliente">Teléfono 1  &nbsp; <a style="color:#A52A2A;">*</a></label>
-                    <input type="text" id="TxtPhone1Cliente" />
-                </div>
-
-                <div>
-                    <label for="TxtPhone2Cliente">Teléfono 2</label>
-                    <input type="text" id="TxtPhone2Cliente" />
-                </div>
             </div>
 
             <div class="col-6">
+
                 <div>
-                    <label for="typeDocumentSelect">Tipo de documento</label>
-                    <select id="typeDocumentSelect">
+                    <label for="TxtPhone1ClientAdvanced">Teléfono 1  &nbsp; </label>
+                    <input type="text" id="TxtPhone1ClientAdvanced" />
+                </div>
+
+                <div>
+                    <label for="TxtPhone2ClientAdvanced">Teléfono 2</label>
+                    <input type="text" id="TxtPhone2ClientAdvanced" />
+                </div>
+
+                <div>
+                    <label for="typeDocumentSelectAdvanced">Tipo de documento</label>
+                    <select id="typeDocumentSelectAdvanced" class="selectControl">
                         <option>DNI</option>
                         <option>Cédula</option>
                         <option>Pasaporte</option>
@@ -77,63 +219,77 @@
                 </div>
 
                 <div>
-                    <label for="TxtDocumCliente">Documento  <a style="color:#A52A2A;">*</a></label>
-                    <input type="text" id="TxtDocumCliente" />
-                </div>
-
-                <div>
-                    <label for="TxtNationalitySelect">Nacionalidad</label>
-                    <select id="TxtNationalitySelect">
-                        <option>Argentina</option>
-                        <option>Colombia</option>
-                        <option>Ecuador</option>
-                        <option>Perú</option>
-
-                    </select>
-                </div>
-
-                <div class="col-md-8">
-                    <label for="TxtAdressCliente" class="col-4">Dirección</label>
-                    <input type="text" id="TxtAdressCliente" class="col-9" />
-                </div>
-
-                <div class="col-md-8">
-                    <label for="TxtCommentCliente" class="col-4">Comentario</label>
-                    <input type="text" id="TxtCommentCliente" class="col-9" />
+                    <label for="TxtDocumClientAdvanced">Documento </label>
+                    <input type="text" id="TxtDocumClientAdvanced" />
                 </div>
 
             </div>
 
+            <br />
+            <hr />
+
+        </div>
+
+        <br />
+
+        <div id="TabClients" class="container">
+            
+            <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                   id="TabClientsT"
+                   data-toggle="table"
+                   data-flat="true"
+                   data-search="true">
+
+                <thead class="bg-dark text-light">
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo 1</th>
+                    <th>Correo 2</th>
+                    <th>Teléfono 1</th>
+                    <th>Teléfono 2</th>
+                    <th>Tipo Doc</th>
+                    <th>Número Doc</th>
+                </thead>
+                <tbody id="rowsClient">
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <!--Seleción de los clientes (Fin)-->
+
+    <div>
+        <div id="MasterBranches" class="divMaster" style="display:none;">
+            <h3>Panel principal de sucursales</h3>
+            <hr />
+        </div>
+
+        <div id="MasterCoins" class="divMaster" style="display:none;">
+            <h3>Panel principal de monedas</h3>
+            <hr />
+        </div>
+
+        <div id="MasterChannels" class="divMaster" style="display:none;">
+            <h3>Panel principal de canales</h3>
+            <hr />
+        </div>
+
+        <div id="MasterSellers" class="divMaster" style="display:none;">
+            <h3>Panel principal de vendedores</h3>
+            <hr />
+        </div>
+
+        <div id="MasterEnvelope" class="divMaster" style="display:none;">
+            <h3>Panel principal de sobres</h3>
+            <hr />
         </div>
     </div>
-    <!--Seeecion de los clientes (Fin)-->
+    
+   
 
-
-    <div id="MasterBranches" class="divMaster" style="display:none;">
-        <h3>Panel principal de sucursales</h3>
-        <hr />
-    </div>
-
-    <div id="MasterCoins" class="divMaster" style="display:none;">
-        <h3>Panel principal de monedas</h3>
-        <hr />
-    </div>
-
-    <div id="MasterChannels" class="divMaster" style="display:none;">
-        <h3>Panel principal de canales</h3>
-        <hr />
-    </div>
-
-    <div id="MasterSellers" class="divMaster" style="display:none;">
-        <h3>Panel principal de vendedores</h3>
-        <hr />
-    </div>
-
-    <div id="MasterEnvelope" class="divMaster" style="display:none;">
-        <h3>Panel principal de sobres</h3>
-        <hr />
-    </div>
 </div>
 
 
-<!--Seeecion de los clientes (Inicio)-->
+
+<!--Seleción de los clientes (Inicio)-->

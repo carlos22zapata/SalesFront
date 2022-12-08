@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+.WhiteLetter {
+    color: white;
+}
+
+.BoldLetter {
+    Font-weight: 700;
+}
+
+.HorizotalTextCenter {
+    display: grid;
+    justify-content: center;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+.BtnSearchIconOnly {
+    color: #d67229;
+    cursor: pointer;
+}
+
+.TableDes {
+    word-break: break-all;
+    /*display:none;*/
+    table-layout: fixed;
+    margin-bottom: 10px;
+    color: black;
+}
+
+
+
+/*Tabla de la busqueda de clienetes*/
+@media only screen and (max-width:800px) {
+
+    /* ######################################################################################## */
+    /* ####################### Tabla principal de los clientes (inicio) ####################### */
+    /* ######################################################################################## */
+       
+
+    #TabClients tbody,
+    #TabClients tr,
+    #TabClients td {
+        display: block;
+    }
+
+    #TabClients thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    #TabClients td {
+        position: relative;
+        padding-left: 50%;
+        border: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    #TabClients td:before {
+        content: attr(data-title);
+        position: absolute;
+        left: 6px;
+        font-weight: bold;
+    }
+
+    #TabClients tr {
+        border-bottom: 1px solid #ccc;
+    }
+
+    table#TabClientsT td:nth-of-type(1):before {
+        content: "ID";
+    }
+
+    table#TabClientsT td:nth-of-type(2):before {
+        content: "NOMBRE";
+    }
+
+    table#TabClientsT td:nth-of-type(3):before {
+        content: "APELLIDO";
+    }
+
+    table#TabClientsT td:nth-of-type(4):before {
+        content: "CORREO 1";
+    }
+
+    table#TabClientsT td:nth-of-type(5):before {
+        content: "CORREO 2";
+    }
+
+    table#TabClientsT td:nth-of-type(6):before {
+        content: "TELEFONO 1";
+    }
+
+    table#TabClientsT td:nth-of-type(7):before {
+        content: "TELEFONO 2";
+    }
+
+    table#TabClientsT td:nth-of-type(8):before {
+        content: "TIPO DOC";
+    }
+
+    table#TabClientsT td:nth-of-type(9):before {
+        content: "NUMERO DOC";
+    }
+
+}

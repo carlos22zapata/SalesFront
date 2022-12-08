@@ -10,9 +10,13 @@ function hideAll() {
     $('.divMaster').hide();
 }
 
-function showDiv(div) {
+function showDiv(divSelPrincipal) {
     hideAll();
-    $('#' + div).show();
+    $('#' + divSelPrincipal).show();
+
+    if (divSelPrincipal == "MasterClients")
+        fnLoadClients(0, 10);
+
     showMenu();
 }
 
@@ -28,6 +32,7 @@ function showMenu() {
     }
 }
 
+//Sección de clientes
 function fnBtnClientSave() {
 
     let data = [];
@@ -69,6 +74,14 @@ function fnBtnClientSave() {
         });
         return;
     }
+    else if (phone1 == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'Debe incluir al menos un teléfono válido.'
+        });
+        return;
+    }
     else if (documentNumber == "") {
         Swal.fire({
             icon: 'warning',
@@ -77,8 +90,6 @@ function fnBtnClientSave() {
         });
         return;
     }
-
-
 
     data.push({
         "clienId": 0,
@@ -100,7 +111,7 @@ function fnBtnClientSave() {
     });
 
     obj.data = data;
-    console.log(JSON.stringify(data[0]));
+    //console.log(JSON.stringify(data[0]));
 
     let url = ApiBackEndUrl + 'Clients/insert';
 
@@ -118,7 +129,125 @@ function fnBtnClientSave() {
             response => response.json())
         .then(
             result => {
-                alert(result);
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Registro agregado exitosamente!',
+                    text: 'Se guardó correctamente el registro'
+                });
+
+                fnCleanClient();
+                fnLoadClients(0, 10);
             });
 
+}
+
+function fnCleanClient() {
+    $('#TxtFirstNameCliente').val('');
+    $('#TxtLastNameIdCliente').val('');
+    $('#TxtEmail1Cliente').val('');
+    $('#TxtEmail2Cliente').val('');
+    $('#TxtPhone1Cliente').val('');
+    $('#TxtPhone2Cliente').val('');
+    $('#TxtCommentCliente').val('');
+    $('#TxtDocumCliente').val('');
+    $('#typeDocumentSelect').val('DNI');
+    $('#TxtAdressCliente').val('');
+    $('#TxtNationalitySelect').val('Argentina');
+}
+
+function fnLoadClients(skip, take) {
+
+    let url = ApiBackEndUrl + 'Clients/GetClients';
+
+    let response = fetch(url,
+        {
+            method: 'GET',
+            headers: {
+                skip: skip,
+                take: take
+            }
+        })
+        .then(
+            response => response.json())
+        .then(
+            result => {
+
+                $("#TabClientsT > tbody").empty();
+                var cont = 0;
+
+                for (var j in result) {
+
+                    var newRow = document.createElement("tr");
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = result[cont].clienId;
+                    newRow.append(newCell);
+                    document.getElementById("rowsClient").appendChild(newRow);
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = result[cont].firstName;
+                    newRow.append(newCell);
+                    document.getElementById("rowsClient").appendChild(newRow); 
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = result[cont].lastName;
+                    newRow.append(newCell);
+                    document.getElementById("rowsClient").appendChild(newRow); 
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = result[cont].email1;
+                    newRow.append(newCell);
+                    document.getElementById("rowsClient").appendChild(newRow); 
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = result[cont].email2;
+                    newRow.append(newCell);
+                    document.getElementById("rowsClient").appendChild(newRow); 
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = result[cont].phone1;
+                    newRow.append(newCell);
+                    document.getElementById("rowsClient").appendChild(newRow); 
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = result[cont].phone2;
+                    newRow.append(newCell);
+                    document.getElementById("rowsClient").appendChild(newRow); 
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = result[cont].typeDocument;
+                    newRow.append(newCell);
+                    document.getElementById("rowsClient").appendChild(newRow); 
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = result[cont].documentNumber;
+                    newRow.append(newCell);
+                    document.getElementById("rowsClient").appendChild(newRow); 
+
+                    cont++;
+                }
+
+                console.log(result);
+            });
+}
+
+function fnSearchClient() {
+   
+}
+
+function fnSearchAdvanced() {
+    var adv = $('#divSearchClientAdvanced').is(':hidden');
+
+    if (adv) {
+        $('#divSearchClientAdvanced').show();
+        $('#divSearchClient').hide();
+    }
+    else {
+        $('#divSearchClientAdvanced').hide();
+        $('#divSearchClient').show();
+    }   
+        
+}
+
+function fnAddClient() {
+    $('#ModalClients').modal('show');
 }
