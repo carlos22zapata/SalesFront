@@ -1,26 +1,30 @@
 ﻿ApiBackEndUrl = 'https://mlapp.tecnovoz.com.ar:8092/api/';
-FrontEnd = 'https://mlapp.tecnovoz.com.ar:8090/';
-//FrontEnd = 'https://localhost:7119/';
+//FrontEnd = 'https://mlapp.tecnovoz.com.ar:8090/';
+
+//ApiBackEndUrl = 'https://localhost:44384/api/';
+FrontEnd = 'https://localhost:7119/';
+
+
 
 function LogIn(user, password) {
     //alert('{"userName":"' + user.value + '","password":"' + password.value + '"}')
     //var jsonBody = '{"userName":"' + user.value + '","password":"' + password.value + '"}';
     //alert(jsonBody);
 
-    if (user.value == "") {
+    if (user == "") {
         $('#lblMessages').html("El nombre de usuario no debe estar vacio !!!");
         $('#lblMessages').show();
         return;
     }
-    else if (password.value == undefined) {
+    else if (password == undefined) {
         $('#lblMessages').html("La contraseña no debe estar vacía !!!");
         $('#lblMessages').show();
         return;
     }
 
     var data = {
-        "userName": user.value,
-        "password": password.value
+        "userName": user,
+        "password": password
     }
 
     

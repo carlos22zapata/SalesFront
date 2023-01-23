@@ -2,6 +2,11 @@
     ViewData["Title"] = "Principal";
 }
 
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
 <link rel="stylesheet" href="~/css/MasterRecords.css" />
 <link rel="stylesheet" href="~/css/TablesStyle.css" />
 
@@ -14,25 +19,18 @@
 
     <!--Seleción de los clientes (Inicio)-->
     <div id="MasterClients" class="divMaster" style="display:none;">
-
         <div class="row">
             <h3 class="col-4">Panel principal de clientes</h3>
             <div id="btnsClients" class="btnsActions_ col-8">
                 <button class="btnActions" id="btnClientSearch" onclick="fnSearchClient()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnClientSearch" onclick="fnSearchAdvanced()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
-                <button class="btnActions" id="btnClientNew" onclick="fnAddClient()"><i class="fa-solid fa-plus"></i></button>
-                              
+                <button class="btnActions" id="btnClientSearch" onclick="fnSearchAdvancedClient()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
+                <button class="btnActions" id="btnClientNew" onclick="fnAddClient()"><i class="fa-solid fa-plus"></i></button>                              
             </div>
-
             <br />
             <hr />
-
         </div>
-
         
-
-        <!-- Modal de clientes (Inicio) -->
-
+        <!-- Modal clientes -->
         <div class="modal fade" id="ModalClients" tabindex="-1" aria-labelledby="ModalClients1" aria-hidden="true">
             
             <div class="modal-dialog">
@@ -46,9 +44,9 @@
                     <div class="modal-body">
                         
                         <button class="btnActions" id="btnClientSave" onclick="fnBtnClientSave()"><i class="fa-regular fa-floppy-disk"></i></button>
-                        <button class="btnActions" id="btnClientSave" onclick="fnCleanClient()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="btnActions" id="btnClientClean" onclick="fnCleanClient()"><i class="fa-solid fa-arrows-rotate"></i></button>
                         
-                        <div class="clientInfo">
+                        <div class="ModalInfo">
                             <div id="clientIdModal" style="display:none">
                                 <label for="TxtIdCliente">Id</label>
                                 <input type="text" class="txtSmall" id="TxtIdCliente" value="0" readonly style="display:none" />
@@ -121,6 +119,13 @@
                                 <label for="TxtCommentCliente" class="col-4">Comentario</label>
                                 <input type="text" id="TxtCommentCliente" class="col-7" />
                             </div>
+
+                            <div>
+                                <label for="SellerSelectClient">Vendedor</label>
+                                <select id="SellerSelectClient" class="selectControl" onclick="fnLoadSelect('SellerSelectClient', 'Sellers/GetSellers')">                                    
+                                </select>
+                            </div>
+
                         </div>                        
 
                     </div>
@@ -134,8 +139,41 @@
             </div>            
         </div>
 
-        <!-- Modal de clientes (Fin) -->
+        <!-- Modal que relaciona las ventas en los clientes -->
+        <div class="modal fade" id="ModalClients_Sales" tabindex="-1" aria-labelledby="ModalClients_Sales1" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
 
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Ventas por cliente</h5>
+                        <label id="idClient_Sales" style="display:none;"></label>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <button class="btnActions" id="" onclick=""><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="" onclick=""><i class="fa-solid fa-arrows-rotate"></i></button>
+                        
+                        <div>
+                            <label id="nameClient_Sales"></label>
+                            <br/>
+                            <label id="documentClient_Sales"></label>
+                        </div>                       
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <h5 class="col-md-4 alignRight">Id2: </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+        <!--Busqueda básica de clientes menú superior-->
         <div id="divSearchClient" class="row SearchGeneral">
 
             <h3>Busqueda</h3>
@@ -164,7 +202,8 @@
 
         </div>
         
-        <div id="divSearchClientAdvanced" class="clientInfo row" style="display:none;">
+        <!--Busqueda de avanzada de clientes menú superior-->
+        <div id="divSearchClientAdvanced" class="ModalInfo row" style="display:none;">
             
             <h3>Busqueda avanzada</h3>
             
@@ -232,6 +271,7 @@
 
         <br />
 
+        <!--Tabla de clientes-->
         <div id="TabClients" class="container">
             
             <table class="table bg-white table-striped table-hover table-sortable TableDes"
@@ -250,14 +290,637 @@
                     <th>Teléfono 2</th>
                     <th>Tipo Doc</th>
                     <th>Número Doc</th>
+                    <th>Ventas</th>
                 </thead>
                 <tbody id="rowsClient">
+                </tbody>
+            </table>
+
+            <div>
+                <a onclick="fnChangeDataGroupClients(5)">5</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupClients(10)">10</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupClients(15)">15</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupClients(20)">20</a> 
+                &nbsp;&nbsp;&nbsp;
+                <label id="selDataGroup" style="display:none;">5</label>
+                
+                &nbsp;&nbsp;
+                <input id="ClientsNPosition" type="number" value="1" min="1" max="99" class="numberPosition" />
+                &nbsp;&nbsp;
+
+            </div>
+
+        </div>
+
+    </div>
+    <!--Seleción de los clientes (Fin)-->
+
+    <!--Seleción de los vendedores (Inicio)-->
+    <div id="MasterSellers" class="divMaster" style="display:none;">
+        
+        <div class="row">
+            <h3 class="col-4">Panel principal de vendedores</h3>
+            <div id="btnsSellers" class="btnsActions_ col-8">
+                <button class="btnActions" id="btnSearchSeller" onclick="fnSearchSeller()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnAdvancedSearchSeller" onclick="fnSearchAdvancedSeller()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
+                <button class="btnActions" id="btnSellerNew" onclick="fnAddSeller()"><i class="fa-solid fa-plus"></i></button>
+                              
+            </div>
+
+            <br />
+            <hr />
+
+        </div>
+
+        <!--Modal Sellers-->
+        <div class="modal fade" id="Modalsellers" tabindex="-1" aria-labelledby="ModalSellers1" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Nuevo vendedor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <button class="btnActions" id="btnSaveSeller" onclick="fnBtnSaveSeller()"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnCleanSeller" onclick="fnCleanSeller()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        
+                        <div class="ModalInfo">
+                            <div id="sellerIdModal" style="display:none">
+                                <label for="TxtIdSeller">Id</label>
+                                <input type="text" class="txtSmall" id="TxtIdSeller" value="0" readonly style="display:none" />
+                            </div>
+
+                            <div>
+                                <label for="TxtFirstNameSeller">Nombre &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtFirstNameSeller" />
+                            </div>
+
+                            <div>
+                                <label for="TxtLastNameSeller">Apellido  &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtLastNameSeller" />
+                            </div>
+
+                            <div>
+                                <label for="TxtEmailseller">Correo &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtEmailseller" />
+                            </div>
+
+                            <div>
+                                <label for="TxtDateSeller">Nacimiento</label>
+                                <input type="date" id="TxtDateSeller" />
+                            </div>
+
+                            <div>
+                                <label for="typeDocumentSelectSeller">Tipo de documento</label>
+                                <select id="typeDocumentSelectSeller" class="selectControl">
+                                    <option>DNI</option>
+                                    <option>Cédula</option>
+                                    <option>Pasaporte</option>
+                                    <option>Licencia</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12">
+                               @* <label for="TxtDocumCliente">Documento  <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtDocumCliente" class="col-5" />*@
+
+                                <label for="TxtDocumSeller">Documento</label>
+                                <input type="text" id="TxtDocumSeller" />
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="TxtCommentSeller" class="col-4">Comentario</label>
+                                <input type="text" id="TxtCommentSeller" class="col-7" />
+                            </div>
+                                                        
+                            <div>
+                                <label for="SelectBranchSeller">Sucursal &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <select id="SelectBranchSeller" class="selectControl" onclick="fnLoadSelect('SelectBranchSeller', 'Branches/GetBranches')">                                    
+                                </select>
+                            </div>
+
+                        </div>                        
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <h5 class="col-md-4 alignRight">Id2: </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+        <div id="divSearchSeller" class="row SearchGeneral">
+
+            <h3>Busqueda</h3>
+
+            <div class="clientInfo row">
+                <div class="col-4">
+                    <label for="TxtFirstNameBasicSearchSeller">Nombre &nbsp; </label>
+                    <input type="text" id="TxtFirstNameBasicSearchSeller" />
+                </div>
+                
+                <div class="col-4">
+                    <label for="TxtLastNameBasicSearchSeller">Apellido  &nbsp; </label>
+                    <input type="text" id="TxtLastNameBasicSearchSeller" />
+                </div>
+                
+                <div class="col-4">
+                    <label for="TxtDocumBasicSearchSeller">Documento </label>
+                    <input type="text" id="TxtDocumBasicSearchSeller" />
+                </div>
+                                                
+            </div>           
+
+            <br />
+            <br />
+            <hr />
+
+        </div>
+
+        <div id="divSearchAdvancedSeller" class="ModalInfo row" style="display:none;">
+            
+            <h3>Busqueda avanzada</h3>
+            
+            <div class="col-6">
+                <div>
+                    <label for="TxtFirstNameSeller">Nombre &nbsp; <a style="color:#A52A2A;">*</a></label>
+                    <input type="text" id="TxtFirstNameSeller" />
+                </div>
+
+                <div>
+                    <label for="TxtLastNameSeller">Apellido  &nbsp; <a style="color:#A52A2A;">*</a></label>
+                    <input type="text" id="TxtLastNameSeller" />
+                </div>
+
+                <div>
+                    <label for="TxtEmailseller">Correo &nbsp; <a style="color:#A52A2A;">*</a></label>
+                    <input type="text" id="TxtEmailseller" />
+                </div>
+
+            </div>
+
+            <div class="col-6">
+
+                <div>
+                    <label for="TxtDateSeller">Nacimiento</label>
+                    <input type="date" id="TxtDateSeller" />
+                </div>
+
+                <div>
+                    <label for="typeDocumentSelectSeller">Tipo de documento</label>
+                    <select id="typeDocumentSelectSeller" class="selectControl">
+                        <option>DNI</option>
+                        <option>Cédula</option>
+                        <option>Pasaporte</option>
+                        <option>Licencia</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    @* <label for="TxtDocumCliente">Documento  <a style="color:#A52A2A;">*</a></label>
+                    <input type="text" id="TxtDocumCliente" class="col-5" />*@
+
+                    <label for="TxtDocumSeller">Documento</label>
+                    <input type="text" id="TxtDocumSeller" />
+                </div>
+
+                <div class="col-md-12">
+                    <label for="TxtBranchSeller" class="col-4">Sucursal</label>
+                    <input type="text" id="TxtBranchSeller" />
+                </div>
+
+            </div>
+
+            <br />
+            <hr />
+
+        </div>
+
+        <!--Tabla Sellers-->
+        <div id="TabSellers" class="container">
+            
+            <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                   id="TabSellersT"
+                   data-toggle="table"
+                   data-flat="true"
+                   data-search="true">
+
+                <thead class="bg-dark text-light">
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>                    
+                    <th>Tipo Doc</th>
+                    <th>Número Doc</th>
+                </thead>
+                <tbody id="rowsSellers">
+                </tbody>
+            </table>
+
+            <div>
+                <a onclick="fnChangeDataGroupClients(5)">5</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupClients(10)">10</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupClients(15)">15</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupClients(20)">20</a> 
+                &nbsp;&nbsp;&nbsp;
+                <label id="selDataGroup" style="display:none;">5</label>
+                
+                &nbsp;&nbsp;
+                <input id="ClientsNPosition" type="number" value="1" min="1" max="99" class="numberPosition" />
+                &nbsp;&nbsp;
+
+            </div>
+
+        </div>
+
+        
+
+       
+    </div>
+    <!--Seleción de los vendedores (Fin)-->
+
+    <!--Sección de los productos (Inicio)-->
+    <div id="MasterProducts" class="divMaster" style="display:none;">
+        
+        <div class="row">
+            <h3 class="col-4">Panel principal de productos</h3>
+            <div id="btnsClients" class="btnsActions_ col-8">
+                <button class="btnActions" id="btnProductsSearch" onclick="fnSearchProducts()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnProductsNew" onclick="fnAddProduct()"><i class="fa-solid fa-plus"></i></button>                              
+            </div>
+
+            <br />
+            <hr />
+        </div>
+        
+        <!--Busqueda básica de productos menú superior-->
+        <div id="divSearchClient" class="row SearchGeneral">
+
+            <h3>Busqueda</h3>
+
+            <div class="clientInfo row">
+                <div class="col-4">
+                    <label for="TxtFirstNameProductBasicSearch">Nombre &nbsp; </label>
+                    <input type="text" id="TxtFirstNameProductBasicSearch" />
+                </div>                                                                                
+            </div>           
+
+            <br />
+            <br />
+            <hr />
+
+        </div>
+
+        <br />
+
+        <!--Tabla de productos-->
+        <div id="TabProducts" class="container">
+            
+            <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                   id="TabProductsT"
+                   data-toggle="table"
+                   data-flat="true"
+                   data-search="true">
+
+                <thead class="bg-dark text-light">
+                    <th>Id</th>
+                    <th>Descripción</th> 
+                    <th>Costo por defecto</th> 
+                </thead>
+                <tbody id="rowsProducts">
+                </tbody>
+            </table>
+
+            <div>
+                <a onclick="fnChangeDataGroupProducts(5)">5</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupProducts(10)">10</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupProducts(15)">15</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupProducts(20)">20</a> 
+                &nbsp;&nbsp;&nbsp;
+                <label id="selDataGroup" style="display:none;">5</label>
+                
+                &nbsp;&nbsp;
+                <input id="ProductsNPosition" type="number" value="1" min="1" max="99" class="numberPosition" />
+                &nbsp;&nbsp;
+
+            </div>
+
+        </div>
+
+        <!-- Modal productos -->
+        <div class="modal fade" id="ModalProducts" tabindex="-1" aria-labelledby="ModalProducts1" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Nuevo producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <button class="btnActions" id="btnClientSave" onclick="fnBtnSaveProduct()"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnClientClean" onclick="fnCleanProducts()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        
+                        <div class="ModalInfo">
+                            <div id="clientIdModal" style="display:none">
+                                <label for="TxtIdProduct">Id</label>
+                                <input type="text" class="txtSmall" id="TxtIdProduct" value="0" readonly style="display:none" />
+                            </div>
+
+                            <div>
+                                <label for="TxtProductDescription">Descripción &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtProductDescription" />
+                            </div>
+
+                            <div>
+                                <label for="TxtProductPrice">Costo &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                @*<input type="number" id="TxtProductPrice" onchange="setTwoNumberDecimal" min="0" max="10" step="0.25" value="0.00"/>*@
+                                <input type="number" id="TxtProductPrice" min="0" max="10" step="0.25" value="0.00"/>
+                            </div>
+                            
+                        </div>                        
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <h5 class="col-md-4 alignRight">Id2: </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+    </div>
+    <!--Sección de los productos (Fin)-->
+
+    <!--Sección de las ventas (Inicio)-->
+
+    <!--Modal de ventas ()-->
+    <div class="modal fade" id="ModalSales" tabindex="-1" aria-labelledby="ModalSales1" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Carrito de compras</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <button class="btnActions" id="btnSaveSale" onclick="fnBtnSaveSale()"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnCleanSale" onclick="fnCleanSale()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        
+                        
+                        <div class="ModalInfo">
+                            <div id="sellerIdModal" style="display:inline">
+                                <label for="TxtIdSale">Id</label>
+                                <input type="text" class="txtSmall" id="TxtIdSeller" value="0" readonly style="display:none" />
+                            </div>
+
+                            <div>
+                                <label for="DpickerDateSale">Fecha</label>
+                                <input type="date" id="DpickerDateSale" />
+                            </div>
+
+                            <div>
+                                <label for="SelectSaleClient">Cliente &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <select id="SelectSaleClient" class="selectControl" onclick="fnLoadSelect('SelectSaleClient', 'Clients/GetClients')">                                    
+                                </select>
+                            </div>
+                                                                                    
+                            <div>
+                                <label for="SelectSaleSeller">Vendedor &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <select id="SelectSaleSeller" class="selectControl" onclick="fnLoadSelect('SelectSaleSeller', 'Sellers/GetSellers')">                                    
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="SelectSaleChannel">Canal &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <select id="SelectSaleChannel" class="selectControl" onclick="fnLoadSelect('SelectSaleChannel', 'Channels/GetChannels')">                                    
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="SelectSaleBranch">Sucursal &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <select id="SelectSaleBranch" class="selectControl" onclick="fnLoadSelect('SelectSaleBranch', 'Branches/GetBranches')">                                    
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="SelectSaleCoin">Moneda &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <select id="SelectSaleCoin" class="selectControl" onclick="fnLoadSelect('SelectSaleCoin', 'Coins/GetCoins')">                                    
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="TxtAmountSale">Monto &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtAmountSale" value="0,00" disabled/>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="TxtCommentSale" class="col-4">Comentario</label>
+                                <input type="text" id="TxtCommentSale" class="col-7" />
+                            </div>
+                            
+                        </div>                        
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <h5 class="col-md-4 alignRight"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+    <!--Modal de detalle de ventas ()-->
+    <div class="modal fade" id="ModalSalesDetail" tabindex="-1" aria-labelledby="ModalSalesDetail1" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> <a id="lblDetalleNro">Detalle del carrito</a></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <button class="btnActions" id="btnSaveSaleDetail" onclick="fnBtnSaveSaleDetail()"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnCleanSaleDetail" onclick="fnCleanSaleDetail()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        
+                        
+                        <div class="ModalInfo">
+                            <div>
+                                <label for="TxtIdSaleDetail">Carrito</label>
+                                <input type="text" class="txtSmall" id="TxtIdSaleDetail" readonly />
+                            </div>
+                            
+                            <div>
+                                <label for="SelectSaleDeailProduct">Producto &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <select id="SelectSaleDeailProduct" class="selectControl" onclick="fnLoadSelect('SelectSaleDeailProduct', 'Products/GetProducts')">                                    
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="SelectSaleDeailFrom">Desde &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <select id="SelectSaleDeailFrom" class="selectControl" onclick="fnLoadSelect('SelectSaleDeailFrom', 'Destinations/GetDestinations')">                                    
+                                </select>
+                            </div>
+                                                                                    
+                            <div>
+                                <label for="SelectSaleDeailTo">Hasta &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <select id="SelectSaleDeailTo" class="selectControl" onclick="fnLoadSelect('SelectSaleDeailTo', 'Destinations/GetDestinations')">                                    
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="TxtAmountSaleDetail">Monto &nbsp; <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtAmountSaleDetail" value="0,00"/>
+                            </div>
+
+                            
+                        </div>                        
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <h5 class="col-md-4 alignRight"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+    <!--Tabla de ventas-->
+    <div id="MasterSales" class="divMaster" style="display:none;">
+       
+        <div class="row">
+            <h3 class="col-4">Panel principal de ventas</h3>
+            <div id="btnsSellers" class="btnsActions_ col-8">
+                <button class="btnActions" id="btnSearchSales" onclick="fnSearchSales()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnAdvancedSearchSales" onclick="fnSearchAdvancedSales()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
+                <button class="btnActions" id="btnSalesNew" onclick="fnAddSales()"><i class="fa-solid fa-plus"></i></button>                             
+            </div>
+
+            <br />
+            <hr />
+        </div>
+
+        <div id="TabSales" class="container">            
+            <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                   id="TabSalesT"
+                   data-toggle="table"
+                   data-flat="true"
+                   data-search="true">
+
+                <thead class="bg-dark text-light">
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Documento</th>
+                    <th>Vendedor</th> 
+                    <th>Número Doc</th>
+                    <th>Monto</th>
+                    <th>Detalle</th>
+                </thead>
+                <tbody id="rowsSales">
+                </tbody>
+            </table>
+        </div>
+            
+        <br />
+
+        <!--Sección detalle del carrito de ventas-->
+        <div class="row">
+            <h3 class="col-4" id="lblDetallecarrito">Detalle del carrito Nro <a id="lblCarNumber"></a></h3>
+            <div id="btnsSellersDetail" class="btnsActions_ col-8">              
+                <button class="btnActions" id="btnSalesDetailNew" onclick="fnAddSalesDetail()"><i class="fa-solid fa-plus"></i></button>           
+            </div>
+
+            <br />
+            <hr />
+        </div>
+
+        <!--Tabla de detalles de las ventas-->
+        <div id="TabSalesDetail" class="container">            
+            <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                   id="TabSalesDetailT"
+                   data-toggle="table"
+                   data-flat="true"
+                   data-search="true">
+
+                <thead class="bg-dark text-light">
+                    <th>Producto</th>
+                    <th>Descripción</th>
+                    <th>Monto</th>                   
+                </thead>
+                <tbody id="rowsSalesDetail">
                 </tbody>
             </table>
         </div>
 
     </div>
-    <!--Seleción de los clientes (Fin)-->
+
+    <!--Sección de las ventas (Fin)-->
+
+    <!--Seccion de los destinos (Inicio) (Sitios de viaje)-->
+
+    <!--Panel principal de destinos-->
+    <div id="MasterDestinations" class="divMaster" style="display:none;">
+        <div class="row">
+        <h3 class="col-4">Destinos</h3>
+        <div id="btnsDestinations" class="btnsActions_ col-8">
+            <button class="btnActions" id="btnDestinations" onclick="fnSearchDestinations()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button class="btnActions" id="btnDestinationsNew" onclick="fnAddDestinations()"><i class="fa-solid fa-plus"></i></button>            
+        </div>
+
+        <br />
+        <hr />
+    </div>
+    </div>
+
+    
+    
+    <!--Sección de los destinos (Fin)-->
+    
+
+    <!--Sección de graficos (Inicio)-->
+    <div id="MasterChats" class="divMaster" style="display:none;">
+        <h3>Indicadores y reportes</h3>
+        <hr />
+
+        <figure class="highcharts-figure">        
+            <div id="container"></div>
+        </figure>
+
+        <figure class="highcharts-figure">
+            <div id="container2"></div>            
+        </figure>
+    </div>
+    <!--Sección de graficos (Fin)-->
 
     <div>
         <div id="MasterBranches" class="divMaster" style="display:none;">
@@ -275,15 +938,7 @@
             <hr />
         </div>
 
-        <div id="MasterSellers" class="divMaster" style="display:none;">
-            <h3>Panel principal de vendedores</h3>
-            <hr />
-        </div>
-
-        <div id="MasterEnvelope" class="divMaster" style="display:none;">
-            <h3>Panel principal de sobres</h3>
-            <hr />
-        </div>
+        
     </div>
     
    
@@ -292,4 +947,6 @@
 
 
 
-<!--Seleción de los clientes (Inicio)-->
+<!--Seleción de los clientes (Fin)-->
+
+

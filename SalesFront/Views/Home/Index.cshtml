@@ -4,7 +4,8 @@
 }
 
 <link rel="stylesheet" href="./css/Login.css" />
-<script src="./js/login.js"></script>
+@*<script src="./js/login.js"></script>*@
+
 
 <div class="text-center">
     <!-- LOGIN CAZA INICIO-->
@@ -31,7 +32,8 @@
                 </div>
 
                 <div>
-                    <button id="botonAceptar" type="button" class="BtnSearch col-md-12" onclick="LogIn(logInUser,logInPass)">INGRESAR</button>                    
+                    <button id="botonAceptar" type="button" class="BtnSearch col-md-12" onclick="LogIn(logInUser.value,logInPass.value)">INGRESAR</button>                    
+                    
                     @*<a class="col-12" asp-area="" asp-controller="Principal" asp-action="Principal">Ingresar</a>*@
                 </div>
             </div>

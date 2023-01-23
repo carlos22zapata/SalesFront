@@ -1,0 +1,4 @@
+﻿- En MarterRecords.js se corrigio la función fnBtnSaveSeller, donde se agregó el modelo de los 
+Branches como un campo mas por la relación que se tenia en la tabla, esto no permitía que se 
+pudiera igualar el json con el registro.
+

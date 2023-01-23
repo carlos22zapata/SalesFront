@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\SalesFront.csproj": {}
+    "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj": {}
   },
   "projects": {
-    "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\SalesFront.csproj": {
+    "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\SalesFront.csproj",
+        "projectUniqueName": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj",
         "projectName": "SalesFront",
-        "projectPath": "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\SalesFront.csproj",
-        "packagesPath": "C:\\Users\\Administrador.WIN-OAU9NV2VHBS\\.nuget\\packages\\",
-        "outputPath": "T:\\SOURCE\\Carlos\\Sales Dominichi\\Front\\WebApplication1\\SalesFront\\SalesFront\\obj\\",
+        "projectPath": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj",
+        "packagesPath": "C:\\Users\\MyHP\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Administrador.WIN-OAU9NV2VHBS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\MyHP\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -46,6 +46,12 @@
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.11, )"
+            },
+            "Microsoft.TypeScript.MSBuild": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[4.9.4, )"
             }
           },
           "imports": [

@@ -10,9 +10,18 @@
     
 }
 
-.clientInfo label {
+.numberPosition{
+    width:50px;
+    background-color:lightgrey;
+    border:none;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.ModalInfo label {
     width: 150px;
 }
+
 
 .txtLarge {
     width: 450px;
@@ -168,4 +177,11 @@ body {
     width:170px;
     height:28px;
     border-radius:3px;
+}
+
+.btnGrid{
+    border:none;
+    background-color:#efad35;
+    color:white;
+    border-radius:5px;
 }
