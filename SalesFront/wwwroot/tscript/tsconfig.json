@@ -10,7 +10,10 @@
     "target": "es2016", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "moduleResolution": "node"
     //"paths": { "sweetalert2": [ "./node_modules/sweetalert2/dist/sweetalert2.d.ts" ] }    
-  }//,
+  },
+  "include": [
+    "./*.ts"
+  ]
   //"include": [
   //  "src/**/*"
   //],

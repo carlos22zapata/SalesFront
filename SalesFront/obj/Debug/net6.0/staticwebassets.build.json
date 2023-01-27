@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "isjYZrXDLr5Mbp4AtAr4dHLRJrIrWvRDBXG7IxZxa8A=",
+  "Hash": "qTBNysszdzZbd/mh2jg3j1flL6CbCMgevJYYiyVkmnA=",
   "Source": "SalesFront",
   "BasePath": "_content/SalesFront",
   "Mode": "Default",
@@ -238,12 +238,12 @@
       "OriginalItemSpec": "wwwroot\\img\\maldives.jpg"
     },
     {
-      "Identity": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\js\\login.js",
+      "Identity": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\js\\login_old.js",
       "SourceId": "SalesFront",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\",
       "BasePath": "_content/SalesFront",
-      "RelativePath": "js/login.js",
+      "RelativePath": "js/login_old.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -252,7 +252,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\login.js"
+      "OriginalItemSpec": "wwwroot\\js\\login_old.js"
     },
     {
       "Identity": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\js\\MasterRecords.js",

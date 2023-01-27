@@ -4,13 +4,11 @@
 }
 
 <link rel="stylesheet" href="./css/Login.css" />
-@*<script src="./js/login.js"></script>*@
-
 
 <div class="text-center">
     <!-- LOGIN CAZA INICIO-->
 
-    <div id="datosLogIn" class="login" >
+    <div id="datosLogIn" class="login">
             
         <div class="rows centerLogo">
             <img src="./img/login2.png" style="width:100px;height:100px;">
@@ -43,6 +41,30 @@
         <label id="lblMessages" style="display:none;">Password invalido !!!</label>
         
     </div>    
+        
+    <div id="datosLogInSucursal" class="login" style="display:none;">
+        <div class="rows centerLogo">
+            <img src="./img/login2.png" style="width:100px;height:100px;">
+        </div>            
+        
+        <div class="rows justify-content-center" >            
+            <h2 class="titulo" >Bienvenido!</h2>
+            <h5 class="titulo" >Seleccione una sucursal</h5>
+        </div> 
+
+        <div >    
+            <div class="container">                
+                <div>
+                    <select id="SelectUserBranch" class="selectControlBig" ></select>                                 
+                </div> 
+                
+                <div>
+                    <button id="botonAceptarSucursal" type="button" class="BtnSearch col-md-12" onclick="LogInSucursal(logInUser.value,logInPass.value)">ACEPTAR</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
 
     <!-- LOGIN CAZA FIN-->
 </div>

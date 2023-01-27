@@ -1,23 +1,18 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-require("jquery");
-class linksApi {
-    constructor() {
-        this.backEnd = "https://mlapp.tecnovoz.com.ar:8092/api/";
-        this.frontEnd = "https://localhost:7119/";
-    }
-    GetBackend() {
-        let ret;
-        (function (ret) {
-            ret[ret["backEnd"] = 0] = "backEnd";
-            ret[ret["frontEnd"] = 1] = "frontEnd";
-        })(ret || (ret = {}));
-        return ret;
-    }
-}
 var ApiBackEndUrl = "https://mlapp.tecnovoz.com.ar:8092/api/";
 var FrontEnd = "https://localhost:7119/";
 function fnLoadSelect(nameControl, url) {
+    var dataWeb = sessionStorage.getItem("TecnoData");
     nameControl = '#' + nameControl;
     var selectControl = $(nameControl);
     if (selectControl[0].childNodes.length > 1)
@@ -27,7 +22,8 @@ function fnLoadSelect(nameControl, url) {
         method: 'GET',
         headers: {
             skip: "0",
-            take: "1000"
+            take: "1000",
+            Authorization: JSON.parse(dataWeb).token
         }
     })
         .then(response => response.json())
@@ -57,10 +53,6 @@ function fnLoadSelect(nameControl, url) {
                     option.val(result[cont].id);
                     option.text(result[cont].firstName + " " + result[cont].lastName);
                     break;
-                case ApiBackEndUrl + 'Branches/GetBranches':
-                    option.val(result[cont].id);
-                    option.text(result[cont].description);
-                    break;
                 case ApiBackEndUrl + 'Products/GetProducts':
                     option.val(result[cont].id);
                     option.text(result[cont].productName);
@@ -69,10 +61,23 @@ function fnLoadSelect(nameControl, url) {
                     option.val(result[cont].id);
                     option.text(result[cont].description);
                     break;
+                case ApiBackEndUrl + 'Account/GetUserSeller':
+                    option.val(result[cont].userId);
+                    option.text(result[cont].firstName + " " + result[cont].lastName);
+                    break;
                 default:
             }
             selectControl.append(option);
             cont++;
+        }
+        if (url == ApiBackEndUrl + 'Account/GetUserSeller') {
+            selectControl.val(JSON.parse(dataWeb).userId);
+        }
+        else if (url == ApiBackEndUrl + 'Branches/GetBranches') {
+            selectControl.val(JSON.parse(dataWeb).BranchId);
+        }
+        else if (url == ApiBackEndUrl + 'Coins/GetCoins') {
+            selectControl.val(1);
         }
     });
 }
@@ -140,54 +145,101 @@ function LogIn(user, password) {
         $('#lblMessages').show();
         return;
     }
-    var data = {
-        "userName": user,
-        "password": password
-    };
-    const request = new Request(ApiBackEndUrl + 'Account', {
-        method: 'POST',
-        body: JSON.stringify(data),
+    let url = ApiBackEndUrl + 'Account/GetTokenUser';
+    let response = fetch(url, {
+        method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            passwordLogin: password,
+            userLogin: user
         }
-    });
-    fetch(request).then((response) => {
-        saveLocalStorage(response);
-        console.log("###### successful session !!! ######");
-        var resp_ = localStorage.getItem("cazaTokenData");
-        let getToken = JSON.parse(resp_);
-        var tt = getToken["token"];
-        $("#logInUser").val("");
-        $("#logInPass").val("");
-        $('#lblMessages').hide();
-        var params = {
-            token: getToken["token"],
-            other_header: 'other_header'
-        };
-        var FrontEnd = "https://localhost:7119/";
-        const principalWeb = FrontEnd + 'Principal';
-        window.open(principalWeb, '_self');
-    }).catch(error => {
+    })
+        .then(response => response.json())
+        .then(result => {
+        sessionStorage.setItem("TecnoData", JSON.stringify(result));
+        $('#datosLogIn').hide();
+        $('#datosLogInSucursal').show();
+        fnSelectUserBranch();
+    })
+        .catch(error => {
         Swal.fire({
-            icon: "error",
-            title: "Error al consultar la API",
-            text: error
+            icon: 'error',
+            title: 'No se acceder a la API!',
+            text: 'Hubo un error: ' + error
         });
     });
 }
-function saveLocalStorage(data) {
-    localStorage.setItem("cazaTokenData", JSON.stringify(data));
+function LogInSucursal() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const principalWeb = FrontEnd + 'Principal';
+        var SelectUserBranch = $('#SelectUserBranch');
+        var BrnchId = SelectUserBranch.val();
+        if (BrnchId == "" || BrnchId == null || BrnchId == undefined) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Debe seleccionar un registro para continuar',
+                text: 'Consulte con el administrador del sistema sobre esto.'
+            });
+            return;
+        }
+        var BrnchName = SelectUserBranch.find('option:selected').text();
+        sessionStorage.setItem("TecnoBranchId", BrnchId);
+        sessionStorage.setItem("TecnoBranchName", BrnchName);
+        yield window.open(principalWeb, '_self');
+    });
+}
+function fnSelectUserBranch() {
+    var dataWeb = sessionStorage.getItem("TecnoData");
+    var userId = JSON.parse(dataWeb).userId;
+    if (userId == null || userId == "" || userId == undefined) {
+        Swal.fire({
+            icon: "error",
+            title: "Inicie sesi�n nuevamente",
+            text: "Debe volver a iniciar sesi�n con su usuario y clave para poder seleccionar una sucursal!!!"
+        });
+        return;
+    }
+    else {
+        let url = ApiBackEndUrl + 'Account/GetUserBranch';
+        let response = fetch(url, {
+            method: 'GET',
+            headers: {
+                UserId: userId.toString(),
+                Authorization: JSON.parse(dataWeb).token
+            }
+        })
+            .then(response => response.json())
+            .then(result => {
+            var SelectUserBranch = $('#SelectUserBranch');
+            SelectUserBranch.empty();
+            for (var j in result) {
+                var option = $(document.createElement("option"));
+                option.val(result[j].BranchesId);
+                option.text(result[j].Description);
+                SelectUserBranch.append(option);
+            }
+            SelectUserBranch.val(JSON.parse(dataWeb).BranchId);
+        })
+            .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'No se pudo completar la operaci�n!',
+                text: 'Hubo un error: ' + error
+            });
+        });
+    }
 }
 function fnAddProduct() {
     $('#ModalProducts').modal('show');
 }
 function fnLoadProducts(skip, take) {
     let url = ApiBackEndUrl + 'Products/GetProducts';
+    var dataWeb = sessionStorage.getItem("TecnoData");
     let response = fetch(url, {
         method: 'GET',
         headers: {
             skip: skip.toString(),
-            take: take.toString()
+            take: take.toString(),
+            Authorization: JSON.parse(dataWeb).token
         }
     })
         .then(response => response.json())
@@ -271,15 +323,18 @@ function fnCleanProducts() {
     $('#TxtProductPrice').val("");
 }
 function fnAddClient() {
+    fnCleanClient();
     $('#ModalClients').modal('show');
 }
 function fnLoadClients(skip, take) {
     let url = ApiBackEndUrl + 'Clients/GetClients';
+    var dataWeb = sessionStorage.getItem("TecnoData");
     let response = fetch(url, {
         method: 'GET',
         headers: {
             skip: skip.toString(),
-            take: take.toString()
+            take: take.toString(),
+            Authorization: JSON.parse(dataWeb).token
         }
     })
         .then(response => response.json())
@@ -291,15 +346,14 @@ function fnLoadClients(skip, take) {
             var name_ = result[cont].firstName;
             var lName_ = result[cont].lastName;
             var email1 = result[cont].email1;
-            var email2 = result[cont].email2;
             var phone1 = result[cont].phone1;
-            var phone2 = result[cont].phone2;
             var tDocument = result[cont].typeDocument;
             var document_ = result[cont].documentNumber;
             var newRow = document.createElement("tr");
             var newCell = document.createElement("td");
             newCell.innerHTML = id_;
             newRow.append(newCell);
+            newCell.style.display = 'none';
             $("#rowsClient").append(newRow);
             var newCell = document.createElement("td");
             newCell.innerHTML = name_;
@@ -314,15 +368,7 @@ function fnLoadClients(skip, take) {
             newRow.append(newCell);
             $("#rowsClient").append(newRow);
             var newCell = document.createElement("td");
-            newCell.innerHTML = email2;
-            newRow.append(newCell);
-            $("#rowsClient").append(newRow);
-            var newCell = document.createElement("td");
             newCell.innerHTML = phone1;
-            newRow.append(newCell);
-            $("#rowsClient").append(newRow);
-            var newCell = document.createElement("td");
-            newCell.innerHTML = phone2;
             newRow.append(newCell);
             $("#rowsClient").append(newRow);
             var newCell = document.createElement("td");
@@ -333,7 +379,7 @@ function fnLoadClients(skip, take) {
             newCell.innerHTML = document_;
             newRow.append(newCell);
             var btn = document.createElement("BUTTON");
-            btn.innerHTML = "Ver";
+            btn.innerHTML = '<i class="fa-solid fa-file-invoice-dollar"></i>';
             btn.classList.add("btnGrid");
             btn.setAttribute('onclick', 'fnSalesClient(' + id_ + ',"' + name_ + ' ' + lName_ + '","' + tDocument + ':' + document_ + '")');
             var newCell = document.createElement("td");
@@ -343,6 +389,7 @@ function fnLoadClients(skip, take) {
             cont++;
         }
         console.log(result);
+        $('#spinnerClients').hide();
     });
 }
 function fnCleanClient() {
@@ -357,14 +404,18 @@ function fnCleanClient() {
     $('#typeDocumentSelect').val('DNI');
     $('#TxtAdressCliente').val('');
     $('#TxtNationalitySelect').val('Argentina');
+    $('#SellerSelectClient').empty();
+    fnLoadSelect('SellerSelectClient', 'Account/GetUserSeller');
 }
 function fnLoadSellers(skip, take) {
     let url = ApiBackEndUrl + 'Sellers/GetSellers';
+    var dataWeb = sessionStorage.getItem("TecnoData");
     let response = fetch(url, {
         method: 'GET',
         headers: {
             skip: skip.toString(),
-            take: take.toString()
+            take: take.toString(),
+            Authorization: JSON.parse(dataWeb).token
         }
     })
         .then(response => response.json())
@@ -406,6 +457,7 @@ function fnAddSeller() {
     $('#Modalsellers').modal('show');
 }
 function fnAddSales() {
+    fnCleanSale();
     $('#ModalSales').modal('show');
 }
 function fnBtnSaveSale() {
@@ -539,12 +591,8 @@ function fnLoadSales(skip, take) {
             newCell.innerHTML = result[cont].DocNum;
             newRow.append(newCell);
             $("#rowsSales").append(newRow);
-            var newCell = document.createElement("td");
-            newCell.innerHTML = result[cont].Amount;
-            newRow.append(newCell);
-            $("#rowsSales").append(newRow);
-            var btn = document.createElement("BUTTON");
-            btn.innerHTML = "Ver";
+            var btn = document.createElement("btnDetailSale");
+            btn.innerHTML = '<i class="fa-solid fa-cart-flatbed-suitcase"></i>';
             btn.classList.add("btnGrid");
             btn.setAttribute('onclick', 'fnSalesDetail(' + result[cont].DocNum + ')');
             var newCell = document.createElement("td");
@@ -554,9 +602,24 @@ function fnLoadSales(skip, take) {
             cont++;
         }
         console.log(result);
+        $('#spinnerSales').hide();
     });
 }
 function fnCleanSale() {
+    var dataWeb = sessionStorage.getItem("TecnoData");
+    var Today = new Date();
+    var TodayString = moment(Today).format("YYYY-MM-DD");
+    $("#DpickerDateSale").val(TodayString);
+    $('#TxtAmountSale').val('0,00');
+    $('#SelectSaleClient').empty();
+    $('#SelectSaleSeller').empty();
+    fnLoadSelect('SelectSaleSeller', 'Account/GetUserSeller');
+    $('#SelectSaleChannel').empty();
+    $('#SelectSaleBranch').empty();
+    fnLoadSelect('SelectSaleBranch', 'Branches/GetBranches');
+    $('#SelectSaleCoin').empty();
+    fnLoadSelect('SelectSaleCoin', 'Coins/GetCoins');
+    $('#TxtCommentSale').val('');
 }
 function fnSalesDetail(DocNum) {
     $('#lblCarNumber').html(DocNum.toString());
@@ -565,6 +628,7 @@ function fnSalesDetail(DocNum) {
 }
 function fnLoadSalesDetail(CreditDocumentId) {
     let url = ApiBackEndUrl + 'ItemsCreditDocuments/GetItemsCreditDocumentsDetail';
+    $('#spinnerSalesDetail').show();
     let response = fetch(url, {
         method: 'GET',
         headers: {
@@ -575,8 +639,15 @@ function fnLoadSalesDetail(CreditDocumentId) {
         .then(result => {
         $("#TabSalesDetailT > tbody").empty();
         var cont = 0;
+        var total = 0;
         for (var j in result) {
+            var amount = result[cont].Amount;
             var newRow = document.createElement("tr");
+            var newCell = document.createElement("td");
+            newCell.innerHTML = result[cont].ItemsCreditDocumentsId;
+            newCell.style.display = 'none';
+            newRow.append(newCell);
+            $("#rowsSalesDetail").append(newRow);
             var newCell = document.createElement("td");
             newCell.innerHTML = result[cont].Product;
             newRow.append(newCell);
@@ -586,11 +657,28 @@ function fnLoadSalesDetail(CreditDocumentId) {
             newRow.append(newCell);
             $("#rowsSalesDetail").append(newRow);
             var newCell = document.createElement("td");
-            newCell.innerHTML = result[cont].Amount;
+            newCell.innerHTML = amount.toLocaleString('de-DE', { minimumFractionDigits: 2 });
+            newRow.append(newCell);
+            $("#rowsSalesDetail").append(newRow);
+            var btn1 = document.createElement("btnDetailSaleDelete");
+            btn1.innerHTML = '<i class="fa-solid fa-delete-left"></i>';
+            btn1.classList.add("btnGridDelete");
+            btn1.setAttribute('onclick', 'fnSalesDetailDelete(' + CreditDocumentId + ',' + result[cont].ItemsCreditDocumentsId + ')');
+            var btn2 = document.createElement("btnDetailSaleUpdate");
+            btn2.innerHTML = '<i class="fa-solid fa-pencil"></i>';
+            btn2.classList.add("btnGridUpdate");
+            btn2.setAttribute('onclick', 'fnSalesDetailUpdate(' + CreditDocumentId + ',' + result[cont].ItemsCreditDocumentsId + ')');
+            var newCell = document.createElement("td");
+            newCell.appendChild(btn1);
+            newCell.appendChild(btn2);
             newRow.append(newCell);
             $("#rowsSalesDetail").append(newRow);
             cont++;
+            total += amount;
         }
+        $('#lblCarNumber').empty();
+        $('#lblCarNumber').html(CreditDocumentId + " - renglones: " + cont + " - total: " + total.toLocaleString('de-DE', { minimumFractionDigits: 2 }));
+        $('#spinnerSalesDetail').hide();
         console.log(result);
     })
         .catch(error => {
@@ -599,6 +687,60 @@ function fnLoadSalesDetail(CreditDocumentId) {
             title: 'Error de consulta',
             text: 'Hubo un error al cargar el detalle del carrito seleccionado'
         });
+    });
+}
+function fnSalesDetailDelete(carNum, carItem) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Desea borrar el registro id:' + carItem + ' del carrito id:' + carNum + ' definitivamente?',
+        text: 'Confirme su solicitud.',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'S�, eliminar!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let url = ApiBackEndUrl + 'ItemsCreditDocuments/deleteItemsCreditDocuments';
+            let response = fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    id: carItem.toString()
+                }
+            })
+                .then(response => response.json())
+                .then(result => {
+                if (result == true) {
+                    fnLoadSalesDetail(carNum);
+                    Swal.fire('Borrado!', 'Registro borrado satisfactoriamente.', 'success');
+                }
+                else {
+                    Swal.fire('Se detecto un error!', 'el archivo no pudo ser borrado.', 'error');
+                }
+            })
+                .catch(error => {
+                Swal.fire('Se detecto un error!', 'Error en la solicitud al sitio remoto (API).', 'error');
+            });
+        }
+    });
+}
+function fnSalesDetailUpdate(carNum, carItem) {
+    $('#lblSalesDetailId').html(carItem.toString());
+    fnAddSalesDetail();
+    fnLoadSelect('SelectSaleDeailProduct', 'Products/GetProducts');
+    fnLoadSelect('SelectSaleDeailFrom', 'Destinations/GetDestinations');
+    fnLoadSelect('SelectSaleDeailTo', 'Destinations/GetDestinations');
+    let url = ApiBackEndUrl + 'ItemsCreditDocuments/GetItemsCreditDocumentsById';
+    let response = fetch(url, {
+        method: 'GET',
+        headers: {
+            id: carItem.toString()
+        }
+    })
+        .then(response => response.json())
+        .then(result => {
+        $('#SelectSaleDeailProduct').val(result.productsId);
+        $('#SelectSaleDeailFrom').val(result.destinationsFrom);
+        $('#SelectSaleDeailTo').val(result.destinationsTo);
+        $('#TxtAmountSaleDetail').val(result.total.toLocaleString('de-DE', { minimumFractionDigits: 2 }));
     });
 }
 function fnAddSalesDetail() {
@@ -622,11 +764,13 @@ function fnBtnSaveSaleDetail() {
     let data = [];
     var obj = {};
     var SaleId_ = $('#TxtIdSaleDetail').val();
+    var SaleDetailId_ = $('#lblSalesDetailId').html();
     var Product_ = $('#SelectSaleDeailProduct').val();
     var From_ = $('#SelectSaleDeailFrom').val();
     var To_ = $('#SelectSaleDeailTo').val();
     var Amount_ = $('#TxtAmountSaleDetail').val();
-    if (Product_ == "") {
+    var isUpdate = (SaleDetailId_ == "" ? false : true);
+    if (Product_ == "" || Product_ == null) {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
@@ -634,7 +778,7 @@ function fnBtnSaveSaleDetail() {
         });
         return;
     }
-    else if (From_ == "") {
+    else if (From_ == "" || From_ == null) {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
@@ -642,7 +786,7 @@ function fnBtnSaveSaleDetail() {
         });
         return;
     }
-    else if (To_ == "") {
+    else if (To_ == "" || To_ == null) {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
@@ -650,7 +794,7 @@ function fnBtnSaveSaleDetail() {
         });
         return;
     }
-    else if (Amount_ == "") {
+    else if (Amount_ == "" || Amount_ == null) {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
@@ -658,39 +802,77 @@ function fnBtnSaveSaleDetail() {
         });
         return;
     }
-    data.push({
-        "id": 0,
-        "creditDocumentsId": SaleId_,
-        "productsId": Product_,
-        "destinationsTo": To_,
-        "destinationsFrom": From_,
-        "total": Amount_
-    });
-    console.log(JSON.stringify(data[0]));
-    let url = ApiBackEndUrl + 'ItemsCreditDocuments/insertItemsCreditDocuments';
-    let response = fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-            mode: 'no-cors'
-        },
-        body: JSON.stringify(data[0])
-    })
-        .then(response => response.json())
-        .then(result => {
-        Swal.fire({
-            icon: 'info',
-            title: 'Registro agregado exitosamente!',
-            text: 'Se guard� correctamente el registro'
+    if (!isUpdate) {
+        data.push({
+            "id": 0,
+            "creditDocumentsId": SaleId_,
+            "productsId": Product_,
+            "destinationsTo": To_,
+            "destinationsFrom": From_,
+            "total": Amount_
         });
-        fnCleanSaleDetail();
-        fnLoadSalesDetail(Number(SaleId_));
-    })
-        .catch(error => {
-        Swal.fire({
-            icon: 'error',
-            title: 'No se pudo guardar el registro!',
-            text: 'Hubo un error: ' + error
+        console.log(JSON.stringify(data[0]));
+        let url = ApiBackEndUrl + 'ItemsCreditDocuments/insertItemsCreditDocuments';
+        let response = fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                mode: 'no-cors'
+            },
+            body: JSON.stringify(data[0])
+        })
+            .then(response => response.json())
+            .then(result => {
+            Swal.fire({
+                icon: 'info',
+                title: 'Registro agregado exitosamente!',
+                text: 'Se guard� correctamente el registro'
+            });
+            fnCleanSaleDetail();
+            fnLoadSalesDetail(Number(SaleId_));
+        })
+            .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'No se pudo guardar el registro!',
+                text: 'Hubo un error: ' + error
+            });
         });
-    });
+    }
+    else {
+        data.push({
+            "id": SaleDetailId_,
+            "creditDocumentsId": SaleId_,
+            "productsId": Product_,
+            "destinationsTo": To_,
+            "destinationsFrom": From_,
+            "total": Amount_
+        });
+        let url = ApiBackEndUrl + 'ItemsCreditDocuments/updateItemsCreditDocuments';
+        let response = fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                mode: 'no-cors'
+            },
+            body: JSON.stringify(data[0])
+        })
+            .then(response => response.json())
+            .then(result => {
+            Swal.fire({
+                icon: 'info',
+                title: 'Registro actualizado exitosamente!',
+                text: 'Se guard� correctamente el cambio.'
+            });
+            fnCleanSaleDetail();
+            fnLoadSalesDetail(Number(SaleId_));
+        })
+            .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'No se pudo guardar el registro!',
+                text: 'Hubo un error: ' + error
+            });
+        });
+    }
 }

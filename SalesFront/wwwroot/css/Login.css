@@ -84,3 +84,12 @@ button {
 	color: white;
 	font-weight:600;
 }
+
+.selectControlBig {
+	width: 305px;
+	height: 28px;
+	border-radius: 3px;
+	border: none;
+	margin-top: 18px;
+	margin-bottom: 30px;
+}

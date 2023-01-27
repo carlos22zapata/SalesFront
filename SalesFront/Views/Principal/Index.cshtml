@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="~/css/MasterRecords.css" />
 <link rel="stylesheet" href="~/css/TablesStyle.css" />
 
-
+<script>var exports = {"__esModule": false};</script>
 <h1>@ViewData["Title"]</h1>
 
 <p>Bienvenido al sistema de control de ventas...</p>
@@ -20,8 +20,16 @@
     <!--Seleción de los clientes (Inicio)-->
     <div id="MasterClients" class="divMaster" style="display:none;">
         <div class="row">
-            <h3 class="col-4">Panel principal de clientes</h3>
-            <div id="btnsClients" class="btnsActions_ col-8">
+            <div class="row col-8"> 
+                <h3 class="col-8">Panel principal de clientes</h3>
+
+                <div id="spinnerClients" class="row col-4">                    
+                    <div  class="spinner-border text-warning col-4" role="status"></div>
+                    <div class="text-warning col-8">Cargando...</div>
+                </div>
+            </div>
+
+            <div id="btnsClients" class="btnsActions_ col-4">
                 <button class="btnActions" id="btnClientSearch" onclick="fnSearchClient()"><i class="fa-solid fa-magnifying-glass"></i></button>
                 <button class="btnActions" id="btnClientSearch" onclick="fnSearchAdvancedClient()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
                 <button class="btnActions" id="btnClientNew" onclick="fnAddClient()"><i class="fa-solid fa-plus"></i></button>                              
@@ -122,7 +130,7 @@
 
                             <div>
                                 <label for="SellerSelectClient">Vendedor</label>
-                                <select id="SellerSelectClient" class="selectControl" onclick="fnLoadSelect('SellerSelectClient', 'Sellers/GetSellers')">                                    
+                                <select id="SellerSelectClient" class="selectControl" onclick="fnLoadSelect('SellerSelectClient', 'Account/GetUserSeller')">                                    
                                 </select>
                             </div>
 
@@ -281,13 +289,11 @@
                    data-search="true">
 
                 <thead class="bg-dark text-light">
-                    <th>Id</th>
+                    <th style="display:none;">Id</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>Correo 1</th>
-                    <th>Correo 2</th>
+                    <th>Correo 1</th>                    
                     <th>Teléfono 1</th>
-                    <th>Teléfono 2</th>
                     <th>Tipo Doc</th>
                     <th>Número Doc</th>
                     <th>Ventas</th>
@@ -692,7 +698,7 @@
                         
                         
                         <div class="ModalInfo">
-                            <div id="sellerIdModal" style="display:inline">
+                            <div id="SalesIdModal" style="display:inline">
                                 <label for="TxtIdSale">Id</label>
                                 <input type="text" class="txtSmall" id="TxtIdSeller" value="0" readonly style="display:none" />
                             </div>
@@ -710,7 +716,7 @@
                                                                                     
                             <div>
                                 <label for="SelectSaleSeller">Vendedor &nbsp; <a style="color:#A52A2A;">*</a></label>
-                                <select id="SelectSaleSeller" class="selectControl" onclick="fnLoadSelect('SelectSaleSeller', 'Sellers/GetSellers')">                                    
+                                <select id="SelectSaleSeller" class="selectControl" onclick="fnLoadSelect('SelectSaleSeller', 'Account/GetUserSeller')">                                    
                                 </select>
                             </div>
 
@@ -808,7 +814,9 @@
 
                     <div class="modal-footer">
                         <div class="row">
-                            <h5 class="col-md-4 alignRight"></h5>
+                            <h5 class="col-md-4 alignRight">
+                                <label id="lblSalesDetailId" style="display:none;"></label>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -819,8 +827,17 @@
     <div id="MasterSales" class="divMaster" style="display:none;">
        
         <div class="row">
-            <h3 class="col-4">Panel principal de ventas</h3>
-            <div id="btnsSellers" class="btnsActions_ col-8">
+            <div class="row col-8"> 
+
+                <h3 class="col-8">Panel principal de ventas</h3>
+
+                <div id="spinnerSales" class="row col-4">                    
+                    <div  class="spinner-border text-warning col-4" role="status"></div>
+                    <div class="text-warning col-8">Cargando...</div>
+                </div>
+                
+            </div>
+            <div id="btnsSellers" class="btnsActions_ col-4">
                 <button class="btnActions" id="btnSearchSales" onclick="fnSearchSales()"><i class="fa-solid fa-magnifying-glass"></i></button>
                 <button class="btnActions" id="btnAdvancedSearchSales" onclick="fnSearchAdvancedSales()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
                 <button class="btnActions" id="btnSalesNew" onclick="fnAddSales()"><i class="fa-solid fa-plus"></i></button>                             
@@ -838,13 +855,12 @@
                    data-search="true">
 
                 <thead class="bg-dark text-light">
-                    <th>Fecha</th>
+                    <th width="15%">Fecha</th>
                     <th>Cliente</th>
                     <th>Documento</th>
                     <th>Vendedor</th> 
-                    <th>Número Doc</th>
-                    <th>Monto</th>
-                    <th>Detalle</th>
+                    <th width="10%">Número Doc</th>
+                    <th width="10%">Detalle</th>
                 </thead>
                 <tbody id="rowsSales">
                 </tbody>
@@ -855,8 +871,19 @@
 
         <!--Sección detalle del carrito de ventas-->
         <div class="row">
-            <h3 class="col-4" id="lblDetallecarrito">Detalle del carrito Nro <a id="lblCarNumber"></a></h3>
-            <div id="btnsSellersDetail" class="btnsActions_ col-8">              
+            <div class="row col-8"> 
+
+                <h4 class="col-8" id="lblDetallecarrito">Detalle del carrito Nro <a id="lblCarNumber"></a></h4>
+
+                <div id="spinnerSalesDetail" class="row col-4" style="display:none;">                    
+                    <div  class="spinner-border text-warning col-4" role="status"></div>
+                    <div class="text-warning col-8">Cargando...</div>
+                </div>
+                
+            </div>
+            
+            
+            <div id="btnsSellersDetail" class="btnsActions_ col-4">              
                 <button class="btnActions" id="btnSalesDetailNew" onclick="fnAddSalesDetail()"><i class="fa-solid fa-plus"></i></button>           
             </div>
 
@@ -873,9 +900,11 @@
                    data-search="true">
 
                 <thead class="bg-dark text-light">
+                    <th style="display:none">IdItem</th>
                     <th>Producto</th>
                     <th>Descripción</th>
-                    <th>Monto</th>                   
+                    <th>Monto</th>    
+                    <th width="10%">Opciones</th>
                 </thead>
                 <tbody id="rowsSalesDetail">
                 </tbody>
@@ -945,7 +974,19 @@
 
 </div>
 
+<script>
+    $(document).ready(function(){
+        var dataWeb = sessionStorage.getItem("TecnoData");
+        var SucursalActual = sessionStorage.getItem("TecnoBranchName");
+        $('#lblUsuario').html("");
+        $('#lblSucursal').html("");
+        $('#lblRol').html("");
 
+        $('#lblUsuario').html(JSON.parse(dataWeb).userName);
+        $('#lblSucursal').html(SucursalActual);
+        $('#lblRol').html(JSON.parse(dataWeb).RoleName);
+    })
+</script>
 
 <!--Seleción de los clientes (Fin)-->
 
