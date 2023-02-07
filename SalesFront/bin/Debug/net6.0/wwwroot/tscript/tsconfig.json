@@ -8,19 +8,19 @@
     "skipLibCheck": true,
     "strict": true, /* Enable all strict type-checking options. */
     "target": "es2016", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "moduleResolution": "node"
-    //"paths": { "sweetalert2": [ "./node_modules/sweetalert2/dist/sweetalert2.d.ts" ] }    
-  },
+    "moduleResolution": "node" //,
+    //"paths": {
+    //  "build": [ "./build" ],
+    //  "front": [ "https://localhost:7119/" ]
+    //}    
+  } ,
   "include": [
-    "./*.ts"
+    "./*.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "./build"
   ]
-  //"include": [
-  //  "src/**/*"
-  //],
-  //"exclude": [
-  //  "node_modules",
-  //  "src/**/*.spec.ts"
-  //]
 
 
 }

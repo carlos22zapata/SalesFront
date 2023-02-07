@@ -28,8 +28,11 @@
 }
 
 .txtSmall{
-    width:50px;
-    
+    width:50px;    
+}
+
+.txtMedium {
+    width: 170px;
 }
 
 .btnActions {

@@ -59,7 +59,6 @@ T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj
 T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.pdb
 T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.genruntimeconfig.cache
 T:\SOURCE\Carlos\Sales Dominichi\Front\WebApplication1\SalesFront\SalesFront\obj\Debug\net6.0\ref\SalesFront.dll
-C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.csproj.AssemblyReference.cache
 C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\bin\Debug\net6.0\wwwroot\tscript\tsconfig.json
 C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\bin\Debug\net6.0\appsettings.json
@@ -76,6 +75,7 @@ C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\bin\Debug\net6.0\Microsof
 C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.csproj.AssemblyReference.cache
 C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.AssemblyInfoInputs.cache
 C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\obj\Debug\net6.0\SalesFront.AssemblyInfo.cs
