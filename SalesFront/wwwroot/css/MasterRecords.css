@@ -51,8 +51,43 @@
     background-color: orange;    
 }
 
+.btnActionsSmall {
+    border-radius: 50px;
+    border: none;
+    width: 25px;
+    height: 25px;
+    background-color: #6ec5b8;
+    color: white;
+    font-size: 15px;
+    float: right;
+    margin-right: 4px;
+}
+
+.btnActionsSmall:hover {
+    background-color: orange;
+}
+
+.highlightSection {
+    background-color: #e4e4e4;
+    border-radius: 10px;
+}
+
+#ModalSales {
+    position: absolute;
+    z-index: 1100;
+}
+
+#ModalClients {
+    position: absolute;
+    z-index: 1200;
+}
+
+#ModalSearch {
+    position: absolute;
+    z-index: 1300;
+}
+
 btnsActions_ {
-    
 }
 
 /* Sidebar Div */
@@ -130,6 +165,7 @@ btnsActions_ {
     max-width: 300px;
     padding: 3px;
     margin-left: 150px;
+    margin-bottom:13px
 }
 
 .menu-float-text {
@@ -169,12 +205,19 @@ body {
     cursor: pointer;
 }
 
-.modal-body{
-    color:black;
+.modal-body {
+    color: black;
+    max-height: 420px;
+    overflow-y: auto;
 }
 
 .modal-header {
     color: black;
+}
+
+/* Important part */
+.modal-dialog {
+    overflow-y: initial !important
 }
 
 .selectControl{
@@ -183,7 +226,7 @@ body {
     border-radius:3px;
 }
 
-.btnGrid {
+.btnGridSalesClients {
     border: none;
     background-color: #efad35;
     color: white;
@@ -192,7 +235,7 @@ body {
     cursor: pointer;
     font-size: 20px;
     font-weight: normal;
-    margin-left:5px
+    margin-left: 5px;
 }
 
 .btnGridDelete {
@@ -207,6 +250,10 @@ body {
     margin-left: 5px
 }
 
+.btnGridDelete title{
+    color: green;
+}
+
 .btnGridUpdate {
     border: none;
     background-color: #2E86C1;
@@ -218,3 +265,17 @@ body {
     font-weight: normal;
     margin-left: 5px
 }
+
+.backGroundSearch {
+    background-color: beige;
+}
+
+.swal2-container {
+    z-index: 10000000 !important;
+}
+
+/*.modal{
+    display: block !important;*/ /* I added this to see the modal, you don't need this */
+/*}*/
+
+

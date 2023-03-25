@@ -21,6 +21,9 @@
     <!--moment-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"  asp-append-version="true"></script>
         
+    <!-- datatables sorter para ordenar las tablas -->
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>*@
+
 </head>
 <body>
     <header>
@@ -72,21 +75,22 @@
                     <a class="menu-text" onclick="showDiv('MasterClients')"><i class="fa-solid fa-address-card"></i> &nbsp; Clientes</a>
                     <a class="menu-text" onclick="showDiv('MasterBranches')"><i class="fa-solid fa-code-branch"></i> &nbsp; Sucursales</a>
                     <a class="menu-text" onclick="showDiv('MasterCoins')"><i class="fas fa-dollar-sign"></i> &nbsp; Monedas</a>
-                    <a class="menu-text" onclick="showDiv('MasterChannels')"><i class="fa-brands fa-stack-exchange"></i> &nbsp; Channels</a>
+                    @*<a class="menu-text" onclick="showDiv('MasterChannels')"><i class="fa-brands fa-stack-exchange"></i> &nbsp; Channels</a>*@
                     @*<a class="menu-text" onclick="showDiv('MasterSellers')"><i class="fa-solid fa-people-robbery"></i> &nbsp; Vendedores</a>*@
                     <a class="menu-text" onclick="showDiv('MasterProducts')"><i class="fa-solid fa-boxes-stacked"></i> &nbsp; Productos</a>
                     <a class="menu-text" onclick="showDiv('MasterDestinations')"><i class="fa-solid fa-plane-arrival"></i> &nbsp; Destinos</a>
+                    <a class="menu-text" onclick="showDiv('MasterHolidays')"><i class="fa-regular fa-calendar-days"></i> &nbsp; Feriados</a>
                 </div>
                              
                 <a class="menu-principal-text" onclick="fnExpandMenu(2)"><i class="fa-solid fa-chalkboard-user menu-principal-text"></i> &nbsp; Procesos</a><hr>
                 <div id="menu-principal-2" class="row" style="display:none;">
                     <a class="menu-text" onclick="showDiv('MasterSales')"><i class="fa-solid fa-address-card"></i> &nbsp; Registro de ventas</a>
-                    <a class="menu-text" onclick="showDiv('MasterSales')"><i class="fa-regular fa-money-bill-1"></i> &nbsp; Registro de pagos</a>
+                    <a class="menu-text" onclick="showDiv('MasterGoals')"><i class="fa-solid fa-bullseye"></i> &nbsp; Registro de objetivos</a>
                 </div>
 
                 <a class="menu-principal-text" onclick="fnExpandMenu(3)"><i class="fa-solid fa-chart-line menu-principal-text"></i> &nbsp; Informes</a><hr>
                 <div id="menu-principal-3" class="row" style="display:none;">
-                    <a class="menu-text" onclick="showDiv('MasterChats')"><i class="fa-solid fa-chart-simple"></i> &nbsp; Indicadores</a>
+                    <a class="menu-text" onclick="showDiv('MasterCharts')"><i class="fa-solid fa-chart-simple"></i> &nbsp; Indicadores</a>
                 </div>
                                 
                 <a class="menu-text" id="aLogOut" asp-controller="Home" asp-action="Index"><i class="fa-solid fa-arrow-right-from-bracket"></i> &nbsp; LogOut</a>

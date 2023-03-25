@@ -11,13 +11,183 @@
 <link rel="stylesheet" href="~/css/TablesStyle.css" />
 
 <script>var exports = {"__esModule": false};</script>
-<h1>@ViewData["Title"]</h1>
-
-<p>Bienvenido al sistema de control de ventas...</p>
 
 <div id="PanelPrincipal" class="divPrincipal">
 
     <!--Seleción de los clientes (Inicio)-->
+
+    <!-- Modal para busqueda general (inicio) -->
+    @*<div class="modal fade" id="ModalSearch" tabindex="-1" aria-labelledby="ModalSearch" aria-hidden="true">*@
+    <div class="modal fade" id="ModalSearch" tabindex="-1" aria-labelledby="ModalSearch1" aria-hidden="true" style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header backGroundSearch">
+                    <label>Busqueda de <label id="lblModalTypeSearch"></label></label>                    
+                    
+                    <div id="spinnerGeneralSearch" class="row col-4">                    
+                        <div  class="spinner-border text-warning col-4" role="status"></div>
+                        <div class="text-warning col-8">Cargando...</div>
+                    </div>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body">  
+                    <input tipe="text" class="col-12" id="txtSearch"/>
+
+                    <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                        id="TableSearchT" 
+                        data-toggle="table"
+                        data-flat="true"
+                        data-search="true">
+                        
+                        <thead class="bg-dark text-light">
+                            <th style="display:none;">Id</th>
+                            <th>Registros encontrados</th>
+                            <th width="35%">_</th>
+                            <th width="8%">_</th>
+                        </thead>
+                        <tbody id="rowsSearch">
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="frameworkDiv modal-footer backGroundSearch">
+                    <div>
+                        <a onclick="fnChangeGeneralSearch(5)">5</a>
+                        &nbsp;
+                        <a onclick="fnChangeGeneralSearch(10)">10</a>
+                        &nbsp;
+                        <a onclick="fnChangeGeneralSearch(15)">15</a>
+                        &nbsp;
+                        <a onclick="fnChangeGeneralSearch(20)">20</a> 
+                        &nbsp;&nbsp;&nbsp;
+                        <label id="selGeneralSearchGroup" style="display:none;">5</label>
+                
+                        &nbsp;&nbsp;
+                        <input id="SalesGeneralSearchNPosition" type="number" value="1" 
+                            min="1" max="99" class="numberPosition" 
+                            onchange="fnLoadGeneralSearch()"/>
+                        &nbsp;&nbsp;
+
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+    <!-- Modal para busqueda general (fin) -->
+
+    <!-- Modal clientes -->
+    <div class="modal fade" id="ModalClients" tabindex="-1" aria-labelledby="ModalClients1" aria-hidden="true" style="display:none;">
+            
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Nuevo cliente <label id="lblOrigin"></label></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                </div>
+
+                <div class="modal-body">
+                        
+                    <button class="btnActions" id="btnClientSave" onclick="fnBtnClientSave()"><i class="fa-regular fa-floppy-disk"></i></button>
+                    <button class="btnActions" id="btnClientClean" onclick="fnCleanClient()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        
+                    <div class="ModalInfo">
+                        <div id="clientIdModal" style="display:none">
+                            <label for="TxtIdCliente">Id</label>
+                            <input type="text" class="txtSmall" id="TxtIdCliente" value="0" readonly style="display:none" />
+                        </div>
+
+                        <div>
+                            <label for="TxtFirstNameCliente">Nombre <a style="color:#A52A2A;">*</a></label>
+                            <input type="text" id="TxtFirstNameCliente" />
+                        </div>
+
+                        <div>
+                            <label for="TxtLastNameIdCliente">Apellido  <a style="color:#A52A2A;">*</a></label>
+                            <input type="text" id="TxtLastNameIdCliente" />
+                        </div>
+
+                        <div>
+                            <label for="TxtEmail1Cliente">Correo 1  <a style="color:#A52A2A;">*</a></label>
+                            <input type="text" id="TxtEmail1Cliente" />
+                        </div>
+
+                        <div>
+                            <label for="TxtEmail2Cliente">Correo 2</label>
+                            <input type="text" id="TxtEmail2Cliente" />
+                        </div>
+
+                        <div>
+                            <label for="TxtPhone1Cliente">Teléfono 1  <a style="color:#A52A2A;">*</a></label>
+                            <input type="text" id="TxtPhone1Cliente" />
+                        </div>
+
+                        <div>
+                            <label for="TxtPhone2Cliente">Teléfono 2</label>
+                            <input type="text" id="TxtPhone2Cliente" />
+                        </div>
+
+                        <div>
+                            <label for="typeDocumentSelect">Tipo de documento</label>
+                            <select id="typeDocumentSelect" class="selectControl">
+                                <option>DNI</option>
+                                <option>Cédula</option>
+                                <option>Pasaporte</option>
+                                <option>Licencia</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="TxtNationalitySelect">Nacionalidad</label>
+                            <select id="TxtNationalitySelect" class="selectControl">
+                                <option>Argentina</option>
+                                <option>Colombia</option>
+                                <option>Ecuador</option>
+                                <option>Perú</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            @* <label for="TxtDocumCliente">Documento  <a style="color:#A52A2A;">*</a></label>
+                            <input type="text" id="TxtDocumCliente" class="col-5" />*@
+
+                            <label for="TxtDocumCliente">Documento <a style="color:#A52A2A;">*</a></label>
+                            <input type="text" id="TxtDocumCliente" />
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="TxtAdressCliente" class="col-4">Dirección <a style="color:#A52A2A;">*</a></label>
+                            <input type="text" id="TxtAdressCliente" class="col-7" />
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="TxtCommentCliente" class="col-4">Comentario</label>
+                            <input type="text" id="TxtCommentCliente" class="col-7" />
+                        </div>
+
+                        <div>
+                            <label for="SellerSelectClient">Vendedor</label>
+                            <select id="SellerSelectClient" class="selectControl" onclick="fnLoadSelect('SellerSelectClient', 'Account/GetUserSeller')">                                    
+                            </select>
+                        </div>
+
+                    </div>                        
+
+                </div>
+
+                <div class="modal-footer">
+                    <div class="row">
+                        <h5 class="col-md-4 alignRight">Id2: </h5>
+                    </div>
+                </div>
+            </div>
+        </div>            
+    </div>
+
     <div id="MasterClients" class="divMaster" style="display:none;">
         <div class="row">
             <div class="row col-8"> 
@@ -32,121 +202,12 @@
             <div id="btnsClients" class="btnsActions_ col-4">
                 <button class="btnActions" id="btnClientSearch" onclick="fnSearchClient()"><i class="fa-solid fa-magnifying-glass"></i></button>
                 <button class="btnActions" id="btnClientAdvancedSearch" onclick="fnSearchAdvancedClient()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
-                <button class="btnActions" id="btnClientNew" onclick="fnAddClient()"><i class="fa-solid fa-plus"></i></button>                              
+                <button class="btnActions" id="btnClientNew" onclick="fnAddClient('')"><i class="fa-solid fa-plus"></i></button>                              
             </div>
             <br />
             <hr />
         </div>
         
-        <!-- Modal clientes -->
-        <div class="modal fade" id="ModalClients" tabindex="-1" aria-labelledby="ModalClients1" aria-hidden="true">
-            
-            <div class="modal-dialog">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Nuevo cliente</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
-                    </div>
-
-                    <div class="modal-body">
-                        
-                        <button class="btnActions" id="btnClientSave" onclick="fnBtnClientSave()"><i class="fa-regular fa-floppy-disk"></i></button>
-                        <button class="btnActions" id="btnClientClean" onclick="fnCleanClient()"><i class="fa-solid fa-arrows-rotate"></i></button>
-                        
-                        <div class="ModalInfo">
-                            <div id="clientIdModal" style="display:none">
-                                <label for="TxtIdCliente">Id</label>
-                                <input type="text" class="txtSmall" id="TxtIdCliente" value="0" readonly style="display:none" />
-                            </div>
-
-                            <div>
-                                <label for="TxtFirstNameCliente">Nombre <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtFirstNameCliente" />
-                            </div>
-
-                            <div>
-                                <label for="TxtLastNameIdCliente">Apellido  <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtLastNameIdCliente" />
-                            </div>
-
-                            <div>
-                                <label for="TxtEmail1Cliente">Correo 1  <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtEmail1Cliente" />
-                            </div>
-
-                            <div>
-                                <label for="TxtEmail2Cliente">Correo 2</label>
-                                <input type="text" id="TxtEmail2Cliente" />
-                            </div>
-
-                            <div>
-                                <label for="TxtPhone1Cliente">Teléfono 1  <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtPhone1Cliente" />
-                            </div>
-
-                            <div>
-                                <label for="TxtPhone2Cliente">Teléfono 2</label>
-                                <input type="text" id="TxtPhone2Cliente" />
-                            </div>
-
-                            <div>
-                                <label for="typeDocumentSelect">Tipo de documento</label>
-                                <select id="typeDocumentSelect" class="selectControl">
-                                    <option>DNI</option>
-                                    <option>Cédula</option>
-                                    <option>Pasaporte</option>
-                                    <option>Licencia</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label for="TxtNationalitySelect">Nacionalidad</label>
-                                <select id="TxtNationalitySelect" class="selectControl">
-                                    <option>Argentina</option>
-                                    <option>Colombia</option>
-                                    <option>Ecuador</option>
-                                    <option>Perú</option>
-                                </select>
-                            </div>
-
-                            <div class="col-12">
-                               @* <label for="TxtDocumCliente">Documento  <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtDocumCliente" class="col-5" />*@
-
-                                <label for="TxtDocumCliente">Documento <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtDocumCliente" />
-                            </div>
-
-                            <div class="col-md-12">
-                                <label for="TxtAdressCliente" class="col-4">Dirección <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtAdressCliente" class="col-7" />
-                            </div>
-
-                            <div class="col-md-12">
-                                <label for="TxtCommentCliente" class="col-4">Comentario</label>
-                                <input type="text" id="TxtCommentCliente" class="col-7" />
-                            </div>
-
-                            <div>
-                                <label for="SellerSelectClient">Vendedor</label>
-                                <select id="SellerSelectClient" class="selectControl" onclick="fnLoadSelect('SellerSelectClient', 'Account/GetUserSeller')">                                    
-                                </select>
-                            </div>
-
-                        </div>                        
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <div class="row">
-                            <h5 class="col-md-4 alignRight">Id2: </h5>
-                        </div>
-                    </div>
-                </div>
-            </div>            
-        </div>
-
         <!-- Modal que relaciona las ventas en los clientes -->
         <div class="modal fade" id="ModalClients_Sales" tabindex="-1" aria-labelledby="ModalClients_Sales1" aria-hidden="true">
             
@@ -296,7 +357,7 @@
                     <th>Teléfono 1</th>
                     <th>Tipo Doc</th>
                     <th>Número Doc</th>
-                    <th>Ventas</th>
+                    <th width="12%">Opciones</th>
                 </thead>
                 <tbody id="rowsClient">
                 </tbody>
@@ -707,8 +768,7 @@
                         
                         <button class="btnActions" id="btnSaveSale" onclick="fnBtnSaveSale()"><i class="fa-regular fa-floppy-disk"></i></button>
                         <button class="btnActions" id="btnCleanSale" onclick="fnCleanSale()"><i class="fa-solid fa-arrows-rotate"></i></button>
-                        
-                        
+                                                
                         <div class="ModalInfo">
                             <div id="SalesIdModal" style="display:none">
                                 <label for="TxtIdSale">Id</label>
@@ -725,10 +785,16 @@
                                 <input type="date" id="DpickerDateSale" />
                             </div>
 
-                            <div>
+                            <div class="highlightSection">
                                 <label for="SelectSaleClient">Cliente <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium" id="TxtSaleClient"/>
+                                <label id="lblSaleClient" style="display:none"></label>
+                                <button id="searchSalesClient" class="btnActionsSmall" onclick="fnShowGeneralSearch('clientes')"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button id="addNewSalesClient" class="btnActionsSmall" onclick="fnAddClient('Ventas')"><i class="fa-solid fa-plus"></i></button>
+
+                                @*<label for="SelectSaleClient">Cliente <a style="color:#A52A2A;">*</a></label>
                                 <select id="SelectSaleClient" class="selectControl" onclick="fnLoadSelect('SelectSaleClient', 'Clients/GetClients')">                                    
-                                </select>
+                                </select>*@
                             </div>
                                                                                     
                             <div>
@@ -757,7 +823,7 @@
 
                             <div>
                                 <label for="TxtAmountSale">Monto <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtAmountSale" value="0,00" disabled/>
+                                <input type="text" id="TxtAmountSale" value="0.00" disabled/>
                             </div>
 
                             <div class="col-md-12">
@@ -766,6 +832,109 @@
                             </div>
                             
                         </div>                        
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <h5 class="col-md-4 alignRight"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+    <!--Modal de pagos en ventas ()-->
+    <div class="modal fade" id="ModalPayment" tabindex="-1" aria-labelledby="ModalPayment1" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Pagos</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <button class="btnActions" id="btnDeletePayment" onclick="fnDeletePayment()"><i class="fa-regular fa-trash-can"></i></button>                        
+                        <button class="btnActions" id="btnSavePayment" onclick="fnBtnSavePayment()"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnCleanPayment" onclick="fnCleanPayment()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                            
+                        <br />
+
+                        <div class="ModalInfo">
+                            <div id="PymentIdModal" style="display:none;">
+                                <label for="TxtIdPayment">Id</label>
+                                <input type="text" class="txtSmall" id="TxtIdPayment" value="0" readonly />
+                            </div>
+
+                            <div>
+                                <label for="DpickerDatePayment">Fecha pago <a style="color:#A52A2A;">*</a></label>
+                                <input type="date" id="DpickerDatePayment" />
+                            </div>
+                            
+                            <div>
+                                <label for="typePayment">Tipo de pago <a style="color:#A52A2A;">*</a></label>
+                                <select id="typePayment" class="selectControl" onchange="fnTypePaymentSelect()">
+                                    <option value="1">Efectivo pesos</option>
+                                    <option value="2">Efectivo dólares</option>
+                                    <option value="3">Efectivo euros</option>|
+                                    <option value="0">Tarjeta de debito</option>
+                                    <option value="0">Tarjeta de crédito</option>
+                                    <option value="0">Transferencia bancaria</option>
+                                </select>
+                            </div>
+
+                            <div id="divEnvelope">
+                                <label for="TxtEnvelope">Sobre# <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium" id="TxtPaymentEnvelope" value="0"/>
+                            </div>
+
+                            <div>
+                                <label for="TxtAmountPayment">Monto <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium" id="TxtAmountPayment" value="0.00"/>
+                                <button id="AddPaimentRecord" class="btnActionsSmall" onclick="fnAddPaymentRecord()"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+
+                            <br />
+                            <div>
+                                <span>Saldo (ARS): <label id="lblTotalOpr">00.00</label></span>     
+                                <label id="lblTotalOpr2" style="display:none;"></label>
+                            </div>
+                            <div>
+                                <div id="TabPayment" class="container">
+            
+                                    <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                                           id="TabPaymentT"
+                                           data-toggle="table"
+                                           data-flat="true"
+                                           data-search="true">
+
+                                        <thead class="bg-dark text-light">
+                                            <th style="display:none;">Id</th>
+                                            <th width="42%">Tipo</th>
+                                            <th>Monto</th>
+                                            <th>Sobre</th>
+                                            <th width="12%">Opc</th>
+                                        </thead>
+                                        <tbody id="rowsPayment">
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                            <br />
+
+                            <div class="col-md-12" style="display:none;">
+                                <label for="TxtCommentPayment" class="col-4">Comentario</label>
+                                <input type="text" id="TxtCommentPayment" class="col-7" />
+                            </div>
+
+                            <span>Valor de la moneda (pesos): <label id="TxtCoinValue">1</label></span>
+                                                                                    
+                        </div>
 
                     </div>
 
@@ -793,7 +962,7 @@
                         
                         <button class="btnActions" id="btnSaveSaleDetail" onclick="fnBtnSaveSaleDetail()"><i class="fa-regular fa-floppy-disk"></i></button>
                         <button class="btnActions" id="btnCleanSaleDetail" onclick="fnCleanSaleDetail()"><i class="fa-solid fa-arrows-rotate"></i></button>
-                        
+                                                
                         <div id="spinnerSalesModal" class="row col-4" style="display:none;">                    
                             <div  class="spinner-border text-warning col-4" role="status"></div>
                             <div class="text-warning col-8">Cargando...</div>
@@ -836,17 +1005,17 @@
 
                             <div>
                                 <label for="TxtAmountSaleDetail">Monto <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtAmountSaleDetail" value="0,00"/>
+                                <input type="text" id="TxtAmountSaleDetail" value="0.00"/>
                             </div>
 
                             <div>
                                 <label for="TxtUtilitySaleDetail">Utilidad <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtUtilitySaleDetail" value="0,00"/>
+                                <input type="text" id="TxtUtilitySaleDetail" value="0.00"/>
                             </div>
 
                             <div>
                                 <label for="TxtMkupSaleDetail">MKUP <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtMkupSaleDetail" value="0,00"/>
+                                <input type="text" id="TxtMkupSaleDetail" value="0.00"/>
                             </div>
 
                             
@@ -882,7 +1051,7 @@
             <div id="btnsSales" class="btnsActions_ col-4">
                 <button class="btnActions" id="btnSearchSales" onclick="fnSearchSales()"><i class="fa-solid fa-magnifying-glass"></i></button>
                 <button class="btnActions" id="btnAdvancedSearchSales" onclick="fnSearchAdvancedSales()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
-                <button class="btnActions" id="btnSalesNew" onclick="fnAddSales()"><i class="fa-solid fa-plus"></i></button>                             
+                <button class="btnActions" id="btnSalesNew" onclick="fnAddSales()"><i class="fa-solid fa-plus"></i></button>                 
             </div>
 
             <br />
@@ -898,16 +1067,37 @@
                    data-search="true">
 
                 <thead class="bg-dark text-light">
-                    <th width="15%">Fecha</th>
+                    <th width="10%">Fecha</th>
                     <th>Cliente</th>
-                    <th width="20%">Documento</th>
+                    <th width="17%">Documento</th>
                     <th>Vendedor</th> 
                     <th width="12%">Número</th>
-                    <th width="10%">Opciones</th>
+                    <th>Monto</th> 
+                    <th width="13%">Opciones</th>
                 </thead>
                 <tbody id="rowsSales">
                 </tbody>
             </table>
+
+            <div>
+                <a onclick="fnChangeDataGroupSales(5)">5</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupSales(10)">10</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupSales(15)">15</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupSales(20)">20</a> 
+                &nbsp;&nbsp;&nbsp;
+                <label id="selDataSalesGroup" style="display:none;">5</label>
+                
+                &nbsp;&nbsp;
+                <input id="SalesNPosition" type="number" value="1" 
+                    min="1" max="99" class="numberPosition" 
+                    onchange="fnLoadSales()"/>
+                &nbsp;&nbsp;
+
+            </div>
+
         </div>
             
         <br />
@@ -962,26 +1152,12 @@
 
     <!--Seccion de los destinos (Inicio) (Sitios de viaje)-->
 
-    <!--Panel principal de destinos-->
-    <div id="MasterDestinations" class="divMaster" style="display:none;">
-        <div class="row">
-        <h3 class="col-4">Destinos</h3>
-        <div id="btnsDestinations" class="btnsActions_ col-8">
-            <button class="btnActions" id="btnDestinations" onclick="fnSearchDestinations()"><i class="fa-solid fa-magnifying-glass"></i></button>
-            <button class="btnActions" id="btnDestinationsNew" onclick="fnAddDestinations()"><i class="fa-solid fa-plus"></i></button>            
-        </div>
-
-        <br />
-        <hr />
-    </div>
-    </div>    
-    
     <!--Sección de los destinos (Fin)-->
     
     <!--Panel principal de sucursales (inicio)-->
 
     <!-- Encabezado de sucursales -->
-    <div id="MasterBranches" class="divBranches" style="display:none;">
+    <div id="MasterBranches" class="divMaster" style="display:none;">
         <div class="row">
             <div class="row col-8"> 
                 <h3 class="col-8">Panel principal de sucursales</h3>
@@ -994,7 +1170,7 @@
 
             <div id="btnsClients" class="btnsActions_ col-4">
                 <button class="btnActions" id="btnBranchSearch" onclick="fnSearchClient()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnBranchNew" onclick="fnAddClient()"><i class="fa-solid fa-plus"></i></button>                              
+                <button class="btnActions" id="btnBranchNew" onclick="fnAddBranches()"><i class="fa-solid fa-plus"></i></button>                              
             </div>
             <br />
             <hr />
@@ -1013,8 +1189,8 @@
                     <th style="display:none;">Id</th>
                     <th>Nombre</th>
                     <th>Email</th>
-                    <th>Zona</th>                    
-                    <th>Tipo de sucursal</th>
+                    <th>Shopping</th>
+                    <th width="10%">Opciones</th>
                 </thead>
                 <tbody id="rowsBranches">
                 </tbody>
@@ -1029,7 +1205,7 @@
                 &nbsp;
                 <a onclick="fnChangeDataGroupBranches(20)">20</a> 
                 &nbsp;&nbsp;&nbsp;
-                <label id="selDataGroup" style="display:none;">5</label>
+                <label id="selDataBranchesGroup" style="display:none;">5</label>
                 
                 &nbsp;&nbsp;
                 <input id="BranchesNPosition" type="number" value="1" 
@@ -1041,16 +1217,593 @@
 
         </div>
 
+        <!--Modal de sucursales (inicio)-->
+        <div class="modal fade" id="ModalBranches" tabindex="-1" aria-labelledby="ModalBranches1" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Sucursales</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <button class="btnActions" id="btnSaveBranches" onclick="fnBtnSaveBranches()"><i class="fa-regular fa-floppy-disk"></i></button>
+                            
+                        <br />
+
+                        <div class="ModalInfo">
+                            
+                            <div id="BranchIdModal" style="display:none;">
+                                <label for="TxtIdBranch">Id moneda</label>
+                                <input type="text" class="txtSmall" id="TxtIdBranch" value="0" readonly />
+                            </div>
+
+                            <div>
+                                <label for="txtNameBranches">Nombre <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="txtNameBranches" />
+                            </div>
+
+                            <div>
+                                <label for="txtEmailBranches">Correo <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="txtEmailBranches" />
+                            </div>
+
+                            <div>
+                                <label for="chkIsShopBranches">Esta en shopping? <a style="color:#A52A2A;">*</a></label>
+                                <input type="checkbox" id="chkIsShopBranches" />
+                            </div>
+                            
+                            <br />                                                                                                        
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <h5 class="col-md-4 alignRight"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
     </div>
     <!--Panel principal de sucursales (fin)-->
+    
+    <!-- Panel de días feriados (inicio) -->
+    <div id="MasterHolidays" class="divMaster" style="display:none;">
+        <div class="row">
+            <div class="row col-8"> 
+                <h3 class="col-8">Panel principal de feriados</h3>
+
+                <div id="spinnerHolidays" class="row col-4">                    
+                    <div  class="spinner-border text-warning col-4" role="status"></div>
+                    <div class="text-warning col-8">Cargando...</div>
+                </div>
+            </div>
+
+            <div id="btnsHolidays" class="btnsActions_ col-4">
+                <button class="btnActions" id="btnHolidaysSearch" onclick="fnSearchHolidays()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnHolidaysNew" onclick="fnAddHolidays()"><i class="fa-solid fa-plus"></i></button>                              
+            </div>
+            <br />
+            <hr />
+        </div>
+
+        <!--Tabla de feriados-->
+        <div id="TabHolidays" class="container">
+            
+            <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                   id="TabHolidaysT"
+                   data-toggle="table"
+                   data-flat="true"
+                   data-search="true">
+
+                <thead class="bg-dark text-light">
+                    <th style="display:none;">Id</th>
+                    <th width="15%">Fecha</th>
+                    <th>Comentario</th>
+                    <th width="10%">Opciones</th>
+                </thead>
+                <tbody id="rowsHolidays">
+                </tbody>
+            </table>
+
+            <div>
+                <a onclick="fnChangeDataGroupHolidays(5)">5</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupHolidays(10)">10</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupHolidays(15)">15</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupHolidays(20)">20</a> 
+                &nbsp;&nbsp;&nbsp;
+                <label id="selDataHolidaysGroup" style="display:none;">5</label>
+                
+                &nbsp;&nbsp;
+                <input id="HolidaysNPosition" type="number" value="1" 
+                    min="1" max="99" class="numberPosition" 
+                    onchange="fnLoadHolidays()"/>
+                &nbsp;&nbsp;
+
+            </div>
+
+        </div>
+
+        <!--Modal de días feriados (inicio)-->
+        <div class="modal fade" id="ModalHolidays" tabindex="-1" aria-labelledby="ModalHolidays1" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Historico de feriados</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <button class="btnActions" id="btnSaveHolidays" onclick="fnBtnSaveHolidays()"><i class="fa-regular fa-floppy-disk"></i></button>
+                            
+                        <br />
+
+                        <div class="ModalInfo">
+                            <div id="HolidaysIdModal" style="display:none;">
+                                <label for="TxtIdHolidays">Id moneda</label>
+                                <input type="text" class="txtSmall" id="TxtIdHolidays" value="0" readonly />
+                            </div>
+
+                            <div>
+                                <label for="DpickerDateHolidays">Fecha valor <a style="color:#A52A2A;">*</a></label>
+                                <input type="date" id="DpickerDateHolidays" />
+                            </div>
+
+                            <div>
+                                <label for="DescriptionHolidays">Descripción <a style="color:#A52A2A;">*</a></label>
+                                <textarea rows="2" id="DescriptionHolidays"></textarea>
+                            </div>
+                            
+                            <br />                                                                                                        
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <h5 class="col-md-4 alignRight"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+    </div>
+
+    <!-- Encabezado de días feriados (Inicio) -->
+
+    <!-- días feriados (Fin) -->
+
+    <!--Panel principal de monedas (inicio)-->
+
+    <!-- Encabezado de monedas -->       
+    <div id="MasterCoins" class="divMaster" style="display:none;">
+        <div class="row">
+            <div class="row col-8"> 
+                <h3 class="col-8">Panel principal de monedas</h3>
+
+                <div id="spinnerCoins" class="row col-4">                    
+                    <div  class="spinner-border text-warning col-4" role="status"></div>
+                    <div class="text-warning col-8">Cargando...</div>
+                </div>
+            </div>
+
+            <div id="btnsCoins" class="btnsActions_ col-4">
+                <button class="btnActions" id="btnCoins" onclick="fnSearchCoins()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnCoins" onclick="fnAddCoin()"><i class="fa-solid fa-plus"></i></button>                              
+            </div>
+            <br />
+            <hr />
+        </div>
+
+        <!--Tabla de monedas-->
+        <div id="TabCoins" class="container">
+            
+            <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                   id="TabCoinsT"
+                   data-toggle="table"
+                   data-flat="true"
+                   data-search="true">
+
+                <thead class="bg-dark text-light">
+                    <th style="display:none;">Id</th>
+                    <th>Nombre</th>
+                    <th>Valor Actual</th>
+                    <th>Fecha de Actualización</th>
+                    <th width="10%">Opciones</th>
+                </thead>
+                <tbody id="rowsCoins">
+                </tbody>
+            </table>
+
+            <div>
+                <a onclick="fnChangeDataGroupCoins(5)">5</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupCoins(10)">10</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupCoins(15)">15</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupCoins(20)">20</a> 
+                &nbsp;&nbsp;&nbsp;
+                <label id="selDataCoinsGroup" style="display:none;">5</label>
+                
+                &nbsp;&nbsp;
+                <input id="CoinsNPosition" type="number" value="1" 
+                    min="1" max="99" class="numberPosition" 
+                    onchange="fnLoadCoins()"/>
+                &nbsp;&nbsp;
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!--Modal de actualización de valor de monedas ()-->
+    <div class="modal fade" id="ModalCoinHistory" tabindex="-1" aria-labelledby="ModalCoinHistory1" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Historico de monedas</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <h5 id="lblSelectCoin"></h5>
+                        <button class="btnActions" id="btnSaveCoinHistory" onclick="fnBtnSaveCoinHistory()"><i class="fa-regular fa-floppy-disk"></i></button>
+                            
+                        <br />
+
+                        <div class="ModalInfo">
+                            <div id="CoinHistoryIdModal" style="display:none;">
+                                <label for="TxtIdCoinHistory">Id moneda</label>
+                                <input type="text" class="txtSmall" id="TxtIdCoinHistory" value="0" readonly />
+                            </div>
+
+                            <div>
+                                <label for="DpickerDateCoinHistory">Fecha valor <a style="color:#A52A2A;">*</a></label>
+                                <input type="date" id="DpickerDateCoinHistory" />
+                            </div>
+                            
+                            <div>
+                                <label for="TxtAmountCoinHistory">Monto <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium" id="TxtAmountCoinHistory" value="0.00"/>
+                            </div>
+
+                            <br />
+                            
+                            <div>
+                                <div id="TabCoinHistory" class="container">
+            
+                                    <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                                           id="TabCoinHistoryT"
+                                           data-toggle="table"
+                                           data-flat="true"
+                                           data-search="true">
+
+                                        <thead class="bg-dark text-light">
+                                            <th style="display:none;">Id</th>
+                                            <th>Monto</th>
+                                            <th>Fecha</th>
+                                            <th width="12%">Opc</th>
+                                        </thead>
+                                        <tbody id="rowsCoinHistory">
+                                        </tbody>
+                                    </table>
+
+                                    <div>
+                                        <a onclick="fnChangeDataGroupCoinHistory(5)">5</a>
+                                        &nbsp;
+                                        <a onclick="fnChangeDataGroupCoinHistory(10)">10</a>
+                                        &nbsp;
+                                        <a onclick="fnChangeDataGroupCoinHistory(15)">15</a>
+                                        &nbsp;
+                                        <a onclick="fnChangeDataGroupCoinHistory(20)">20</a> 
+                                        &nbsp;&nbsp;&nbsp;
+                                        <label id="selDataCoinHistoryGroup" style="display:none;">5</label>
+                
+                                        &nbsp;&nbsp;
+                                        <input id="CoinHistoryNPosition" type="number" value="1" min="1" max="99" class="numberPosition" onchange="fnLoadHistoryCoins()"/>
+                                        &nbsp;&nbsp;
+
+                                    </div>
+
+                                </div>
+                            </div>                                                                                                                
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <h5 class="col-md-4 alignRight"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    <!--Panel principal de monedas (fin)-->
+
+    <!--Panel principal de destinos (inicio)-->
+
+    <!-- Encabezado de destinos -->       
+    <div id="MasterDestinations" class="divMaster" style="display:none;">
+        <div class="row">
+            <div class="row col-8"> 
+                <h3 class="col-8">Panel principal de destinos</h3>
+
+                <div id="spinnerDestinations" class="row col-4">                    
+                    <div  class="spinner-border text-warning col-4" role="status"></div>
+                    <div class="text-warning col-8">Cargando...</div>
+                </div>
+            </div>
+
+            <div id="btnsDestinations" class="btnsActions_ col-4">
+                <button class="btnActions" id="btnDestinations" onclick="fnSearchDestinations()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnDestinations" onclick="fnAddDestinations()"><i class="fa-solid fa-plus"></i></button>                              
+            </div>
+            <br />
+            <hr />
+        </div>
+
+        <!--Tabla de destinos-->
+        <div id="TabDestinations" class="container">
+            
+            <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                   id="TabDestinationsT"
+                   data-toggle="table"
+                   data-flat="true"
+                   data-search="true">
+
+                <thead class="bg-dark text-light">
+                    <th style="display:none;">Id</th>
+                    <th>País</th>
+                    <th>Es provincia?</th>
+                    <th>Nombre provincia</th>
+                    <th width="10%">Opciones</th>
+                </thead>
+                <tbody id="rowsDestinations">
+                </tbody>
+            </table>
+
+            <div>
+                <a onclick="fnChangeDataGroupDestinations(5)">5</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupDestinations(10)">10</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupDestinations(15)">15</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupDestinations(20)">20</a> 
+                &nbsp;&nbsp;&nbsp;
+                <label id="selDataCoinsDestinations" style="display:none;">5</label>
+                
+                &nbsp;&nbsp;
+                <input id="DestinationsNPosition" type="number" value="1" 
+                    min="1" max="99" class="numberPosition" 
+                    onchange="fnLoadDestinations()"/>
+                &nbsp;&nbsp;
+
+            </div>
+
+        </div>
+
+    </div>
+    <!--Panel principal de destinos (fin)-->
+
+    <!--Panel principal de objetivos (fin)-->
+    
+    <div id="MasterGoals" class="divMaster" style="display:none;">
+        <div class="row">
+            <div class="row col-8"> 
+                <h3 class="col-8">Panel principal de objetivos</h3>
+
+                <div id="spinnerGoals" class="row col-4">                    
+                    <div  class="spinner-border text-warning col-4" role="status"></div>
+                    <div class="text-warning col-8">Cargando...</div>
+                </div>
+            </div>
+
+            <div id="btnsCoins" class="btnsActions_ col-4">
+                <button class="btnActions" id="btnCoins" onclick="fnSearchGoals()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnCoins" onclick="fnAddGoal()"><i class="fa-solid fa-plus"></i></button>                              
+            </div>
+            <br />
+            <hr />
+        </div>     
+        
+        <!--Tabla de objetivos-->
+        <div id="TabGoals" class="container">
+            
+            <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                   id="TabGoalsT"
+                   data-toggle="table"
+                   data-flat="true"
+                   data-search="true">
+
+                <thead class="bg-dark text-light">
+                    <th style="display:none;">Id</th>
+                    <th style="display:none;">SucursalId</th>
+                    <th style="display:none;">VendedorlId</th>
+                    <th>Fecha</th>
+                    <th>Sucursal</th>
+                    <th>Vendedor</th>
+                    <th>Monto</th>
+                    <th width="15%">Opciones</th>
+                </thead>
+                <tbody id="rowsGoals">
+                </tbody>
+            </table>
+
+            <div>
+                <a onclick="fnChangeDataGroupGoals(5)">5</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupGoals(10)">10</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupGoals(15)">15</a>
+                &nbsp;
+                <a onclick="fnChangeDataGroupGoals(20)">20</a> 
+                &nbsp;&nbsp;&nbsp;
+                <label id="selDataGoalsGroup" style="display:none;">5</label>
+                
+                &nbsp;&nbsp;
+                <input id="GoalsNPosition" type="number" value="1" 
+                    min="1" max="99" class="numberPosition" 
+                    onchange="fnLoadGoals()"/>
+                &nbsp;&nbsp;
+
+            </div>
+
+        </div>
+
+        <!-- Modal objetivos -->
+        <div class="modal fade" id="ModalGoals" tabindex="-1" aria-labelledby="ModalGoals1" aria-hidden="true">            
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Nuevo objetivo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <button class="btnActions" id="btnGoalSave" onclick="fnBtnSaveGoal()"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnGoalClean" onclick="fnCleanGoal()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        
+                        <div class="ModalInfo">
+                            <div id="GoalIdModal">
+                                <label for="TxtIdGoal">Id</label>
+                                <input type="text" class="txtSmall" id="TxtIdGoal" value="0" readonly />
+                            </div>
+
+                            <div>
+                                <label for="DpickerDateGoal">Fecha <a style="color:#A52A2A;">*</a></label>
+                                <input type="date" id="DpickerDateGoal" />
+                            </div>
+
+                            <div class="highlightSection">
+                                <label>Tipo de objetivo <a style="color:#A52A2A;">*</a></label>
+                                <br />
+                                <input type="radio" id="radioSeller" name="selectCase" value="S" onclick="fnGoalSelect('S')">
+                                <label for="radioSeller">Vendedor</label><br>
+                                <input type="radio" id="radioBranch" name="selectCase" value="B" onclick="fnGoalSelect('B')">
+                                <label for="radioBranch">Sucursal</label><br>  
+                            </div>
+
+                            <div id="selGoalSeller" style="display:none;">
+                                <label for="SelectGoalSeller">Vendedor <a style="color:#A52A2A;">*</a></label>
+                                <select id="SelectGoalSeller" class="selectControl" onclick="fnLoadSelect('SelectGoalSeller', 'Account/GetUserSeller')">                                    
+                                </select>
+                            </div>
+
+                            <div id="selGoalBranch" style="display:none;">
+                                <label for="SelectGoalBranch">Sucursal <a style="color:#A52A2A;">*</a></label>
+                                <select id="SelectGoalBranch" class="selectControl" onclick="fnLoadSelect('SelectGoalBranch', 'Branches/GetBranches')">                                    
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="TxtAmountGoal">Monto <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtAmountGoal" value="0.00"/>
+                            </div>
+                            
+                        </div>                        
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row">
+                            <h5 class="col-md-4 alignRight">Id2: </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+    </div>
+    
+    <!--Panel principal de objetivos (fin)-->
 
     <!--Sección de graficos (Inicio)-->
-    <div id="MasterChats" class="divMaster" style="display:none;">
-        <h3>Indicadores y reportes</h3>
-        <hr />
+    <div id="MasterCharts" class="divMaster" >
+        
+        <div class="row">
+            <div class="row col-8"> 
+                <h3 class="col-8">Indicadores y reportes</h3>
+
+                <div id="spinnerReports" class="row col-4">                    
+                    <div  class="spinner-border text-warning col-4" role="status"></div>
+                    <div class="text-warning col-8">Cargando...</div>
+                </div>
+            </div>
+
+            <div id="btnsCoins" class="btnsActions_ col-4">
+                <button class="btnActions" id="btnRefreshReport" onclick="fnReportGoals()"><i class="fa-solid fa-arrows-rotate"></i></button>                             
+            </div>
+            <br />
+            <hr />
+        </div>
+
+        <div class="col-md-12 row">
+            <div class="col-md-4">
+                <label for="DpickerReportGoalsIni">Fecha inicio</label>
+                <input type="date" id="DpickerReportGoalsIni" />
+            </div>
+
+            <div class="col-md-4">
+                <label for="DpickerReportGoalsEnd">Fecha fin</label>
+                <input type="date" id="DpickerReportGoalsEnd" />
+            </div>
+        </div>
+        
+        <br />
+
+        <div id="TabReportGoals" class="container">
+            
+            <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                   id="TabReportGoalsT"
+                   data-toggle="table"
+                   data-flat="true"
+                   data-search="true">
+
+                <thead class="bg-dark text-light">
+                    <th width="9%">Sucursal</th>
+                    <th width="11%">Gross B</th>
+                    <th width="11%">Gross M <br /> AUD</th>
+                    <th width="11%">Gross M <br /> S/AUD</th>
+                    <th width="6%">%</th>
+                    <th width="6%">MKUP</th>
+                    <th width="11%">Utilidad <br /> ARS</th>
+                    <th width="11%">OBJ. UTI</th>
+                    <th width="8%">Alcanzado</th>
+                    <th width="10%">PROY $</th>
+                    <th width="6%">PROY %</th>                    
+                </thead>
+                <tbody id="rowsReportGoals">
+                </tbody>
+            </table>
+
+        </div>
+
+        <br />
 
         <figure class="highcharts-figure">        
-            <div id="container"></div>
+            <div id="SalesGraph"></div>
         </figure>
 
         <figure class="highcharts-figure">
@@ -1062,10 +1815,7 @@
     <div>
         
 
-        <div id="MasterCoins" class="divMaster" style="display:none;">
-            <h3>Panel principal de monedas</h3>
-            <hr />
-        </div>
+        
 
         <div id="MasterChannels" class="divMaster" style="display:none;">
             <h3>Panel principal de canales</h3>
@@ -1090,6 +1840,8 @@
         $('#lblUsuario').html(JSON.parse(dataWeb).userName);
         $('#lblSucursal').html(SucursalActual);
         $('#lblRol').html(JSON.parse(dataWeb).RoleName);
+                
+        fnReportGoals();
     })
 </script>
 

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "charset": "utf8",
     "outDir": "./build", /* Specify an output folder for all emitted files. */
     "removeComments": true,
     "esModuleInterop": true, /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */
@@ -13,14 +14,11 @@
     //  "build": [ "./build" ],
     //  "front": [ "https://localhost:7119/" ]
     //}    
-  } ,
+  },
   "include": [
-    "./*.ts",
     "**/*"
   ],
   "exclude": [
     "./build"
   ]
-
-
 }

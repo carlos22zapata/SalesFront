@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "fxSDE8O60TngGuXu4p37jfWiSB9lhq/sWDJz2jcc/NU=",
+  "Hash": "ck7r7QnSrgFfyhBoy+8BYEdppjpaiz0t3sG9/vjbFfI=",
   "Source": "SalesFront",
   "BasePath": "_content/SalesFront",
   "Mode": "Default",
@@ -1341,6 +1341,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\tscript\\build\\app.js"
+    },
+    {
+      "Identity": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\build\\build\\file.js",
+      "SourceId": "SalesFront",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\",
+      "BasePath": "_content/SalesFront",
+      "RelativePath": "tscript/build/build/file.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\tscript\\build\\build\\file.js"
     },
     {
       "Identity": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\tsconfig.json",
