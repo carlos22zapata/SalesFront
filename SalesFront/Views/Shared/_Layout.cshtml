@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8" />
+    <meta http-equiv=”Content-Type” content=”text/html; charset=UTF-8″ />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Control de ventas</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -31,8 +31,12 @@
             <div class="container">
                 
                 <!--Este es el menú principal-->
-                <div class="btn-float-principal" onclick="showMenu()">
+                <div class="btn-float-principal" onclick="showMenu()"  data-title="Muestra el menú principal">
                     <a href="#" id="btnMenuOptions" ><i class="fa-solid fa-bars" style="margin-top:17px;"></i></a>                    
+                </div>
+
+                <div class="btn-float-principal-small" onclick="showNewSale()" data-title="Acceso directo al carrito">
+                    <a href="#" id="btnMenuOptions" ><i class="fa-solid fa-cart-plus"></i></a>                    
                 </div>
 
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Control de ventas</a>
@@ -111,7 +115,7 @@
     
     <script>var exports = {"__esModule": false};</script>
     @*<script src="~/js/MenuPrincipal.js" asp-append-version="true"></script>*@
-    <script src="./tscript/build/app.js" asp-append-version="true" charset="UTF-8"></script>
+    <script src="./tscript/build/app.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     
     @RenderSection("Scripts", required: false)

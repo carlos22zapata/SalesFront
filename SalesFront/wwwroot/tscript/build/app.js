@@ -112,7 +112,6 @@ function showDiv(divSelPrincipal) {
         if (divSelPrincipal == "MasterHolidays")
             fnLoadHolidays();
         showMenu();
-        fnSalesGraph();
     });
 }
 function fnExpandMenu(n) {
@@ -154,6 +153,15 @@ function showMenu() {
     else {
         $("#first-menu").show(100);
     }
+}
+function showNewSale() {
+    $("#first-menu").hide(100);
+    $("#menu-principal-1").hide();
+    $("#menu-principal-2").hide();
+    $("#menu-principal-3").hide();
+    $('#MasterSales').show();
+    fnLoadSales();
+    fnAddSales();
 }
 function hideAll() {
     $('.divMaster').hide();
@@ -328,10 +336,12 @@ function fnLoadProducts() {
             btn1.innerHTML = iconDelete;
             btn1.classList.add("btnGridDelete");
             btn1.setAttribute('onclick', 'fnProductDelete(' + result[cont].id + ')');
+            btn1.setAttribute('data-title', 'Borrar producto');
             var btn2 = document.createElement("btnProductUpdate");
             btn2.innerHTML = iconUpdate;
             btn2.classList.add("btnGridUpdate");
             btn2.setAttribute('onclick', 'fnProductUpdate(' + result[cont].id + ')');
+            btn2.setAttribute('data-title', 'Actualizar producto');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
             newCell.appendChild(btn2);
@@ -421,7 +431,7 @@ function fnBtnSaveProduct() {
     let response = fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=UTF-8',
             Authorization: JSON.parse(dataWeb).token
         },
         body: JSON.stringify(data[0])
@@ -510,20 +520,21 @@ function fnLoadClients() {
             var newCell = document.createElement("td");
             newCell.innerHTML = document_;
             newRow.append(newCell);
-            var btn1 = $('<button/>', {
-                id: 'btnClientDelete',
-                html: 'Prueba 123',
-                title: 'Texto de ayuda aqu�',
-                class: 'btnGridUpdate'
-            });
-            var btn2 = document.createElement("btnProductUpdate");
+            var btn1 = document.createElement("btnClientDelete");
+            btn1.innerHTML = iconDelete;
+            btn1.classList.add("btnGridDelete");
+            btn1.setAttribute('onclick', 'fnProductDelete(' + result[cont].id + ')');
+            btn1.setAttribute('data-title', 'Eliminar registro de cliente');
+            var btn2 = document.createElement("btnClientUpdate");
             btn2.innerHTML = iconUpdate;
             btn2.classList.add("btnGridUpdate");
             btn2.setAttribute('onclick', 'fnProductUpdate(' + result[cont].id + ')');
+            btn2.setAttribute('data-title', 'Actualizar registro de cliente');
             var btn3 = document.createElement("btnSalesClients");
             btn3.innerHTML = '<i class="fa-solid fa-file-invoice-dollar"></i>';
             btn3.classList.add("btnGridSalesClients");
             btn3.setAttribute('onclick', 'fnSalesClient(' + id_ + ',"' + name_ + ' ' + lName_ + '","' + tDocument + ':' + document_ + '")');
+            btn3.setAttribute('data-title', 'Ver las ventas del cliente');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
             newCell.appendChild(btn2);
@@ -707,18 +718,21 @@ function fnSearchClient() {
                 var newCell = document.createElement("td");
                 newCell.innerHTML = document_;
                 newRow.append(newCell);
-                var btn1 = document.createElement("btnProductDelete");
+                var btn1 = document.createElement("btnClientDelete");
                 btn1.innerHTML = iconDelete;
                 btn1.classList.add("btnGridDelete");
                 btn1.setAttribute('onclick', 'fnProductDelete(' + result[cont].id + ')');
-                var btn2 = document.createElement("btnProductUpdate");
+                btn1.setAttribute('data-title', 'Eliminar registro de cliente');
+                var btn2 = document.createElement("btnClientUpdate");
                 btn2.innerHTML = iconUpdate;
                 btn2.classList.add("btnGridUpdate");
                 btn2.setAttribute('onclick', 'fnProductUpdate(' + result[cont].id + ')');
+                btn2.setAttribute('data-title', 'Actualizar registro de cliente');
                 var btn3 = document.createElement("btnSalesClients");
                 btn3.innerHTML = '<i class="fa-solid fa-file-invoice-dollar"></i>';
                 btn3.classList.add("btnGridSalesClients");
                 btn3.setAttribute('onclick', 'fnSalesClient(' + id_ + ',"' + name_ + ' ' + lName_ + '","' + tDocument + ':' + document_ + '")');
+                btn3.setAttribute('data-title', 'Ver las ventas del cliente');
                 var newCell = document.createElement("td");
                 newCell.appendChild(btn1);
                 newCell.appendChild(btn2);
@@ -749,6 +763,7 @@ function fnSearchClient() {
                 btn1.innerHTML = '<i class="fa-regular fa-circle-check"></i>';
                 btn1.classList.add("btnGridSalesClients");
                 btn1.setAttribute('onclick', 'fnSelectSearchClient(' + id_ + ',"' + name_ + ' ' + lname_ + '")');
+                btn1.setAttribute('data-title', 'Ventas del cliente');
                 var newCell = document.createElement("td");
                 newCell.appendChild(btn1);
                 newRow.append(newCell);
@@ -865,7 +880,7 @@ function fnBtnClientSave() {
     let response = fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=UTF-8',
             Authorization: JSON.parse(dataWeb).token
         },
         body: JSON.stringify(data[0])
@@ -1087,7 +1102,7 @@ function fnBtnSaveSeller() {
     let response = fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;charset=utf-8'
+            'Content-Type': 'application/json;charset=UTF-8'
         },
         body: JSON.stringify(data[0])
     })
@@ -1149,7 +1164,15 @@ function fnBtnSaveSale() {
     var SaleBranch = $('#SelectSaleBranch').val();
     var SaleCoin = $('#SelectSaleCoin').val();
     var CommentSale = $('#TxtCommentSale').val();
-    if (DateSale == "") {
+    if (!validateNumberSale()) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'El formato del n�mero de carrito no es correcto'
+        });
+        return;
+    }
+    else if (DateSale == "") {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
@@ -1229,7 +1252,7 @@ function fnBtnSaveSale() {
     let response = fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=UTF-8',
             Authorization: JSON.parse(dataWeb).token
         },
         body: JSON.stringify(data[0])
@@ -1293,14 +1316,17 @@ function fnLoadSales() {
             btn1.innerHTML = iconDelete;
             btn1.classList.add("btnGridDelete");
             btn1.setAttribute('onclick', 'fnSalesDelete(' + result[cont].DocNum + ')');
+            btn1.setAttribute('data-title', 'Borrar venta');
             var btn2 = document.createElement("btnDetailSaleDetail");
             btn2.innerHTML = '<i class="fa-solid fa-cart-flatbed-suitcase"></i>';
             btn2.classList.add("btnGridSalesClients");
             btn2.setAttribute('onclick', 'fnSalesDetail(' + result[cont].DocNum + ',"' + result[cont].CarNumber + '")');
+            btn2.setAttribute('data-title', 'Ver detalle de la venta');
             var btn3 = document.createElement("btnSalePayment");
             btn3.innerHTML = '<i class="fa-solid fa-circle-dollar-to-slot"></i>';
             btn3.classList.add("btnGridUpdate");
             btn3.setAttribute('onclick', 'fnSalesPayment(' + result[cont].DocNum + ',' + result[cont].Amount + ')');
+            btn3.setAttribute('data-title', 'Agregar pago');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
             newCell.appendChild(btn2);
@@ -1377,6 +1403,24 @@ function fnChangeDataGroupSales(num) {
     fnCleanSale();
     fnLoadSales();
 }
+function validateInput(e) {
+    var key = window.Event ? e.which : e.keyCode;
+    return (key >= 48 && key <= 57);
+}
+function validateNumberSale() {
+    const lblLength = $('#TxtNumberSale').val().length;
+    if (lblLength == 9)
+        return true;
+    else
+        return false;
+}
+function lostFocusNumberSale() {
+    const lblLength = $('#TxtNumberSale').val().length;
+    if (validateNumberSale())
+        $('#lblNumberSale').hide();
+    else
+        $('#lblNumberSale').show();
+}
 function fnSalesDetail(DocNum, CarNumber) {
     $('#lblCarNumber').html(DocNum.toString());
     $('#TxtIdSaleDetail').val(DocNum.toString());
@@ -1432,10 +1476,12 @@ function fnLoadSalesDetail(CreditDocumentId, CarNumber) {
             btn1.innerHTML = iconDelete;
             btn1.classList.add("btnGridDelete");
             btn1.setAttribute('onclick', 'fnSalesDetailDelete(' + CreditDocumentId + ',' + result[cont].ItemsCreditDocumentsId + ')');
+            btn1.setAttribute('data-title', 'Borrar detalle de la venta');
             var btn2 = document.createElement("btnDetailSaleUpdate");
             btn2.innerHTML = iconUpdate;
             btn2.classList.add("btnGridUpdate");
             btn2.setAttribute('onclick', 'fnSalesDetailUpdate(' + CreditDocumentId + ',' + result[cont].ItemsCreditDocumentsId + ')');
+            btn2.setAttribute('data-title', 'Actualizar registro de venta');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
             newCell.appendChild(btn2);
@@ -1616,7 +1662,7 @@ function fnBtnSaveSaleDetail() {
         let response = fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'application/json;charset=UTF-8',
                 Authorization: JSON.parse(dataWeb).token
             },
             body: JSON.stringify(data[0])
@@ -1668,7 +1714,7 @@ function fnBtnSaveSaleDetail() {
         let response = fetch(url, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'application/json;charset=UTF-8',
                 mode: 'no-cors'
             },
             body: JSON.stringify(data[0])
@@ -1748,7 +1794,7 @@ function fnBtnSavePayment() {
                         let response = fetch(url, {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json;charset=utf-8',
+                                'Content-Type': 'application/json;charset=UTF-8',
                                 Authorization: JSON.parse(dataWeb).token
                             },
                             body: JSON.stringify(data[0])
@@ -2019,10 +2065,12 @@ function fnLoadBranches() {
             btn1.innerHTML = iconDelete;
             btn1.classList.add("btnGridDelete");
             btn1.setAttribute('onclick', 'fnBranchesDelete(' + id_ + ')');
+            btn1.setAttribute('data-title', 'Borrar sucursal');
             var btn2 = document.createElement("btnBranchesUpdate");
             btn2.innerHTML = iconUpdate;
             btn2.classList.add("btnGridUpdate");
             btn2.setAttribute('onclick', 'fnBranchesUpdate(' + id_ + ')');
+            btn2.setAttribute('data-title', 'Actualizar sucursal');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
             newCell.appendChild(btn2);
@@ -2131,7 +2179,7 @@ function fnBtnSaveBranches() {
         let response = fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'application/json;charset=UTF-8',
                 Authorization: JSON.parse(dataWeb).token
             },
             body: JSON.stringify(data[0])
@@ -2172,7 +2220,7 @@ function fnBtnSaveBranches() {
         let response = fetch(url, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'application/json;charset=UTF-8',
                 Authorization: JSON.parse(dataWeb).token
             },
             body: JSON.stringify(data[0])
@@ -2260,10 +2308,12 @@ function fnLoadCoins() {
             btn1.innerHTML = iconDelete;
             btn1.classList.add("btnGridDelete");
             btn1.setAttribute('onclick', 'fnCoinsDelete(' + id_ + ')');
+            btn1.setAttribute('data-title', 'Borrar moneda');
             var btn2 = document.createElement("btnCoinsUpdate");
             btn2.innerHTML = iconUpdate;
             btn2.classList.add("btnGridUpdate");
             btn2.setAttribute('onclick', 'fnCoinsUpdate(' + id_ + ',"' + description_ + '")');
+            btn2.setAttribute('data-title', 'Actualizar moneda');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
             newCell.appendChild(btn2);
@@ -2470,7 +2520,7 @@ function fnBtnSaveCoinHistory() {
     let response = fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=UTF-8',
             Authorization: JSON.parse(dataWeb).token
         },
         body: JSON.stringify(data[0])
@@ -2542,10 +2592,12 @@ function fnLoadDestinations() {
             btn1.innerHTML = iconDelete;
             btn1.classList.add("btnGridDelete");
             btn1.setAttribute('onclick', 'fnDestinationsDelete(' + id_ + ')');
+            btn1.setAttribute('data-title', 'Borrar destino');
             var btn2 = document.createElement("btnDestinationsUpdate");
             btn2.innerHTML = iconUpdate;
             btn2.classList.add("btnGridUpdate");
             btn2.setAttribute('onclick', 'fnDestinationsUpdate(' + id_ + ')');
+            btn2.setAttribute('data-title', 'Actualizar destino');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
             newCell.appendChild(btn2);
@@ -2663,10 +2715,12 @@ function fnLoadGoals() {
             btn1.innerHTML = iconDelete;
             btn1.classList.add("btnGridDelete");
             btn1.setAttribute('onclick', 'fnGoalDelete(' + id_ + ')');
+            btn1.setAttribute('data-title', 'Borrar objetivo');
             var btn2 = document.createElement("btnGoalUpdate");
             btn2.innerHTML = iconUpdate;
             btn2.classList.add("btnGridUpdate");
             btn2.setAttribute('onclick', 'fnGoalUpdate(' + id_ + ')');
+            btn2.setAttribute('data-title', 'Actualizar objetivo');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
             newCell.appendChild(btn2);
@@ -2756,7 +2810,7 @@ function fnBtnSaveGoal() {
     let response = fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=UTF-8',
             Authorization: JSON.parse(dataWeb).token
         },
         body: JSON.stringify(data[0])
@@ -2855,6 +2909,77 @@ function fnReportGoals() {
     })
         .then(response => response.json())
         .then(result => {
+        $("#TabReportGoalsT > tbody").empty();
+        var cont = 0;
+        for (var j in result) {
+            var sbName = result[cont].SBName;
+            var amount = result[cont].Amount;
+            var utility = result[cont].Utility;
+            var utilityToday = result[cont].UtilityToday;
+            var utilityR = utility - utilityToday;
+            var porcUtility = (utilityR / amount) * 100;
+            var mkup = result[cont].Mkup;
+            var objetive = result[cont].objetiveAmount;
+            var reached = (utilityToday / objetive) * 100;
+            var projected = result[cont].Projected;
+            var projectedPorc = result[cont].ProjectedPorc;
+            var newRow = document.createElement("tr");
+            var newCell = document.createElement("td");
+            newCell.innerHTML = sbName;
+            newRow.append(newCell);
+            $("#rowsReportGoals").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = amount.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            ;
+            newRow.append(newCell);
+            $("#rowsReportGoals").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = utilityR.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            ;
+            newRow.append(newCell);
+            $("#rowsReportGoals").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = utilityToday.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            ;
+            newRow.append(newCell);
+            $("#rowsReportGoals").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = porcUtility.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            ;
+            newRow.append(newCell);
+            $("#rowsReportGoals").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = mkup.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            ;
+            newRow.append(newCell);
+            $("#rowsReportGoals").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = utility.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            ;
+            newRow.append(newCell);
+            $("#rowsReportGoals").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = objetive.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            ;
+            newRow.append(newCell);
+            $("#rowsReportGoals").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = reached.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            ;
+            newRow.append(newCell);
+            $("#rowsReportGoals").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = projected.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            ;
+            newRow.append(newCell);
+            $("#rowsReportGoals").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = projectedPorc.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            ;
+            newRow.append(newCell);
+            $("#rowsReportGoals").append(newRow);
+            cont++;
+        }
         $('#spinnerReports').hide();
     })
         .catch(error => {
@@ -3026,10 +3151,12 @@ function fnLoadHolidays() {
             btn1.innerHTML = iconDelete;
             btn1.classList.add("btnGridDelete");
             btn1.setAttribute('onclick', 'fnHolidaysDelete(' + id_ + ')');
+            btn1.setAttribute('data-title', 'Borrar feriado');
             var btn2 = document.createElement("btnHolidaysUpdate");
             btn2.innerHTML = iconUpdate;
             btn2.classList.add("btnGridUpdate");
             btn2.setAttribute('onclick', 'fnHolidaysUpdate(' + id_ + ')');
+            btn2.setAttribute('data-title', 'Actualizar feriado');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
             newCell.appendChild(btn2);
@@ -3133,7 +3260,7 @@ function fnBtnSaveHolidays() {
     let response = fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json;charset=utf-8',
+            'Content-Type': 'application/json;charset=UTF-8',
             Authorization: JSON.parse(dataWeb).token
         },
         body: JSON.stringify(data[0])

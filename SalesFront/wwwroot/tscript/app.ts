@@ -1,14 +1,12 @@
 import { strict } from "assert";
 import { Console, error } from "console";
-//import "jquery";
-//import * as bootstrap from "bootstrap";
-//import require from "node:stream/consumers";
 
 declare let Swal: any;
 declare let moment: any;
 declare let require: any;
 declare let $: any;
 declare let Highcharts: any;
+declare let mask: any;
 
 const iconDelete: string = '<i class="fa-solid fa-delete-left"></i>';
 const iconUpdate: string = '<i class="fa-solid fa-pencil"></i>';
@@ -172,9 +170,7 @@ async function showDiv(divSelPrincipal:string) {
         fnLoadHolidays();
 
     showMenu();
-
-    fnSalesGraph();
-        
+            
 }
 
 //Función encargada de abrir y cerrar el contenido del menú principal
@@ -217,6 +213,17 @@ function showMenu() {
     } else {
         $("#first-menu").show(100);
     }
+}
+
+function showNewSale() {
+    $("#first-menu").hide(100);
+    $("#menu-principal-1").hide();
+    $("#menu-principal-2").hide();
+    $("#menu-principal-3").hide();
+
+    $('#MasterSales').show();
+    fnLoadSales();
+    fnAddSales();
 }
 
 function hideAll() {
@@ -344,9 +351,7 @@ async function LogInSucursal() {
 
     sessionStorage.setItem("TecnoBranchId", BrnchId);
     sessionStorage.setItem("TecnoBranchName", BrnchName);
-    await window.open(principalWeb, '_self');
-    //Función que inicia los indicadores de entrada
-    //await fnReportGoals();
+    await window.open(principalWeb, '_self');    
 }
 
 //function fnReadLinks() {
@@ -472,11 +477,13 @@ function fnLoadProducts() {
                     btn1.innerHTML = iconDelete;
                     btn1.classList.add("btnGridDelete");
                     btn1.setAttribute('onclick', 'fnProductDelete(' + result[cont].id + ')')
+                    btn1.setAttribute('data-title', 'Borrar producto');
 
                     var btn2 = document.createElement("btnProductUpdate");
                     btn2.innerHTML = iconUpdate;
                     btn2.classList.add("btnGridUpdate");
                     btn2.setAttribute('onclick', 'fnProductUpdate(' + result[cont].id + ')')
+                    btn2.setAttribute('data-title', 'Actualizar producto');
 
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
@@ -608,7 +615,7 @@ function fnBtnSaveProduct() {
         {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'application/json;charset=UTF-8',
                 Authorization: JSON.parse(dataWeb).token
             },
             body: JSON.stringify(data[0])
@@ -734,27 +741,23 @@ function fnLoadClients() {
                     newRow.append(newCell);
 
                     //Creo los dos botones para la tabla
-                    //var btn1 = document.createElement("btnClientDelete");
-                    //btn1.innerHTML = iconDelete;
-                    //btn1.classList.add("btnGridDelete");
-                    //btn1.setAttribute('onclick', 'fnProductDelete(' + result[cont].id + ')');                    
-
-                    var btn1 = $('<button/>', {
-                        id: 'btnClientDelete',
-                        html: 'Prueba 123', //iconDelete,
-                        title: 'Texto de ayuda aquí',
-                        class: 'btnGridUpdate'
-                    });
-
-                    var btn2 = document.createElement("btnProductUpdate");
+                    var btn1 = document.createElement("btnClientDelete");
+                    btn1.innerHTML = iconDelete;
+                    btn1.classList.add("btnGridDelete");                    
+                    btn1.setAttribute('onclick', 'fnProductDelete(' + result[cont].id + ')');
+                    btn1.setAttribute('data-title', 'Eliminar registro de cliente');
+                    
+                    var btn2 = document.createElement("btnClientUpdate");
                     btn2.innerHTML = iconUpdate;
-                    btn2.classList.add("btnGridUpdate");
+                    btn2.classList.add("btnGridUpdate");                    
                     btn2.setAttribute('onclick', 'fnProductUpdate(' + result[cont].id + ')');
+                    btn2.setAttribute('data-title', 'Actualizar registro de cliente');
 
                     var btn3 = document.createElement("btnSalesClients");
                     btn3.innerHTML = '<i class="fa-solid fa-file-invoice-dollar"></i>';
                     btn3.classList.add("btnGridSalesClients");
                     btn3.setAttribute('onclick', 'fnSalesClient(' + id_ + ',"' + name_ + ' ' + lName_ + '","' + tDocument + ':' + document_ + '")')
+                    btn3.setAttribute('data-title', 'Ver las ventas del cliente');
 
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
@@ -1007,20 +1010,23 @@ function fnSearchClient() {
                             newRow.append(newCell);
 
                             //Creo los dos botones para la tabla
-                            var btn1 = document.createElement("btnProductDelete");
+                            var btn1 = document.createElement("btnClientDelete");
                             btn1.innerHTML = iconDelete;
                             btn1.classList.add("btnGridDelete");
                             btn1.setAttribute('onclick', 'fnProductDelete(' + result[cont].id + ')');
+                            btn1.setAttribute('data-title', 'Eliminar registro de cliente');
 
-                            var btn2 = document.createElement("btnProductUpdate");
+                            var btn2 = document.createElement("btnClientUpdate");
                             btn2.innerHTML = iconUpdate;
                             btn2.classList.add("btnGridUpdate");
                             btn2.setAttribute('onclick', 'fnProductUpdate(' + result[cont].id + ')');
+                            btn2.setAttribute('data-title', 'Actualizar registro de cliente');
 
                             var btn3 = document.createElement("btnSalesClients");
                             btn3.innerHTML = '<i class="fa-solid fa-file-invoice-dollar"></i>';
                             btn3.classList.add("btnGridSalesClients");
                             btn3.setAttribute('onclick', 'fnSalesClient(' + id_ + ',"' + name_ + ' ' + lName_ + '","' + tDocument + ':' + document_ + '")')
+                            btn3.setAttribute('data-title', 'Ver las ventas del cliente');
 
                             var newCell = document.createElement("td");
                             newCell.appendChild(btn1);
@@ -1057,6 +1063,7 @@ function fnSearchClient() {
                             btn1.innerHTML = '<i class="fa-regular fa-circle-check"></i>';
                             btn1.classList.add("btnGridSalesClients");
                             btn1.setAttribute('onclick', 'fnSelectSearchClient(' + id_ + ',"' + name_ + ' ' +lname_ +'")')
+                            btn1.setAttribute('data-title', 'Ventas del cliente');
 
                             var newCell = document.createElement("td");
                             newCell.appendChild(btn1);
@@ -1193,7 +1200,7 @@ function fnBtnClientSave() {
         {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'application/json;charset=UTF-8',
                 Authorization: JSON.parse(dataWeb).token
             },
             body: JSON.stringify(data[0])
@@ -1241,10 +1248,6 @@ function fnPositionClient() {
     
     return [Position, Records];
 }
-
-//function fnShowPositionClients() {
-
-//} 
 
 function fnChangeDataGroupClients(num: number) {
     $('#selDataGroup').html(num);
@@ -1501,7 +1504,7 @@ function fnBtnSaveSeller() {
             method: 'POST',
             headers: {
                 'Content-Type':
-                    'application/json;charset=utf-8'
+                    'application/json;charset=UTF-8'
             },
             body: JSON.stringify(data[0])
 
@@ -1597,7 +1600,15 @@ function fnBtnSaveSale() {
     var SaleCoin = $('#SelectSaleCoin').val();
     var CommentSale = $('#TxtCommentSale').val();
 
-    if (DateSale == "") {
+    if (!validateNumberSale()) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'El formato del número de carrito no es correcto'
+        });
+        return;
+    }
+    else if (DateSale == "") {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
@@ -1679,7 +1690,7 @@ function fnBtnSaveSale() {
         {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'application/json;charset=UTF-8',
                 Authorization: JSON.parse(dataWeb).token
             },
             body: JSON.stringify(data[0])
@@ -1700,7 +1711,7 @@ function fnBtnSaveSale() {
             });
 }
 
-function fnLoadSales() {
+function fnLoadSales() {    
     var dataWeb: any = sessionStorage.getItem("TecnoData");
     let url = ApiBackEndUrl + 'CreditDocuments/GetCreditDocumentsClients';
     var position = fnPositionSale();
@@ -1764,18 +1775,21 @@ function fnLoadSales() {
                     var btn1 = document.createElement("btnSaleDelete");
                     btn1.innerHTML = iconDelete;
                     btn1.classList.add("btnGridDelete");
-                    btn1.setAttribute('onclick', 'fnSalesDelete(' + result[cont].DocNum + ')')
+                    btn1.setAttribute('onclick', 'fnSalesDelete(' + result[cont].DocNum + ')');
+                    btn1.setAttribute('data-title', 'Borrar venta');
 
                     var btn2 = document.createElement("btnDetailSaleDetail");
                     btn2.innerHTML = '<i class="fa-solid fa-cart-flatbed-suitcase"></i>';
                     btn2.classList.add("btnGridSalesClients");
                     btn2.setAttribute('onclick', 'fnSalesDetail(' + result[cont].DocNum + ',"' + result[cont].CarNumber + '")');
+                    btn2.setAttribute('data-title', 'Ver detalle de la venta');
 
                     var btn3 = document.createElement("btnSalePayment");
                     btn3.innerHTML = '<i class="fa-solid fa-circle-dollar-to-slot"></i>';
                     btn3.classList.add("btnGridUpdate");
                     btn3.setAttribute('onclick', 'fnSalesPayment(' + result[cont].DocNum + ',' + result[cont].Amount + ')')
-                    
+                    btn3.setAttribute('data-title', 'Agregar pago');
+
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
                     newCell.appendChild(btn2);
@@ -1889,6 +1903,27 @@ function fnChangeDataGroupSales(num: number) {
     $('#selDataSalesGroup').html(num);
     fnCleanSale();
     fnLoadSales();
+}
+
+function validateInput(e: any) {
+    var key = window.Event ? e.which : e.keyCode
+    return (key >= 48 && key <= 57)
+}
+
+function validateNumberSale() {
+    const lblLength = $('#TxtNumberSale').val().length;
+    if (lblLength == 9)
+        return true;
+    else
+        return false;
+}
+
+function lostFocusNumberSale() {
+    const lblLength = $('#TxtNumberSale').val().length;
+    if (validateNumberSale())
+        $('#lblNumberSale').hide();
+    else
+        $('#lblNumberSale').show();
 }
 
 //#endregion Sección de Ventas
@@ -2076,11 +2111,13 @@ function fnLoadSalesDetail(CreditDocumentId: number, CarNumber: string) {
                     btn1.innerHTML = iconDelete;
                     btn1.classList.add("btnGridDelete");
                     btn1.setAttribute('onclick', 'fnSalesDetailDelete(' + CreditDocumentId + ',' + result[cont].ItemsCreditDocumentsId + ')')
+                    btn1.setAttribute('data-title', 'Borrar detalle de la venta');
 
                     var btn2 = document.createElement("btnDetailSaleUpdate");
                     btn2.innerHTML = iconUpdate;
                     btn2.classList.add("btnGridUpdate");
                     btn2.setAttribute('onclick', 'fnSalesDetailUpdate(' + CreditDocumentId + ',' + result[cont].ItemsCreditDocumentsId + ')')
+                    btn2.setAttribute('data-title', 'Actualizar registro de venta');
 
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
@@ -2328,7 +2365,7 @@ function fnBtnSaveSaleDetail() {
             {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
+                    'Content-Type': 'application/json;charset=UTF-8',
                     Authorization: JSON.parse(dataWeb).token
                 },
                 body: JSON.stringify(data[0])
@@ -2393,7 +2430,7 @@ function fnBtnSaveSaleDetail() {
             {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
+                    'Content-Type': 'application/json;charset=UTF-8',
                     mode: 'no-cors'
                 },
                 body: JSON.stringify(data[0])
@@ -2500,7 +2537,7 @@ function fnBtnSavePayment() {
                             {
                                 method: 'POST',
                                 headers: {
-                                    'Content-Type': 'application/json;charset=utf-8',
+                                    'Content-Type': 'application/json;charset=UTF-8',
                                     Authorization: JSON.parse(dataWeb).token
                                 },
                                 body: JSON.stringify(data[0])
@@ -2866,11 +2903,13 @@ function fnLoadBranches() {
                     btn1.innerHTML = iconDelete;
                     btn1.classList.add("btnGridDelete");
                     btn1.setAttribute('onclick', 'fnBranchesDelete(' + id_ + ')')
+                    btn1.setAttribute('data-title', 'Borrar sucursal');
 
                     var btn2 = document.createElement("btnBranchesUpdate");
                     btn2.innerHTML = iconUpdate;
                     btn2.classList.add("btnGridUpdate");
                     btn2.setAttribute('onclick', 'fnBranchesUpdate(' + id_ + ')')
+                    btn2.setAttribute('data-title', 'Actualizar sucursal');
 
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
@@ -3020,7 +3059,7 @@ function fnBtnSaveBranches() {
             {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
+                    'Content-Type': 'application/json;charset=UTF-8',
                     Authorization: JSON.parse(dataWeb).token
                 },
                 body: JSON.stringify(data[0])
@@ -3070,7 +3109,7 @@ function fnBtnSaveBranches() {
             {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
+                    'Content-Type': 'application/json;charset=UTF-8',
                     Authorization: JSON.parse(dataWeb).token
                 },
                 body: JSON.stringify(data[0])
@@ -3195,12 +3234,14 @@ function fnLoadCoins() {
                     var btn1 = document.createElement("btnCoinsDelete");
                     btn1.innerHTML = iconDelete;
                     btn1.classList.add("btnGridDelete");
-                    btn1.setAttribute('onclick', 'fnCoinsDelete(' + id_ + ')')
+                    btn1.setAttribute('onclick', 'fnCoinsDelete(' + id_ + ')');
+                    btn1.setAttribute('data-title', 'Borrar moneda');
 
                     var btn2 = document.createElement("btnCoinsUpdate");
                     btn2.innerHTML = iconUpdate;
                     btn2.classList.add("btnGridUpdate");
-                    btn2.setAttribute('onclick', 'fnCoinsUpdate(' + id_ + ',"' + description_ + '")')
+                    btn2.setAttribute('onclick', 'fnCoinsUpdate(' + id_ + ',"' + description_ + '")');
+                    btn2.setAttribute('data-title', 'Actualizar moneda');
 
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
@@ -3500,7 +3541,7 @@ function fnBtnSaveCoinHistory() {
         {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'application/json;charset=UTF-8',
                 Authorization: JSON.parse(dataWeb).token
             },
             body: JSON.stringify(data[0])
@@ -3603,11 +3644,13 @@ function fnLoadDestinations() {
                     btn1.innerHTML = iconDelete;
                     btn1.classList.add("btnGridDelete");
                     btn1.setAttribute('onclick', 'fnDestinationsDelete(' + id_ + ')')
+                    btn1.setAttribute('data-title', 'Borrar destino');
 
                     var btn2 = document.createElement("btnDestinationsUpdate");
                     btn2.innerHTML = iconUpdate;
                     btn2.classList.add("btnGridUpdate");
                     btn2.setAttribute('onclick', 'fnDestinationsUpdate(' + id_ + ')')
+                    btn2.setAttribute('data-title', 'Actualizar destino');
 
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
@@ -3785,11 +3828,13 @@ function fnLoadGoals() {
                     btn1.innerHTML = iconDelete;
                     btn1.classList.add("btnGridDelete");
                     btn1.setAttribute('onclick', 'fnGoalDelete(' + id_ + ')');
+                    btn1.setAttribute('data-title', 'Borrar objetivo');
 
                     var btn2 = document.createElement("btnGoalUpdate");
                     btn2.innerHTML = iconUpdate;
                     btn2.classList.add("btnGridUpdate");
                     btn2.setAttribute('onclick', 'fnGoalUpdate(' + id_ + ')');
+                    btn2.setAttribute('data-title', 'Actualizar objetivo');
 
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
@@ -3894,7 +3939,7 @@ function fnBtnSaveGoal() {
         {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'application/json;charset=UTF-8',
                 Authorization: JSON.parse(dataWeb).token
             },
             body: JSON.stringify(data[0])
@@ -4044,100 +4089,100 @@ function fnReportGoals() {
         .then(
             result => {
 
-                //$("#TabReportGoalsT > tbody").empty();
-                //var cont = 0;
+                $("#TabReportGoalsT > tbody").empty();
+                var cont = 0;
 
-                ////console.log('fnSalesDetail(' + result[cont].DocNum + ',"' + result[cont].CarNumber + '")');
+                //console.log('fnSalesDetail(' + result[cont].DocNum + ',"' + result[cont].CarNumber + '")');
 
-                //for (var j in result) {
+                for (var j in result) {
 
-                //    var sbName = result[cont].SBName;
-                //    var amount = result[cont].Amount;
-                //    //var amountToday = result[cont].UtilityToday;
-                //    //var amountR = amount - amountToday;                    
-                //    var utility = result[cont].Utility;
-                //    var utilityToday = result[cont].UtilityToday;
-                //    var utilityR = utility - utilityToday;                    
-                //    var porcUtility = (utilityR / amount) * 100;
-                //    var mkup = result[cont].Mkup;
-                //    var objetive = result[cont].objetiveAmount;
-                //    var reached = (utilityToday / objetive) * 100;
-                //    var projected = result[cont].Projected;
-                //    var projectedPorc = result[cont].ProjectedPorc;
+                    var sbName = result[cont].SBName;
+                    var amount = result[cont].Amount;
+                    //var amountToday = result[cont].UtilityToday;
+                    //var amountR = amount - amountToday;                    
+                    var utility = result[cont].Utility;
+                    var utilityToday = result[cont].UtilityToday;
+                    var utilityR = utility - utilityToday;                    
+                    var porcUtility = (utilityR / amount) * 100;
+                    var mkup = result[cont].Mkup;
+                    var objetive = result[cont].objetiveAmount;
+                    var reached = (utilityToday / objetive) * 100;
+                    var projected = result[cont].Projected;
+                    var projectedPorc = result[cont].ProjectedPorc;
 
-                //    var newRow = document.createElement("tr");
+                    var newRow = document.createElement("tr");
 
-                //    //Nombre de la sucursal
-                //    var newCell = document.createElement("td");
-                //    newCell.innerHTML = sbName;
-                //    newRow.append(newCell);
-                //    $("#rowsReportGoals").append(newRow);
+                    //Nombre de la sucursal
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = sbName;
+                    newRow.append(newCell);
+                    $("#rowsReportGoals").append(newRow);
 
-                //    //Total de las ventas
-                //    var newCell = document.createElement("td");
-                //    newCell.innerHTML = amount.toLocaleString('en-US', { minimumFractionDigits: 2 });;
-                //    newRow.append(newCell);
-                //    $("#rowsReportGoals").append(newRow);  
+                    //Total de las ventas
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = amount.toLocaleString('en-US', { minimumFractionDigits: 2 });;
+                    newRow.append(newCell);
+                    $("#rowsReportGoals").append(newRow);  
 
-                //    //Total de la utilidad menos la del día actual del día
-                //    var newCell = document.createElement("td");
-                //    newCell.innerHTML = utilityR.toLocaleString('en-US', { minimumFractionDigits: 2 });;
-                //    newRow.append(newCell);
-                //    $("#rowsReportGoals").append(newRow);  
+                    //Total de la utilidad menos la del día actual del día
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = utilityR.toLocaleString('en-US', { minimumFractionDigits: 2 });;
+                    newRow.append(newCell);
+                    $("#rowsReportGoals").append(newRow);  
 
-                //    //Total de la utilidad del día
-                //    var newCell = document.createElement("td");
-                //    newCell.innerHTML = utilityToday.toLocaleString('en-US', { minimumFractionDigits: 2 });;
-                //    newRow.append(newCell);
-                //    $("#rowsReportGoals").append(newRow);  
+                    //Total de la utilidad del día
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = utilityToday.toLocaleString('en-US', { minimumFractionDigits: 2 });;
+                    newRow.append(newCell);
+                    $("#rowsReportGoals").append(newRow);  
 
-                //    //Porcentaje de la utilidad
-                //    var newCell = document.createElement("td");
-                //    newCell.innerHTML = porcUtility.toLocaleString('en-US', { minimumFractionDigits: 2 });;
-                //    newRow.append(newCell);
-                //    $("#rowsReportGoals").append(newRow); 
+                    //Porcentaje de la utilidad
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = porcUtility.toLocaleString('en-US', { minimumFractionDigits: 2 });;
+                    newRow.append(newCell);
+                    $("#rowsReportGoals").append(newRow); 
 
-                //    //Mkup
-                //    var newCell = document.createElement("td");
-                //    newCell.innerHTML = mkup.toLocaleString('en-US', { minimumFractionDigits: 2 });;
-                //    newRow.append(newCell);
-                //    $("#rowsReportGoals").append(newRow); 
+                    //Mkup
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = mkup.toLocaleString('en-US', { minimumFractionDigits: 2 });;
+                    newRow.append(newCell);
+                    $("#rowsReportGoals").append(newRow); 
 
-                //    //Utilidad en pesos
-                //    var newCell = document.createElement("td");
-                //    newCell.innerHTML = utility.toLocaleString('en-US', { minimumFractionDigits: 2 });;
-                //    newRow.append(newCell);
-                //    $("#rowsReportGoals").append(newRow); 
+                    //Utilidad en pesos
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = utility.toLocaleString('en-US', { minimumFractionDigits: 2 });;
+                    newRow.append(newCell);
+                    $("#rowsReportGoals").append(newRow); 
 
-                //    //Objetivo
-                //    var newCell = document.createElement("td");
-                //    newCell.innerHTML = objetive.toLocaleString('en-US', { minimumFractionDigits: 2 });;
-                //    newRow.append(newCell);
-                //    $("#rowsReportGoals").append(newRow); 
+                    //Objetivo
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = objetive.toLocaleString('en-US', { minimumFractionDigits: 2 });;
+                    newRow.append(newCell);
+                    $("#rowsReportGoals").append(newRow); 
 
-                //    //Alcanzado
-                //    var newCell = document.createElement("td");
-                //    newCell.innerHTML = reached.toLocaleString('en-US', { minimumFractionDigits: 2 });;
-                //    newRow.append(newCell);
-                //    $("#rowsReportGoals").append(newRow);
+                    //Alcanzado
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = reached.toLocaleString('en-US', { minimumFractionDigits: 2 });;
+                    newRow.append(newCell);
+                    $("#rowsReportGoals").append(newRow);
 
-                //    //Proyectado
-                //    var newCell = document.createElement("td");
-                //    newCell.innerHTML = projected.toLocaleString('en-US', { minimumFractionDigits: 2 });;
-                //    newRow.append(newCell);
-                //    $("#rowsReportGoals").append(newRow);
+                    //Proyectado
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = projected.toLocaleString('en-US', { minimumFractionDigits: 2 });;
+                    newRow.append(newCell);
+                    $("#rowsReportGoals").append(newRow);
 
-                //    //Proyectado porcentaje
-                //    var newCell = document.createElement("td");
-                //    newCell.innerHTML = projectedPorc.toLocaleString('en-US', { minimumFractionDigits: 2 });;
-                //    newRow.append(newCell);
-                //    $("#rowsReportGoals").append(newRow);
+                    //Proyectado porcentaje
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = projectedPorc.toLocaleString('en-US', { minimumFractionDigits: 2 });;
+                    newRow.append(newCell);
+                    $("#rowsReportGoals").append(newRow);
 
-                //    cont++;
+                    cont++;
 
-                //}
+                }
 
-                ////console.log(result);
+                //console.log(result);
 
                 $('#spinnerReports').hide();
             })
@@ -4361,11 +4406,13 @@ function fnLoadHolidays() {
                     btn1.innerHTML = iconDelete;
                     btn1.classList.add("btnGridDelete");
                     btn1.setAttribute('onclick', 'fnHolidaysDelete(' + id_ + ')');
+                    btn1.setAttribute('data-title', 'Borrar feriado');
 
                     var btn2 = document.createElement("btnHolidaysUpdate");
                     btn2.innerHTML = iconUpdate;
                     btn2.classList.add("btnGridUpdate");
                     btn2.setAttribute('onclick', 'fnHolidaysUpdate(' + id_ + ')');
+                    btn2.setAttribute('data-title', 'Actualizar feriado');
 
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
@@ -4507,7 +4554,7 @@ function fnBtnSaveHolidays() {
         {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json;charset=utf-8',
+                'Content-Type': 'application/json;charset=UTF-8',
                 Authorization: JSON.parse(dataWeb).token
             },
             body: JSON.stringify(data[0])
