@@ -330,3 +330,69 @@ body {
 [data-title] {
     position: relative;
 }
+
+ul {
+    position: absolute;
+    z-index: 2;
+    background-color: #add0d9;
+    margin-left: 110px;
+    list-style: none;
+}
+
+ul, li{
+    padding-right:16px;
+}
+
+.StyleR4 {
+    max-height: 400px;
+}
+
+
+.StyleR4 th:first-child,
+.StyleR4 td:first-child {
+    width: 300px;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background-color: #f2f2f2; /* Agregue el color de fondo aquí */
+    color: black;
+}
+
+.StyleR4 th:nth-child(2),
+.StyleR4 td:nth-child(2) {
+    width: 300px;
+    position: sticky;
+    left: 95px; /* Ancho de la primera columna */
+    z-index: 1;
+    background-color: #f2f2f2; /* Agregue el color de fondo aquí */
+    color: black;
+}
+
+.StyleR4 thead th:first-child,
+.StyleR4 thead td:first-child,
+.StyleR4 thead th:nth-child(2),
+.StyleR4 thead td:nth-child(2) {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+        
+.StyleR4 thead th {
+    position: sticky;
+    top: 0;
+    background-color: black;
+}
+
+.StyleR4 tr td:nth-child(1),
+.StyleR4 tr th:nth-child(1),
+.StyleR4 tr td:nth-child(2),
+.StyleR4 tr th:nth-child(2) {
+    min-width: 168px;
+    
+}
+
+.StyleR4 th,
+.StyleR4 td {
+    width: 20px;
+}
+

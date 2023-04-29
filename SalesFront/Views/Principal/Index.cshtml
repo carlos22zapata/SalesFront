@@ -45,8 +45,8 @@
                         <thead class="bg-dark text-light">
                             <th style="display:none;">Id</th>
                             <th>Registros encontrados</th>
-                            <th width="35%">_</th>
-                            <th width="8%">_</th>
+                            <th width="30%">_</th>
+                            <th width="50px"></th>
                         </thead>
                         <tbody id="rowsSearch">
                         </tbody>
@@ -111,6 +111,13 @@
                             <input type="text" id="TxtLastNameIdCliente" />
                         </div>
 
+                        <div class="col-md-12">
+                            <label for="TxtSaleSeller1" class="col-4">Vendedor <a style="color:#A52A2A;">*</a></label>
+                            <input type="text" class="txtMedium col-7" id="TxtSaleSeller1" autocomplete="off" placeholder="Vendedor"/>                                
+                            <label id="lblSaleSeller1" style="display:none;"></label>
+                            <ul id="SearchResultsSaleSeller1"></ul>
+                        </div>
+
                         <div>
                             <label for="TxtEmail1Cliente">Correo 1  <a style="color:#A52A2A;">*</a></label>
                             <input type="text" id="TxtEmail1Cliente" />
@@ -169,11 +176,11 @@
                             <input type="text" id="TxtCommentCliente" class="col-7" />
                         </div>
 
-                        <div>
+                       @* <div>
                             <label for="SellerSelectClient">Vendedor</label>
                             <select id="SellerSelectClient" class="selectControl" onclick="fnLoadSelect('SellerSelectClient', 'Account/GetUserSeller')">                                    
                             </select>
-                        </div>
+                        </div>*@
 
                     </div>                        
 
@@ -786,17 +793,16 @@
                             </div>
 
                             <div id="SalesNumCarModal">
-                                <label for="TxtNumberSale">Número <a style="color:#A52A2A;">*</a></label>
+                                <label for="TxtNumberSale">Número 
+                                    <a style="color:#A52A2A;">*</a> &nbsp;
+                                    <i id="lblNumberSale" class="fa-solid fa-triangle-exclamation" style="color:#A52A2A; display:none;" data-title="Formato del número incorrecto!!!"></i>
+                                    <i id="lblNumberSaleOk" class="fa-regular fa-circle-check" style="color:#27AE60; display:none;" data-title="Formato correcto!"></i>
+                                </label>
                                 <input type="text" class="txtMedium" id="TxtNumberSale"                                     
-                                    placeholder="000000000" onKeyPress="return validateInput(event)"
-                                    minlength="9" maxlength="9" 
-                                    data-title="Inserte 9 números seguidos, una ver se guarde el sistema los organiza con el formato 000-000-000"
+                                    placeholder="000-000-000" 
+                                    minlength="11" maxlength="11" 
+                                    data-title="Inserte 9 números en bloques de 3 divididos por un guión, Ejemplo 000-000-000"
                                     onblur="lostFocusNumberSale()"/>
-                            </div>
-
-                            <div class="d-flex align-items-center h-100">   
-                                <label id="lblNumberSale" style="color:#A52A2A; display:none;"><i class="fa-solid fa-arrow-up"></i> &nbsp; 
-                                    Formato del número incorrecto!!!</label>
                             </div>
 
                             <div>
@@ -804,22 +810,38 @@
                                 <input type="date" id="DpickerDateSale" />
                             </div>
 
-                            <div class="highlightSection">
-                                <label for="SelectSaleClient">Cliente <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" class="txtMedium" id="TxtSaleClient"/>
-                                <label id="lblSaleClient" style="display:none"></label>
-                                <button id="searchSalesClient" class="btnActionsSmall" onclick="fnShowGeneralSearch('clientes')" data-title="Buscar cliente"><i class="fa-solid fa-magnifying-glass"></i></button>
-                                <button id="addNewSalesClient" class="btnActionsSmall" onclick="fnAddClient('Ventas')" data-title="Agregar nuevo cliente"><i class="fa-solid fa-plus"></i></button>
+                            <div class="highlightSection" style="display:none;">
+                                @*<label for="SelectSaleClient">Cliente <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium" id="TxtSaleClient" />*@
+                                                                
+                                @*<button id="searchSalesClient" class="btnActionsSmall" onclick="fnShowGeneralSearch('clientes')" data-title="Buscar cliente"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button id="addNewSalesClient" class="btnActionsSmall" onclick="fnAddClient('Ventas')" data-title="Agregar nuevo cliente"><i class="fa-solid fa-plus"></i></button>*@
 
                                 @*<label for="SelectSaleClient">Cliente <a style="color:#A52A2A;">*</a></label>
                                 <select id="SelectSaleClient" class="selectControl" onclick="fnLoadSelect('SelectSaleClient', 'Clients/GetClients')">                                    
                                 </select>*@
                             </div>
-                                                                                    
-                            <div>
+                                   
+                            <div class="col-md-12">
+                                <label for="SelectSaleClient" class="col-4">Cliente <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium col-7" id="TxtSaleClient2" autocomplete="off" placeholder="Cliente"/>
+                                <button id="searchSalesClient" class="btnActionsSmall" onclick="fnShowGeneralSearch('clientes')" data-title="Buscar cliente"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button id="addNewSalesClient" class="btnActionsSmall" onclick="fnAddClient('Ventas')" data-title="Agregar nuevo cliente"><i class="fa-solid fa-plus"></i></button>
+                                <label id="lblSaleClient" style="display:none;"></label>
+                                <ul id="SearchResultsClients"></ul>
+                            </div>
+
+                            @*<div>
                                 <label for="SelectSaleSeller">Vendedor <a style="color:#A52A2A;">*</a></label>
                                 <select id="SelectSaleSeller" class="selectControl" onclick="fnLoadSelect('SelectSaleSeller', 'Account/GetUserSeller')">                                    
                                 </select>
+                            </div>*@
+
+                            <div class="col-md-12">
+                                <label for="SelectSaleSeller" class="col-4">Vendedor <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium col-7" id="TxtSaleSeller2" autocomplete="off" placeholder="Vendedor"/>                                
+                                <label id="lblSaleSeller" style="display:none;"></label>
+                                <ul id="SearchResultsSaleSeller"></ul>
                             </div>
 
                             <div>
@@ -840,10 +862,10 @@
                                 </select>
                             </div>
 
-                            <div>
+                           @* <div>
                                 <label for="TxtAmountSale">Monto <a style="color:#A52A2A;">*</a></label>
                                 <input type="text" id="TxtAmountSale" value="0.00" disabled/>
-                            </div>
+                            </div>*@
 
                             <div class="col-md-12">
                                 <label for="TxtCommentSale" class="col-4">Comentario</label>
@@ -988,11 +1010,18 @@
                         </div>
                         
                         <div class="ModalInfo">
-                            <div>
+                            <div style="display:none;">
                                 <label for="TxtIdSaleDetail">Carrito</label>
                                 <input type="text" class="txtSmall" id="TxtIdSaleDetail" readonly />
                             </div>
                             
+                            <div>
+                                <label for="TxtIdSaleCarNumber">Número</label>
+                                <input type="text" class="txtMedium" id="TxtCarNumberSale"                                     
+		                        placeholder="000-000-000" 
+		                        minlength="11" maxlength="11" readonly/>
+                            </div>
+
                             <div>
                                 <label for="DpickerDateSaleDetail">Fecha vuelo <a style="color:#A52A2A;">*</a></label>
                                 <input type="date" id="DpickerDateSaleDetail" />
@@ -1016,10 +1045,19 @@
                                 </select>
                             </div>*@
                                                                                     
-                            <div>
+                            @*<div>
                                 <label for="SelectSaleDeailTo">Destino <a style="color:#A52A2A;">*</a></label>
                                 <select id="SelectSaleDeailTo" class="selectControl" onclick="fnLoadSelect('SelectSaleDeailTo', 'Destinations/GetDestinationsCountries')">                                    
                                 </select>
+                            </div>*@
+
+                            <div>
+                                <div >
+                                <label for="lblSaleDeailTo">Destino <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium col-md-12" id="TxtSaleDeailTo" autocomplete="off"/>                                
+                                <ul id="SearchResultsSaleDeailTo"></ul>
+                                <label id="lblSaleDeailTo" style="display:none;"></label>
+                            </div>
                             </div>
 
                             <div>
@@ -1033,10 +1071,14 @@
                             </div>
 
                             <div>
-                                <label for="TxtMkupSaleDetail">MKUP <a style="color:#A52A2A;">*</a></label>
+                                <label for="TxtMkupSaleDetail">MKUP(%) <a style="color:#A52A2A;">*</a></label>
                                 <input type="text" id="TxtMkupSaleDetail" value="0.00"/>
                             </div>
 
+                            <div id="SectionAudit" style="display:none;">
+                                <label for="chkAudit">Registro auditado</label>
+                                <input type="checkbox" id="chkAudit"/>
+                            </div>
                             
                         </div>                        
 
@@ -1087,9 +1129,9 @@
 
                 <thead class="bg-dark text-light">
                     <th width="10%">Fecha</th>
-                    <th>Cliente</th>
-                    <th width="17%">Documento</th>
-                    <th>Vendedor</th> 
+                    <th width="19%">Cliente</th>
+                    <th width="15%">Documento</th>
+                    <th width="19%">Vendedor</th> 
                     <th width="12%">Número</th>
                     <th>Monto</th> 
                     <th width="13%">Opciones</th>
@@ -1142,7 +1184,7 @@
             
             
             <div id="btnsSellersDetail" class="btnsActions_ col-4">              
-                <button class="btnActions" id="btnSalesDetailNew" onclick="fnAddSalesDetail()" data-title="Agregar detalle de la venta"><i class="fa-solid fa-plus"></i></button>           
+                <button class="btnActions" id="btnSalesDetailNew" onclick="fnAddSalesDetail(true)" data-title="Agregar detalle de la venta"><i class="fa-solid fa-plus"></i></button>           
             </div>
 
             <br />
@@ -1163,7 +1205,7 @@
                     <th>Descripción</th>
                     <th>Monto</th> 
                     <th>Utilidad</th> 
-                    <th>Mkup</th> 
+                    <th>Mkup(%)</th> 
                     <th width="10%">Opciones</th>
                 </thead>
                 <tbody id="rowsSalesDetail">
@@ -1654,8 +1696,7 @@
     </div>
     <!--Panel principal de destinos (fin)-->
 
-    <!--Panel principal de objetivos (fin)-->
-    
+    <!--Panel principal de objetivos (fin)-->    
     <div id="MasterGoals" class="divMaster" style="display:none;">
         <div class="row">
             <div class="row col-8"> 
@@ -1789,11 +1830,10 @@
             </div>            
         </div>
 
-    </div>
-    
+    </div>    
     <!--Panel principal de objetivos (fin)-->
 
-    <!--Sección de graficos (Inicio)-->
+    <!--Sección de graficos y reportes (Inicio)-->
     <div id="MasterCharts" class="divMaster" >
         
         <div class="row">
@@ -1807,27 +1847,180 @@
             </div>
 
             <div id="btnsCoins" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnRefreshReport" onclick="fnReportGoals()" data-title="Resetear registros"><i class="fa-solid fa-arrows-rotate"></i></button>                             
+                <button class="btnActions" id="btnRefreshReport" onclick="fnRefreshReport()" data-title="Recalcular reporte"><i class="fa-solid fa-arrows-rotate"></i></button>   
+                
             </div>
+
+            <div class="row col-9">
+                <div class="col-3">
+                    <input type="radio" id="Rep1" name="option" value="Report1" onclick="fnSelectReport()">
+		            <label for="Rep1">Reporte por día</label><br>
+                </div>
+
+                <div class="col-3">
+                    <input type="radio" id="Rep2" name="option" value="Report2" onclick="fnSelectReport()">
+		            <label for="Rep2">Reporte por meses</label><br>
+                </div>
+
+                <div class="col-3">
+                    <input type="radio" id="Rep3" name="option" value="Report3" onclick="fnSelectReport()">
+		            <label for="Rep3">Gestion por fechas</label><br>
+                </div> 
+                
+                <div class="col-3">
+                    <input type="radio" id="Rep4" name="option" value="Report4" onclick="fnSelectReport()">
+		            <label for="Rep4">Progresión mensual</label><br>
+                </div> 
+            </div>
+
             <br />
             <hr />
         </div>
 
-        <div class="col-md-12 row">
-            <div class="col-md-4">
-                <label for="DpickerReportGoalsIni">Fecha inicio</label>
-                <input type="date" id="DpickerReportGoalsIni" />
+        <!--Reporte 1 GM por día-->
+        <div id="Report1">
+
+            <div class="col-md-12 row">
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsIni">Fecha inicio</label>
+                    <input type="date" id="DpickerReportGoalsIniR1" />
+                </div>
+
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsEnd">Fecha fin</label>
+                    <input type="date" id="DpickerReportGoalsEndR1" />
+                </div>
             </div>
 
-            <div class="col-md-4">
-                <label for="DpickerReportGoalsEnd">Fecha fin</label>
-                <input type="date" id="DpickerReportGoalsEnd" />
-            </div>
+            <br/>
+
+            <div id="gridSalesByBranch"></div>            
         </div>
-        
-        <br />
 
-        <div id="TabReportGoals" class="container">
+        <!--Reporte 2 GM por día-->
+        <div id="Report2" style="display:none">
+
+            <div class="col-md-12 row">
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsIniR2">Fecha inicio</label>
+                    <input type="date" id="DpickerReportGoalsIniR2" />
+                </div>
+
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsEndR3">Fecha fin</label>
+                    <input type="date" id="DpickerReportGoalsEndR2" />
+                </div>
+            </div>
+
+            <br/>
+
+            <div id="gridSalesByMonth"></div>  
+            <div class="options">
+                <div class="caption">Options</div>
+                <div class="option">
+                  <div id="autoExpandR2" style="color:white;"></div>
+                </div>
+              </div>
+        </div>
+
+        <!--Reporte 3-->
+        <div id="Report3" style="display:none">
+
+            <div class="col-md-12 row">
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsIniR3">Fecha inicio</label>
+                    <input type="date" id="DpickerReportGoalsIniR3" />
+                </div>
+
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsEndR3">Fecha fin</label>
+                    <input type="date" id="DpickerReportGoalsEndR3" />
+                </div>
+            </div>
+
+            <br/>
+
+              <div id="gridContainer"></div>
+              <div class="options">
+                <div class="caption">Options</div>
+                <div class="option">
+                  <div id="autoExpand" style="color:white;"></div>
+                </div>
+              </div>
+        </div>
+
+        <!--Reporte 4, reporte del mes poor día por columnas-->
+        <div id="Report4" style="display:none">
+            <div class="col-md-12 row">
+                
+                <div class="row col-6">
+                    <div class="col-md-4">
+                        <label for="montsSelect">Mes: </label>
+                        <select id="montsSelect" class="selectControl">                                
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="yearSelect">Año: </label>
+                       <select id="yearSelect" class="selectControl">
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                    <option value="2031">2031</option>
+                                    <option value="2032">2032</option>
+                                    <option value="2033">2033</option>
+                                    <option value="2034">2034</option>
+                                </select>
+                    </div>
+                </div>
+                
+
+                <div class="row col-6">
+
+                    <div class="col-3">
+                        <label>Incluye los vendedores?:</label>
+                    </div>
+
+                    <div class="col-1">
+                        <input type="radio" id="Sel1" name="optionSeller" value="Seller1" onclick="fnSelectReport()">
+		                <label for="Sel1">Si</label><br>
+                    </div>
+
+                    <div class="col-1">
+                        <input type="radio" id="Sel2" name="optionSeller" value="Seller2" onclick="fnSelectReport()">
+		                <label for="Sel2">No</label><br>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <br/>
+
+            <div id="gridSalesByMonthColumns" class="StyleR4 table-responsive" style="overflow-y: auto;">
+                <table class="table bg-white table-striped table-hover table-sortable"
+                       id="TabReport4"
+                       data-toggle="table"
+                       data-flat="true"
+                       data-search="true">
+
+                    <thead class="bg-dark text-light">
+                        <th>Sucursal</th>
+                        <th>Vendedor</th>                    
+                    </thead>
+                    <tbody id="rowsTabReport4">
+                    </tbody>
+                </table>
+            </div>  
+        
+        </div>
+
+        <!--<div id="TabReportGoals" class="container">
             
             <table class="table bg-white table-striped table-hover table-sortable TableDes"
                    id="TabReportGoalsT"
@@ -1852,7 +2045,7 @@
                 </tbody>
             </table>
 
-        </div>
+        </div>-->
 
         <br />
 
@@ -1863,8 +2056,9 @@
         <figure class="highcharts-figure">
             <div id="container2"></div>            
         </figure>
+
     </div>
-    <!--Sección de graficos (Fin)-->
+    <!--Sección de graficos y reportes (Fin)-->
 
     <div>
         
@@ -1894,7 +2088,11 @@
                 
         //$('#TxtNumberSale').mask('000-000-000');
 
-        fnReportGoals();
+        document.getElementById("Rep1").checked = true;
+        fnReportGoalsResume();
+
+        //const Workbook = new ExcelJS.Workbook();
+        //fnReportGoals();
     })
 </script>
 
