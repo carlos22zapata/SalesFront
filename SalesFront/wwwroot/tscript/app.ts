@@ -4078,6 +4078,13 @@ function fnAddDestinations(id: number) {
     $('#ModalDestinations').modal('show');
 }
 
+function fnSearchDestinations() {
+    var description = $('#txtSearchDestinations').val();
+    var position = $('#DestinationsNPosition').val();
+    var select = "select top " + position + " * from Clients ";
+
+}
+
 function fnBtnSaveDestinations() {
     let data = [];
     var obj = {};
