@@ -1,19 +1,21 @@
+ï»¿@charset "UTF-8";
+
 .divMaster {
     background-color: rgba(0, 0, 0, 0.425);
     border-radius: 20px;
-    padding:20px;
+    padding: 20px;
     color: white;
-    margin:0;
+    margin: 0;
 }
 
 .divPrincipal {
-    margin:0px;    
+    margin: 0px;
 }
 
-.numberPosition{
-    width:50px;
-    background-color:lightgrey;
-    border:none;
+.numberPosition {
+    width: 50px;
+    background-color: lightgrey;
+    border: none;
     border-radius: 10px;
     padding: 5px;
 }
@@ -27,8 +29,8 @@
     width: 450px;
 }
 
-.txtSmall{
-    width:50px;    
+.txtSmall {
+    width: 50px;
 }
 
 .txtMedium {
@@ -44,12 +46,12 @@
     color: white;
     font-size: 25px;
     float: right;
-    margin-right:4px;
+    margin-right: 4px;
 }
 
-.btnActions:hover {
-    background-color: orange;    
-}
+    .btnActions:hover {
+        background-color: orange;
+    }
 
 .btnActionsSmall {
     border-radius: 50px;
@@ -63,9 +65,9 @@
     margin-right: 4px;
 }
 
-.btnActionsSmall:hover {
-    background-color: orange;
-}
+    .btnActionsSmall:hover {
+        background-color: orange;
+    }
 
 .highlightSection {
     background-color: #e4e4e4;
@@ -100,32 +102,32 @@ btnsActions_ {
     border-top-right-radius: 90px;
 }
 
-/* Div header */
-.principalMenu h2 {
-    padding: 40px 0 0 0;
-    cursor: pointer;
-}
+    /* Div header */
+    .principalMenu h2 {
+        padding: 40px 0 0 0;
+        cursor: pointer;
+    }
 
-/* Div links */
-.principalMenu a {
-    font-size: 14px;
-    color: #fff;
-    display: block;
-    padding: 12px;
-    padding-left: 30px;
-    text-decoration: none;
-    outline: none;
-}
+    /* Div links */
+    .principalMenu a {
+        font-size: 14px;
+        color: #fff;
+        display: block;
+        padding: 12px;
+        padding-left: 30px;
+        text-decoration: none;
+        outline: none;
+    }
 
-/* Div link on hover */
-.principalMenu a:hover {
-    color: #56ff38;
-    background: #fff;
-    position: relative;
-    background-color: #fff;
-    border-top-left-radius: 22px;
-    border-bottom-left-radius: 22px;
-}
+        /* Div link on hover */
+        .principalMenu a:hover {
+            color: #56ff38;
+            background: #fff;
+            position: relative;
+            background-color: #fff;
+            border-top-left-radius: 22px;
+            border-bottom-left-radius: 22px;
+        }
 
 /*   Boton primcipal flotante */
 
@@ -145,17 +147,42 @@ btnsActions_ {
     margin-left: 100px;
 }
 
-.btn-float-principal:hover {
-    background-color: #a2e2d8; /* Color de fondo al pasar el cursor */
-    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.6);
-    transform: translateY(2px);
-    cursor: pointer;
+    .btn-float-principal:hover {
+        background-color: #a2e2d8; /* Color de fondo al pasar el cursor */
+        box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.6);
+        transform: translateY(2px);
+        cursor: pointer;
+    }
+
+.btn-float-principal-small {
+    background-color: #6ec5b9;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: middle;
+    justify-content: center;
+    position: relative;
+    z-index: 99;
+    bottom: 0px;
+    top: 8px;
+    right: 10px;
+    margin-right: 10px;
+    margin-left: 3px;
+    padding-top: 5px;
 }
 
-/*CSS del menú principal*/
+    .btn-float-principal-small:hover {
+        background-color: #a2e2d8; /* Color de fondo al pasar el cursor */
+        box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.6);
+        transform: translateY(2px);
+        cursor: pointer;
+    }
+
+/*CSS del menï¿½ principal*/
 .menu-float {
     border-radius: 20px;
-    font-size: 16px; /* Cambiar el tamaño de la tipografia */
+    font-size: 16px; /* Cambiar el tamaï¿½o de la tipografia */
     color: #ffffff; /* Color del texto */
     background-color: rgba(0, 0, 0, 0.425);
     width: 500px;
@@ -165,7 +192,7 @@ btnsActions_ {
     max-width: 300px;
     padding: 3px;
     margin-left: 150px;
-    margin-bottom:13px
+    margin-bottom: 13px
 }
 
 .menu-float-text {
@@ -188,8 +215,8 @@ btnsActions_ {
     cursor: pointer;
 }
 
-.divGrid{
-    background-color:yellow;
+.divGrid {
+    background-color: yellow;
 }
 
 body {
@@ -220,10 +247,10 @@ body {
     overflow-y: initial !important
 }
 
-.selectControl{
-    width:170px;
-    height:28px;
-    border-radius:3px;
+.selectControl {
+    width: 170px;
+    height: 28px;
+    border-radius: 3px;
 }
 
 .btnGridSalesClients {
@@ -248,10 +275,6 @@ body {
     font-size: 20px;
     font-weight: normal;
     margin-left: 5px
-}
-
-.btnGridDelete title{
-    color: green;
 }
 
 .btnGridUpdate {
@@ -279,3 +302,95 @@ body {
 /*}*/
 
 
+[data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
+    visibility: visible;
+}
+
+[data-title]:after {
+    content: attr(data-title);
+    background-color: #DEB237;
+    color: #fff;
+    font-size: 14px;
+    font-family: Raleway;
+    position: absolute;
+    padding: 3px 20px;
+    bottom: -1.6em;
+    right: 10%;
+    white-space: nowrap;
+    box-shadow: 1px 1px 3px #222222;
+    opacity: 0;
+    border: none;
+    z-index: 100099999 !important;
+    visibility: hidden;
+    border-radius: 6px;
+}
+
+[data-title] {
+    position: relative;
+}
+
+ul {
+    position: absolute;
+    z-index: 2;
+    background-color: #add0d9;
+    margin-left: 110px;
+    list-style: none;
+}
+
+ul, li {
+    padding-right: 16px;
+}
+
+.StyleR4 {
+    max-height: 400px;
+}
+
+
+    .StyleR4 th:first-child,
+    .StyleR4 td:first-child {
+        width: 300px;
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        background-color: #f2f2f2; /* Agregue el color de fondo aquÃ­ */
+        color: black;
+    }
+
+    .StyleR4 th:nth-child(2),
+    .StyleR4 td:nth-child(2) {
+        width: 300px;
+        position: sticky;
+        left: 95px; /* Ancho de la primera columna */
+        z-index: 1;
+        background-color: #f2f2f2; /* Agregue el color de fondo aquÃ­ */
+        color: black;
+    }
+
+    .StyleR4 thead th:first-child,
+    .StyleR4 thead td:first-child,
+    .StyleR4 thead th:nth-child(2),
+    .StyleR4 thead td:nth-child(2) {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .StyleR4 thead th {
+        position: sticky;
+        top: 0;
+        background-color: black;
+    }
+
+    .StyleR4 tr td:nth-child(1),
+    .StyleR4 tr th:nth-child(1),
+    .StyleR4 tr td:nth-child(2),
+    .StyleR4 tr th:nth-child(2) {
+        min-width: 168px;
+    }
+
+    .StyleR4 th,
+    .StyleR4 td {
+        width: 20px;
+    }

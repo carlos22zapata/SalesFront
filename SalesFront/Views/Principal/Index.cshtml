@@ -30,7 +30,7 @@
                         <div class="text-warning col-8">Cargando...</div>
                     </div>
 
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>
                 </div>
                 
                 <div class="modal-body">  
@@ -45,8 +45,8 @@
                         <thead class="bg-dark text-light">
                             <th style="display:none;">Id</th>
                             <th>Registros encontrados</th>
-                            <th width="35%">_</th>
-                            <th width="8%">_</th>
+                            <th width="30%">_</th>
+                            <th width="50px"></th>
                         </thead>
                         <tbody id="rowsSearch">
                         </tbody>
@@ -55,20 +55,20 @@
                 
                 <div class="frameworkDiv modal-footer backGroundSearch">
                     <div>
-                        <a onclick="fnChangeGeneralSearch(5)">5</a>
+                        <a onclick="fnChangeGeneralSearch(5)" data-title="Registros por página">5</a>
                         &nbsp;
-                        <a onclick="fnChangeGeneralSearch(10)">10</a>
+                        <a onclick="fnChangeGeneralSearch(10)" data-title="Registros por página">10</a>
                         &nbsp;
-                        <a onclick="fnChangeGeneralSearch(15)">15</a>
+                        <a onclick="fnChangeGeneralSearch(15)" data-title="Registros por página">15</a>
                         &nbsp;
-                        <a onclick="fnChangeGeneralSearch(20)">20</a> 
+                        <a onclick="fnChangeGeneralSearch(20)" data-title="Registros por página">20</a> 
                         &nbsp;&nbsp;&nbsp;
                         <label id="selGeneralSearchGroup" style="display:none;">5</label>
                 
                         &nbsp;&nbsp;
                         <input id="SalesGeneralSearchNPosition" type="number" value="1" 
                             min="1" max="99" class="numberPosition" 
-                            onchange="fnLoadGeneralSearch()"/>
+                            onchange="fnLoadGeneralSearch()" data-title="Cantidad de registros por página"/>
                         &nbsp;&nbsp;
 
                     </div>
@@ -87,13 +87,13 @@
 
                 <div class="modal-header">
                     <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Nuevo cliente <label id="lblOrigin"></label></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
                 </div>
 
                 <div class="modal-body">
                         
-                    <button class="btnActions" id="btnClientSave" onclick="fnBtnClientSave()"><i class="fa-regular fa-floppy-disk"></i></button>
-                    <button class="btnActions" id="btnClientClean" onclick="fnCleanClient()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                    <button class="btnActions" id="btnClientSave" onclick="fnBtnClientSave()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                    <button class="btnActions" id="btnClientClean" onclick="fnCleanClient()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
                         
                     <div class="ModalInfo">
                         <div id="clientIdModal" style="display:none">
@@ -109,6 +109,13 @@
                         <div>
                             <label for="TxtLastNameIdCliente">Apellido  <a style="color:#A52A2A;">*</a></label>
                             <input type="text" id="TxtLastNameIdCliente" />
+                        </div>
+
+                        <div class="col-md-12">
+                            <label for="TxtSaleSeller1" class="col-4">Vendedor <a style="color:#A52A2A;">*</a></label>
+                            <input type="text" class="txtMedium col-7" id="TxtSaleSeller1" autocomplete="off" placeholder="Vendedor"/>                                
+                            <label id="lblSaleSeller1" style="display:none;"></label>
+                            <ul id="SearchResultsSaleSeller1"></ul>
                         </div>
 
                         <div>
@@ -169,11 +176,11 @@
                             <input type="text" id="TxtCommentCliente" class="col-7" />
                         </div>
 
-                        <div>
+                       @* <div>
                             <label for="SellerSelectClient">Vendedor</label>
                             <select id="SellerSelectClient" class="selectControl" onclick="fnLoadSelect('SellerSelectClient', 'Account/GetUserSeller')">                                    
                             </select>
-                        </div>
+                        </div>*@
 
                     </div>                        
 
@@ -200,9 +207,9 @@
             </div>
 
             <div id="btnsClients" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnClientSearch" onclick="fnSearchClient()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnClientAdvancedSearch" onclick="fnSearchAdvancedClient()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
-                <button class="btnActions" id="btnClientNew" onclick="fnAddClient('')"><i class="fa-solid fa-plus"></i></button>                              
+                <button class="btnActions" id="btnClientSearch" onclick="fnSearchClient()"><i class="fa-solid fa-magnifying-glass" data-title="Buscar clientes"></i></button>
+                <button class="btnActions" id="btnClientAdvancedSearch" onclick="fnSearchAdvancedClient()"><i class="fa-solid fa-arrow-down-short-wide" data-title="Busqueda avanzada de clientes"></i></button>
+                <button class="btnActions" id="btnClientNew" onclick="fnAddClient('')"><i class="fa-solid fa-plus" data-title="Crear nuevo cliente"></i></button>                              
             </div>
             <br />
             <hr />
@@ -217,13 +224,13 @@
                     <div class="modal-header">
                         <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Ventas por cliente</h5>
                         <label id="idClient_Sales" style="display:none;"></label>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
                     </div>
 
                     <div class="modal-body">
                         
-                        <button class="btnActions" id="" onclick=""><i class="fa-regular fa-floppy-disk"></i></button>
-                        <button class="btnActions" id="" onclick=""><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="btnActions" id="" onclick="" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="" onclick="" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
                         
                         <div>
                             <label id="nameClient_Sales"></label>
@@ -363,21 +370,27 @@
                 </tbody>
             </table>
 
-            <div>
-                <a onclick="fnChangeDataGroupClients(5)">5</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupClients(10)">10</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupClients(15)">15</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupClients(20)">20</a> 
-                &nbsp;&nbsp;&nbsp;
-                <label id="selDataGroup" style="display:none;">5</label>
-                
+            <div class="row">
+                <div class="col-2">
+                    <a onclick="fnChangeDataGroupClients(5)" data-title="Registros por página">5</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupClients(10)" data-title="Registros por página">10</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupClients(15)" data-title="Registros por página">15</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupClients(20)" data-title="Registros por página">20</a> 
+                    &nbsp;&nbsp;&nbsp;
+                    <label id="selDataGroup" style="display:none;">5</label>
+                </div>
+                                
                 &nbsp;&nbsp;
-                <input id="ClientsNPosition" type="number" value="1" 
+
+                <div data-title="Cantidad de registros por página" class="col-1">
+                    <input id="ClientsNPosition" type="number" value="1" 
                     min="1" max="99" class="numberPosition" 
                     onchange="fnLoadClients()"/>
+                </div>
+                
                 &nbsp;&nbsp;
 
             </div>
@@ -393,9 +406,9 @@
         <div class="row">
             <h3 class="col-4">Panel principal de vendedores</h3>
             <div id="btnsSellers" class="btnsActions_ col-8">
-                <button class="btnActions" id="btnSearchSeller" onclick="fnSearchSeller()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnAdvancedSearchSeller" onclick="fnSearchAdvancedSeller()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
-                <button class="btnActions" id="btnSellerNew" onclick="fnAddSeller()"><i class="fa-solid fa-plus"></i></button>
+                <button class="btnActions" id="btnSearchSeller" onclick="fnSearchSeller()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnAdvancedSearchSeller" onclick="fnSearchAdvancedSeller()" data-title="Busqueda Busqueda avanzada de registro"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
+                <button class="btnActions" id="btnSellerNew" onclick="fnAddSeller()" data-title="Guardar registro"><i class="fa-solid fa-plus"></i></button>
                               
             </div>
 
@@ -412,13 +425,13 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Nuevo vendedor</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
                     </div>
 
                     <div class="modal-body">
                         
-                        <button class="btnActions" id="btnSaveSeller" onclick="fnBtnSaveSeller()"><i class="fa-regular fa-floppy-disk"></i></button>
-                        <button class="btnActions" id="btnCleanSeller" onclick="fnCleanSeller()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="btnActions" id="btnSaveSeller" onclick="fnBtnSaveSeller()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnCleanSeller" onclick="fnCleanSeller()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
                         
                         <div class="ModalInfo">
                             <div id="sellerIdModal" style="display:none">
@@ -614,10 +627,7 @@
             </div>
 
         </div>
-
-        
-
-       
+               
     </div>
     <!--Seleción de los vendedores (Fin)-->
 
@@ -636,8 +646,8 @@
             </div>
                         
             <div id="btnsProducts" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnProductsSearch" onclick="fnSearchProducts()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnProductsNew" onclick="fnAddProduct()"><i class="fa-solid fa-plus"></i></button>                              
+                <button class="btnActions" id="btnProductsSearch" onclick="fnSearchProducts()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnProductsNew" onclick="fnAddProduct()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                              
             </div>
 
             <br />
@@ -683,19 +693,26 @@
                 </tbody>
             </table>
 
-            <div>
-                <a onclick="fnChangeDataGroupProducts(5)">5</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupProducts(10)">10</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupProducts(15)">15</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupProducts(20)">20</a> 
-                &nbsp;&nbsp;&nbsp;
-                <label id="selDataProductsGroup" style="display:none;">5</label>
+            <div class="row">
+                <div class="col-2">
+                    <a onclick="fnChangeDataGroupProducts(5)" data-title="Registros por página">5</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupProducts(10)" data-title="Registros por página">10</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupProducts(15)" data-title="Registros por página">15</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupProducts(20)" data-title="Registros por página">20</a> 
+                    &nbsp;&nbsp;&nbsp;
+                    <label id="selDataProductsGroup" style="display:none;">5</label>
+                </div>                
                 
                 &nbsp;&nbsp;
-                <input id="ProductsNPosition" type="number" value="1" min="1" max="99" class="numberPosition" onchange="fnLoadProducts()"/>
+                <div data-title="Cantidad de registros por página" class="col-1">
+                    <input id="ProductsNPosition" type="number" value="1" 
+                        min="1" max="99" class="numberPosition" 
+                        onchange="fnLoadProducts()"/>
+                </div>
+                
                 &nbsp;&nbsp;
 
             </div>
@@ -710,13 +727,13 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Nuevo producto</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
                     </div>
 
                     <div class="modal-body">
                         
-                        <button class="btnActions" id="btnProductSave" onclick="fnBtnSaveProduct()"><i class="fa-regular fa-floppy-disk"></i></button>
-                        <button class="btnActions" id="btnProductClean" onclick="fnCleanProducts()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="btnActions" id="btnProductSave" onclick="fnBtnSaveProduct()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnProductClean" onclick="fnCleanProducts()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
                         
                         <div class="ModalInfo">
                             <div id="clientIdModal" style="display:none">
@@ -761,13 +778,13 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Carrito de ventas</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
                     </div>
 
                     <div class="modal-body">
                         
-                        <button class="btnActions" id="btnSaveSale" onclick="fnBtnSaveSale()"><i class="fa-regular fa-floppy-disk"></i></button>
-                        <button class="btnActions" id="btnCleanSale" onclick="fnCleanSale()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="btnActions" id="btnSaveSale" onclick="fnBtnSaveSale()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnCleanSale" onclick="fnCleanSale()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
                                                 
                         <div class="ModalInfo">
                             <div id="SalesIdModal" style="display:none">
@@ -776,8 +793,16 @@
                             </div>
 
                             <div id="SalesNumCarModal">
-                                <label for="TxtNumberSale">Número <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" class="txtMedium" id="TxtNumberSale" pattern="^[0-9]{3}-[0-9]{3}-[0-9]{3} $" placeholder="000-000-000" />
+                                <label for="TxtNumberSale">Número 
+                                    <a style="color:#A52A2A;">*</a> &nbsp;
+                                    <i id="lblNumberSale" class="fa-solid fa-triangle-exclamation" style="color:#A52A2A; display:none;" data-title="Formato del número incorrecto!!!"></i>
+                                    <i id="lblNumberSaleOk" class="fa-regular fa-circle-check" style="color:#27AE60; display:none;" data-title="Formato correcto!"></i>
+                                </label>
+                                <input type="text" class="txtMedium" id="TxtNumberSale"                                     
+                                    placeholder="000-000-000" 
+                                    minlength="11" maxlength="11" 
+                                    data-title="Inserte 9 números en bloques de 3 divididos por un guión, Ejemplo 000-000-000"
+                                    onblur="lostFocusNumberSale()"/>
                             </div>
 
                             <div>
@@ -785,22 +810,38 @@
                                 <input type="date" id="DpickerDateSale" />
                             </div>
 
-                            <div class="highlightSection">
-                                <label for="SelectSaleClient">Cliente <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" class="txtMedium" id="TxtSaleClient"/>
-                                <label id="lblSaleClient" style="display:none"></label>
-                                <button id="searchSalesClient" class="btnActionsSmall" onclick="fnShowGeneralSearch('clientes')"><i class="fa-solid fa-magnifying-glass"></i></button>
-                                <button id="addNewSalesClient" class="btnActionsSmall" onclick="fnAddClient('Ventas')"><i class="fa-solid fa-plus"></i></button>
+                            <div class="highlightSection" style="display:none;">
+                                @*<label for="SelectSaleClient">Cliente <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium" id="TxtSaleClient" />*@
+                                                                
+                                @*<button id="searchSalesClient" class="btnActionsSmall" onclick="fnShowGeneralSearch('clientes')" data-title="Buscar cliente"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button id="addNewSalesClient" class="btnActionsSmall" onclick="fnAddClient('Ventas')" data-title="Agregar nuevo cliente"><i class="fa-solid fa-plus"></i></button>*@
 
                                 @*<label for="SelectSaleClient">Cliente <a style="color:#A52A2A;">*</a></label>
                                 <select id="SelectSaleClient" class="selectControl" onclick="fnLoadSelect('SelectSaleClient', 'Clients/GetClients')">                                    
                                 </select>*@
                             </div>
-                                                                                    
-                            <div>
+                                   
+                            <div class="col-md-12">
+                                <label for="SelectSaleClient" class="col-4">Cliente <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium col-7" id="TxtSaleClient2" autocomplete="off" placeholder="Cliente"/>
+                                <button id="searchSalesClient" class="btnActionsSmall" onclick="fnShowGeneralSearch('clientes')" data-title="Buscar cliente"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button id="addNewSalesClient" class="btnActionsSmall" onclick="fnAddClient('Ventas')" data-title="Agregar nuevo cliente"><i class="fa-solid fa-plus"></i></button>
+                                <label id="lblSaleClient" style="display:none;"></label>
+                                <ul id="SearchResultsClients"></ul>
+                            </div>
+
+                            @*<div>
                                 <label for="SelectSaleSeller">Vendedor <a style="color:#A52A2A;">*</a></label>
                                 <select id="SelectSaleSeller" class="selectControl" onclick="fnLoadSelect('SelectSaleSeller', 'Account/GetUserSeller')">                                    
                                 </select>
+                            </div>*@
+
+                            <div class="col-md-12">
+                                <label for="SelectSaleSeller" class="col-4">Vendedor <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium col-7" id="TxtSaleSeller2" autocomplete="off" placeholder="Vendedor"/>                                
+                                <label id="lblSaleSeller" style="display:none;"></label>
+                                <ul id="SearchResultsSaleSeller"></ul>
                             </div>
 
                             <div>
@@ -821,10 +862,10 @@
                                 </select>
                             </div>
 
-                            <div>
+                           @* <div>
                                 <label for="TxtAmountSale">Monto <a style="color:#A52A2A;">*</a></label>
                                 <input type="text" id="TxtAmountSale" value="0.00" disabled/>
-                            </div>
+                            </div>*@
 
                             <div class="col-md-12">
                                 <label for="TxtCommentSale" class="col-4">Comentario</label>
@@ -852,14 +893,14 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Pagos</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
                     </div>
 
                     <div class="modal-body">
                         
-                        <button class="btnActions" id="btnDeletePayment" onclick="fnDeletePayment()"><i class="fa-regular fa-trash-can"></i></button>                        
-                        <button class="btnActions" id="btnSavePayment" onclick="fnBtnSavePayment()"><i class="fa-regular fa-floppy-disk"></i></button>
-                        <button class="btnActions" id="btnCleanPayment" onclick="fnCleanPayment()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="btnActions" id="btnDeletePayment" onclick="fnDeletePayment()" data-title="Borrar pago"><i class="fa-regular fa-trash-can"></i></button>                        
+                        <button class="btnActions" id="btnSavePayment" onclick="fnBtnSavePayment()" data-title="Guardar pago"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnCleanPayment" onclick="fnCleanPayment()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
                             
                         <br />
 
@@ -894,7 +935,7 @@
                             <div>
                                 <label for="TxtAmountPayment">Monto <a style="color:#A52A2A;">*</a></label>
                                 <input type="text" class="txtMedium" id="TxtAmountPayment" value="0.00"/>
-                                <button id="AddPaimentRecord" class="btnActionsSmall" onclick="fnAddPaymentRecord()"><i class="fa-solid fa-plus"></i></button>
+                                <button id="AddPaimentRecord" class="btnActionsSmall" onclick="fnAddPaymentRecord()" data-title="Agregar pago"><i class="fa-solid fa-plus"></i></button>
                             </div>
 
                             <br />
@@ -955,13 +996,13 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> <a id="lblDetalleNro">Detalle del carrito</a></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
                     </div>
 
                     <div class="modal-body">
                         
-                        <button class="btnActions" id="btnSaveSaleDetail" onclick="fnBtnSaveSaleDetail()"><i class="fa-regular fa-floppy-disk"></i></button>
-                        <button class="btnActions" id="btnCleanSaleDetail" onclick="fnCleanSaleDetail()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="btnActions" id="btnSaveSaleDetail" onclick="fnBtnSaveSaleDetail()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnCleanSaleDetail" onclick="fnCleanSaleDetail()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
                                                 
                         <div id="spinnerSalesModal" class="row col-4" style="display:none;">                    
                             <div  class="spinner-border text-warning col-4" role="status"></div>
@@ -969,11 +1010,18 @@
                         </div>
                         
                         <div class="ModalInfo">
-                            <div>
+                            <div style="display:none;">
                                 <label for="TxtIdSaleDetail">Carrito</label>
                                 <input type="text" class="txtSmall" id="TxtIdSaleDetail" readonly />
                             </div>
                             
+                            <div>
+                                <label for="TxtIdSaleCarNumber">Número</label>
+                                <input type="text" class="txtMedium" id="TxtCarNumberSale"                                     
+		                        placeholder="000-000-000" 
+		                        minlength="11" maxlength="11" readonly/>
+                            </div>
+
                             <div>
                                 <label for="DpickerDateSaleDetail">Fecha vuelo <a style="color:#A52A2A;">*</a></label>
                                 <input type="date" id="DpickerDateSaleDetail" />
@@ -997,10 +1045,19 @@
                                 </select>
                             </div>*@
                                                                                     
-                            <div>
+                            @*<div>
                                 <label for="SelectSaleDeailTo">Destino <a style="color:#A52A2A;">*</a></label>
                                 <select id="SelectSaleDeailTo" class="selectControl" onclick="fnLoadSelect('SelectSaleDeailTo', 'Destinations/GetDestinationsCountries')">                                    
                                 </select>
+                            </div>*@
+
+                            <div>
+                                <div >
+                                <label for="lblSaleDeailTo">Destino <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" class="txtMedium col-md-12" id="TxtSaleDeailTo" autocomplete="off"/>                                
+                                <ul id="SearchResultsSaleDeailTo"></ul>
+                                <label id="lblSaleDeailTo" style="display:none;"></label>
+                            </div>
                             </div>
 
                             <div>
@@ -1014,10 +1071,14 @@
                             </div>
 
                             <div>
-                                <label for="TxtMkupSaleDetail">MKUP <a style="color:#A52A2A;">*</a></label>
+                                <label for="TxtMkupSaleDetail">MKUP(%) <a style="color:#A52A2A;">*</a></label>
                                 <input type="text" id="TxtMkupSaleDetail" value="0.00"/>
                             </div>
 
+                            <div id="SectionAudit" style="display:none;">
+                                <label for="chkAudit">Registro auditado</label>
+                                <input type="checkbox" id="chkAudit"/>
+                            </div>
                             
                         </div>                        
 
@@ -1049,9 +1110,9 @@
                 
             </div>
             <div id="btnsSales" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnSearchSales" onclick="fnSearchSales()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnAdvancedSearchSales" onclick="fnSearchAdvancedSales()"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
-                <button class="btnActions" id="btnSalesNew" onclick="fnAddSales()"><i class="fa-solid fa-plus"></i></button>                 
+                <button class="btnActions" id="btnSearchSales" onclick="fnSearchSales()" data-title="Buscar venta"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnAdvancedSearchSales" onclick="fnSearchAdvancedSales()" data-title="Buscar venta avanzada"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
+                <button class="btnActions" id="btnSalesNew" onclick="fnAddSales()" data-title="Agregar nueva venta"><i class="fa-solid fa-plus"></i></button>                 
             </div>
 
             <br />
@@ -1068,9 +1129,9 @@
 
                 <thead class="bg-dark text-light">
                     <th width="10%">Fecha</th>
-                    <th>Cliente</th>
-                    <th width="17%">Documento</th>
-                    <th>Vendedor</th> 
+                    <th width="19%">Cliente</th>
+                    <th width="15%">Documento</th>
+                    <th width="19%">Vendedor</th> 
                     <th width="12%">Número</th>
                     <th>Monto</th> 
                     <th width="13%">Opciones</th>
@@ -1079,21 +1140,27 @@
                 </tbody>
             </table>
 
-            <div>
-                <a onclick="fnChangeDataGroupSales(5)">5</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupSales(10)">10</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupSales(15)">15</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupSales(20)">20</a> 
-                &nbsp;&nbsp;&nbsp;
-                <label id="selDataSalesGroup" style="display:none;">5</label>
+            <div class="row">
+                <div class="col-2">
+                    <a onclick="fnChangeDataGroupSales(5)" data-title="Registros por página">5</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupSales(10)" data-title="Registros por página">10</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupSales(15)" data-title="Registros por página">15</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupSales(20)" data-title="Registros por página">20</a> 
+                    &nbsp;&nbsp;&nbsp;
+                    <label id="selDataSalesGroup" style="display:none;">5</label>
+                </div>
                 
                 &nbsp;&nbsp;
-                <input id="SalesNPosition" type="number" value="1" 
-                    min="1" max="99" class="numberPosition" 
-                    onchange="fnLoadSales()"/>
+
+                <div data-title="Cantidad de registros por página" class="col-1">
+                    <input id="SalesNPosition" type="number" value="1" 
+                        min="1" max="99" class="numberPosition" 
+                        onchange="fnLoadSales()"/>
+                </div>
+
                 &nbsp;&nbsp;
 
             </div>
@@ -1117,7 +1184,7 @@
             
             
             <div id="btnsSellersDetail" class="btnsActions_ col-4">              
-                <button class="btnActions" id="btnSalesDetailNew" onclick="fnAddSalesDetail()"><i class="fa-solid fa-plus"></i></button>           
+                <button class="btnActions" id="btnSalesDetailNew" onclick="fnAddSalesDetail(true)" data-title="Agregar detalle de la venta"><i class="fa-solid fa-plus"></i></button>           
             </div>
 
             <br />
@@ -1138,7 +1205,7 @@
                     <th>Descripción</th>
                     <th>Monto</th> 
                     <th>Utilidad</th> 
-                    <th>Mkup</th> 
+                    <th>Mkup(%)</th> 
                     <th width="10%">Opciones</th>
                 </thead>
                 <tbody id="rowsSalesDetail">
@@ -1169,8 +1236,8 @@
             </div>
 
             <div id="btnsClients" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnBranchSearch" onclick="fnSearchClient()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnBranchNew" onclick="fnAddBranches()"><i class="fa-solid fa-plus"></i></button>                              
+                <button class="btnActions" id="btnBranchSearch" onclick="fnSearchClient()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnBranchNew" onclick="fnAddBranches()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                              
             </div>
             <br />
             <hr />
@@ -1196,21 +1263,27 @@
                 </tbody>
             </table>
 
-            <div>
-                <a onclick="fnChangeDataGroupBranches(5)">5</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupBranches(10)">10</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupBranches(15)">15</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupBranches(20)">20</a> 
-                &nbsp;&nbsp;&nbsp;
-                <label id="selDataBranchesGroup" style="display:none;">5</label>
+            <div class="row">
+                <div class="col-2">
+                    <a onclick="fnChangeDataGroupBranches(5)" data-title="Registros por página">5</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupBranches(10)" data-title="Registros por página">10</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupBranches(15)" data-title="Registros por página">15</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupBranches(20)" data-title="Registros por página">20</a> 
+                    &nbsp;&nbsp;&nbsp;
+                    <label id="selDataBranchesGroup" style="display:none;">5</label>
+                </div>
                 
                 &nbsp;&nbsp;
-                <input id="BranchesNPosition" type="number" value="1" 
-                    min="1" max="99" class="numberPosition" 
-                    onchange="fnLoadBranches()"/>
+
+                <div data-title="Cantidad de registros por página" class="col-1">
+                    <input id="BranchesNPosition" type="number" value="1" 
+                        min="1" max="99" class="numberPosition" 
+                        onchange="fnLoadBranches()"/>
+                </div>
+
                 &nbsp;&nbsp;
 
             </div>
@@ -1225,12 +1298,12 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Sucursales</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
                     </div>
 
                     <div class="modal-body">
                         
-                        <button class="btnActions" id="btnSaveBranches" onclick="fnBtnSaveBranches()"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnSaveBranches" onclick="fnBtnSaveBranches()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
                             
                         <br />
 
@@ -1286,8 +1359,8 @@
             </div>
 
             <div id="btnsHolidays" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnHolidaysSearch" onclick="fnSearchHolidays()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnHolidaysNew" onclick="fnAddHolidays()"><i class="fa-solid fa-plus"></i></button>                              
+                <button class="btnActions" id="btnHolidaysSearch" onclick="fnSearchHolidays()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnHolidaysNew" onclick="fnAddHolidays()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                              
             </div>
             <br />
             <hr />
@@ -1312,21 +1385,27 @@
                 </tbody>
             </table>
 
-            <div>
-                <a onclick="fnChangeDataGroupHolidays(5)">5</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupHolidays(10)">10</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupHolidays(15)">15</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupHolidays(20)">20</a> 
-                &nbsp;&nbsp;&nbsp;
-                <label id="selDataHolidaysGroup" style="display:none;">5</label>
+            <div class="row">
+                <div class="col-2">
+                    <a onclick="fnChangeDataGroupHolidays(5)" data-title="Registros por página">5</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupHolidays(10)" data-title="Registros por página">10</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupHolidays(15)" data-title="Registros por página">15</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupHolidays(20)" data-title="Registros por página">20</a> 
+                    &nbsp;&nbsp;&nbsp;
+                    <label id="selDataHolidaysGroup" style="display:none;">5</label>
+                </div>
                 
                 &nbsp;&nbsp;
-                <input id="HolidaysNPosition" type="number" value="1" 
-                    min="1" max="99" class="numberPosition" 
-                    onchange="fnLoadHolidays()"/>
+
+                <div data-title="Cantidad de registros por página" class="col-1">
+                    <input id="HolidaysNPosition" type="number" value="1" 
+                        min="1" max="99" class="numberPosition" 
+                        onchange="fnLoadHolidays()"/>
+                </div>
+
                 &nbsp;&nbsp;
 
             </div>
@@ -1341,12 +1420,12 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Historico de feriados</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
                     </div>
 
                     <div class="modal-body">
                         
-                        <button class="btnActions" id="btnSaveHolidays" onclick="fnBtnSaveHolidays()"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnSaveHolidays" onclick="fnBtnSaveHolidays()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
                             
                         <br />
 
@@ -1401,8 +1480,8 @@
             </div>
 
             <div id="btnsCoins" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnCoins" onclick="fnSearchCoins()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnCoins" onclick="fnAddCoin()"><i class="fa-solid fa-plus"></i></button>                              
+                <button class="btnActions" id="btnCoins" onclick="fnSearchCoins()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnCoins" onclick="fnAddCoin()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                              
             </div>
             <br />
             <hr />
@@ -1428,21 +1507,27 @@
                 </tbody>
             </table>
 
-            <div>
-                <a onclick="fnChangeDataGroupCoins(5)">5</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupCoins(10)">10</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupCoins(15)">15</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupCoins(20)">20</a> 
-                &nbsp;&nbsp;&nbsp;
-                <label id="selDataCoinsGroup" style="display:none;">5</label>
+            <div class="row">
+		        <div class="col-2">
+                    <a onclick="fnChangeDataGroupCoins(5)" data-title="Registros por página">5</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupCoins(10)" data-title="Registros por página">10</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupCoins(15)" data-title="Registros por página">15</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupCoins(20)" data-title="Registros por página">20</a> 
+                    &nbsp;&nbsp;&nbsp;
+                    <label id="selDataCoinsGroup" style="display:none;">5</label>
+                </div>
                 
                 &nbsp;&nbsp;
-                <input id="CoinsNPosition" type="number" value="1" 
-                    min="1" max="99" class="numberPosition" 
-                    onchange="fnLoadCoins()"/>
+
+                <div data-title="Cantidad de registros por página" class="col-1">
+                    <input id="CoinsNPosition" type="number" value="1" 
+                        min="1" max="99" class="numberPosition" 
+                        onchange="fnLoadCoins()"/>
+                </div>
+
                 &nbsp;&nbsp;
 
             </div>
@@ -1459,13 +1544,13 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Historico de monedas</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
                     </div>
 
                     <div class="modal-body">
                         
                         <h5 id="lblSelectCoin"></h5>
-                        <button class="btnActions" id="btnSaveCoinHistory" onclick="fnBtnSaveCoinHistory()"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnSaveCoinHistory" onclick="fnBtnSaveCoinHistory()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
                             
                         <br />
 
@@ -1554,14 +1639,23 @@
             </div>
 
             <div id="btnsDestinations" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnDestinations" onclick="fnSearchDestinations()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnDestinations" onclick="fnAddDestinations()"><i class="fa-solid fa-plus"></i></button>                              
+                <button class="btnActions" id="btnDestinations" onclick="fnSearchDestinations()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnDestinations" onclick="fnAddDestinations('0')" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                              
             </div>
             <br />
             <hr />
         </div>
 
+
+
         <!--Tabla de destinos-->
+        <div>
+            <label>Buscar: </label>
+            <input type="text" id="txtSearch"/>
+        </div>
+
+        <br/>
+
         <div id="TabDestinations" class="container">
             
             <table class="table bg-white table-striped table-hover table-sortable TableDes"
@@ -1581,32 +1675,74 @@
                 </tbody>
             </table>
 
-            <div>
-                <a onclick="fnChangeDataGroupDestinations(5)">5</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupDestinations(10)">10</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupDestinations(15)">15</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupDestinations(20)">20</a> 
-                &nbsp;&nbsp;&nbsp;
-                <label id="selDataCoinsDestinations" style="display:none;">5</label>
+            <div class="row">
+		        <div class="col-2">
+                    <a onclick="fnChangeDataGroupDestinations(5)" data-title="Registros por página">5</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupDestinations(10)" data-title="Registros por página">10</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupDestinations(15)" data-title="Registros por página">15</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupDestinations(20)" data-title="Registros por página">20</a> 
+                    &nbsp;&nbsp;&nbsp;
+                    <label id="selDataCoinsDestinations" style="display:none;">5</label>
+                </div>
                 
                 &nbsp;&nbsp;
-                <input id="DestinationsNPosition" type="number" value="1" 
-                    min="1" max="99" class="numberPosition" 
-                    onchange="fnLoadDestinations()"/>
+
+                <div data-title="Cantidad de registros por página" class="col-1">
+                    <input id="DestinationsNPosition" type="number" value="1" 
+                        min="1" max="99" class="numberPosition" 
+                        onchange="fnLoadDestinations()"/>
+                </div>
+
                 &nbsp;&nbsp;
 
             </div>
 
         </div>
 
+    <!--Modal de destinos ()-->
+    <div class="modal fade" id="ModalDestinations" tabindex="-1" aria-labelledby="ModalDestinations1" aria-hidden="true">
+            
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> <a>Destinos</a></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
+                    </div>
+
+                    <div class="modal-body">
+                        
+                        <button class="btnActions" id="btnSaveDestinations" onclick="fnBtnSaveDestinations()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnCleanDestinations" onclick="fnCleanDestinations()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        
+                        <div class="ModalInfo">
+                            <div style="display:none;">                                
+                                <input type="text" id="TxtIdDestinations" readonly />
+                            </div>
+                            
+                            <div>
+                                <label for="TxtDestinationsName">Nombre <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtDestinationsName"/>
+                            </div>
+                            
+                        </div>                        
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <h5></h5>
+                    </div>
+                </div>
+            </div>            
+        </div>
+
     </div>
     <!--Panel principal de destinos (fin)-->
 
-    <!--Panel principal de objetivos (fin)-->
-    
+    <!--Panel principal de objetivos (fin)-->    
     <div id="MasterGoals" class="divMaster" style="display:none;">
         <div class="row">
             <div class="row col-8"> 
@@ -1619,8 +1755,8 @@
             </div>
 
             <div id="btnsCoins" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnCoins" onclick="fnSearchGoals()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnCoins" onclick="fnAddGoal()"><i class="fa-solid fa-plus"></i></button>                              
+                <button class="btnActions" id="btnCoins" onclick="fnSearchGoals()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnCoins" onclick="fnAddGoal()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                              
             </div>
             <br />
             <hr />
@@ -1649,22 +1785,27 @@
                 </tbody>
             </table>
 
-            <div>
-                <a onclick="fnChangeDataGroupGoals(5)">5</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupGoals(10)">10</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupGoals(15)">15</a>
-                &nbsp;
-                <a onclick="fnChangeDataGroupGoals(20)">20</a> 
-                &nbsp;&nbsp;&nbsp;
-                <label id="selDataGoalsGroup" style="display:none;">5</label>
+            <div class="row">
+		        <div class="col-2">
+                    <a onclick="fnChangeDataGroupGoals(5)" data-title="Registros por página">5</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupGoals(10)" data-title="Registros por página">10</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupGoals(15)" data-title="Registros por página">15</a>
+                    &nbsp;
+                    <a onclick="fnChangeDataGroupGoals(20)" data-title="Registros por página">20</a> 
+                    &nbsp;&nbsp;&nbsp;
+                    <label id="selDataGoalsGroup" style="display:none;">5</label>
+                </div>
                 
                 &nbsp;&nbsp;
-                <input id="GoalsNPosition" type="number" value="1" 
-                    min="1" max="99" class="numberPosition" 
-                    onchange="fnLoadGoals()"/>
-                &nbsp;&nbsp;
+
+                <div data-title="Cantidad de registros por página" class="col-1">
+                    <input id="GoalsNPosition" type="number" value="1" 
+                        min="1" max="99" class="numberPosition" 
+                        onchange="fnLoadGoals()"/>
+                    &nbsp;&nbsp;
+                </div>
 
             </div>
 
@@ -1677,13 +1818,13 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Nuevo objetivo</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                        
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>                        
                     </div>
 
                     <div class="modal-body">
                         
-                        <button class="btnActions" id="btnGoalSave" onclick="fnBtnSaveGoal()"><i class="fa-regular fa-floppy-disk"></i></button>
-                        <button class="btnActions" id="btnGoalClean" onclick="fnCleanGoal()"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="btnActions" id="btnGoalSave" onclick="fnBtnSaveGoal()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                        <button class="btnActions" id="btnGoalClean" onclick="fnCleanGoal()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
                         
                         <div class="ModalInfo">
                             <div id="GoalIdModal">
@@ -1735,11 +1876,10 @@
             </div>            
         </div>
 
-    </div>
-    
+    </div>    
     <!--Panel principal de objetivos (fin)-->
 
-    <!--Sección de graficos (Inicio)-->
+    <!--Sección de graficos y reportes (Inicio)-->
     <div id="MasterCharts" class="divMaster" >
         
         <div class="row">
@@ -1753,27 +1893,180 @@
             </div>
 
             <div id="btnsCoins" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnRefreshReport" onclick="fnReportGoals()"><i class="fa-solid fa-arrows-rotate"></i></button>                             
+                <button class="btnActions" id="btnRefreshReport" onclick="fnRefreshReport()" data-title="Recalcular reporte"><i class="fa-solid fa-arrows-rotate"></i></button>   
+                
             </div>
+
+            <div class="row col-9">
+                <div class="col-3">
+                    <input type="radio" id="Rep1" name="option" value="Report1" onclick="fnSelectReport()">
+		            <label for="Rep1">Reporte por día</label><br>
+                </div>
+
+                <div class="col-3">
+                    <input type="radio" id="Rep2" name="option" value="Report2" onclick="fnSelectReport()">
+		            <label for="Rep2">Reporte por meses</label><br>
+                </div>
+
+                <div class="col-3">
+                    <input type="radio" id="Rep3" name="option" value="Report3" onclick="fnSelectReport()">
+		            <label for="Rep3">Gestion por fechas</label><br>
+                </div> 
+                
+                <div class="col-3">
+                    <input type="radio" id="Rep4" name="option" value="Report4" onclick="fnSelectReport()">
+		            <label for="Rep4">Progresión mensual</label><br>
+                </div> 
+            </div>
+
             <br />
             <hr />
         </div>
 
-        <div class="col-md-12 row">
-            <div class="col-md-4">
-                <label for="DpickerReportGoalsIni">Fecha inicio</label>
-                <input type="date" id="DpickerReportGoalsIni" />
+        <!--Reporte 1 GM por día-->
+        <div id="Report1">
+
+            <div class="col-md-12 row">
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsIni">Fecha inicio</label>
+                    <input type="date" id="DpickerReportGoalsIniR1" />
+                </div>
+
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsEnd">Fecha fin</label>
+                    <input type="date" id="DpickerReportGoalsEndR1" />
+                </div>
             </div>
 
-            <div class="col-md-4">
-                <label for="DpickerReportGoalsEnd">Fecha fin</label>
-                <input type="date" id="DpickerReportGoalsEnd" />
-            </div>
+            <br/>
+
+            <div id="gridSalesByBranch"></div>            
         </div>
-        
-        <br />
 
-        <div id="TabReportGoals" class="container">
+        <!--Reporte 2 GM por día-->
+        <div id="Report2" style="display:none">
+
+            <div class="col-md-12 row">
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsIniR2">Fecha inicio</label>
+                    <input type="date" id="DpickerReportGoalsIniR2" />
+                </div>
+
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsEndR3">Fecha fin</label>
+                    <input type="date" id="DpickerReportGoalsEndR2" />
+                </div>
+            </div>
+
+            <br/>
+
+            <div id="gridSalesByMonth"></div>  
+            <div class="options">
+                <div class="caption">Options</div>
+                <div class="option">
+                  <div id="autoExpandR2" style="color:white;"></div>
+                </div>
+              </div>
+        </div>
+
+        <!--Reporte 3-->
+        <div id="Report3" style="display:none">
+
+            <div class="col-md-12 row">
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsIniR3">Fecha inicio</label>
+                    <input type="date" id="DpickerReportGoalsIniR3" />
+                </div>
+
+                <div class="col-md-4">
+                    <label for="DpickerReportGoalsEndR3">Fecha fin</label>
+                    <input type="date" id="DpickerReportGoalsEndR3" />
+                </div>
+            </div>
+
+            <br/>
+
+              <div id="gridContainer"></div>
+              <div class="options">
+                <div class="caption">Options</div>
+                <div class="option">
+                  <div id="autoExpand" style="color:white;"></div>
+                </div>
+              </div>
+        </div>
+
+        <!--Reporte 4, reporte del mes poor día por columnas-->
+        <div id="Report4" style="display:none">
+            <div class="col-md-12 row">
+                
+                <div class="row col-6">
+                    <div class="col-md-4">
+                        <label for="montsSelect">Mes: </label>
+                        <select id="montsSelect" class="selectControl">                                
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="yearSelect">Año: </label>
+                       <select id="yearSelect" class="selectControl">
+                                    <option value="2023">2023</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2028">2028</option>
+                                    <option value="2029">2029</option>
+                                    <option value="2030">2030</option>
+                                    <option value="2031">2031</option>
+                                    <option value="2032">2032</option>
+                                    <option value="2033">2033</option>
+                                    <option value="2034">2034</option>
+                                </select>
+                    </div>
+                </div>
+                
+
+                <div class="row col-6">
+
+                    <div class="col-3">
+                        <label>Incluye los vendedores?:</label>
+                    </div>
+
+                    <div class="col-1">
+                        <input type="radio" id="Sel1" name="optionSeller" value="Seller1" onclick="fnSelectReport()">
+		                <label for="Sel1">Si</label><br>
+                    </div>
+
+                    <div class="col-1">
+                        <input type="radio" id="Sel2" name="optionSeller" value="Seller2" onclick="fnSelectReport()">
+		                <label for="Sel2">No</label><br>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <br/>
+
+            <div id="gridSalesByMonthColumns" class="StyleR4 table-responsive" style="overflow-y: auto;">
+                <table class="table bg-white table-striped table-hover table-sortable"
+                       id="TabReport4"
+                       data-toggle="table"
+                       data-flat="true"
+                       data-search="true">
+
+                    <thead class="bg-dark text-light">
+                        <th>Sucursal</th>
+                        <th>Vendedor</th>                    
+                    </thead>
+                    <tbody id="rowsTabReport4">
+                    </tbody>
+                </table>
+            </div>  
+        
+        </div>
+
+        <!--<div id="TabReportGoals" class="container">
             
             <table class="table bg-white table-striped table-hover table-sortable TableDes"
                    id="TabReportGoalsT"
@@ -1798,7 +2091,7 @@
                 </tbody>
             </table>
 
-        </div>
+        </div>-->
 
         <br />
 
@@ -1809,20 +2102,17 @@
         <figure class="highcharts-figure">
             <div id="container2"></div>            
         </figure>
+
     </div>
-    <!--Sección de graficos (Fin)-->
+    <!--Sección de graficos y reportes (Fin)-->
 
     <div>
         
-
-        
-
         <div id="MasterChannels" class="divMaster" style="display:none;">
             <h3>Panel principal de canales</h3>
             <hr />
         </div>
-
-        
+                
     </div>
     
    
@@ -1831,6 +2121,7 @@
 
 <script>
     $(document).ready(function(){
+
         var dataWeb = sessionStorage.getItem("TecnoData");
         var SucursalActual = sessionStorage.getItem("TecnoBranchName");
         $('#lblUsuario').html("");
@@ -1841,10 +2132,15 @@
         $('#lblSucursal').html(SucursalActual);
         $('#lblRol').html(JSON.parse(dataWeb).RoleName);
                 
-        fnReportGoals();
+        //$('#TxtNumberSale').mask('000-000-000');
+
+        document.getElementById("Rep1").checked = true;
+        fnReportGoalsResume();
+
+        //const Workbook = new ExcelJS.Workbook();
+        //fnReportGoals();
     })
 </script>
 
-<!--Seleción de los clientes (Fin)-->
 
 
