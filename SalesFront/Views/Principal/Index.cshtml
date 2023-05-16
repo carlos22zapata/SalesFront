@@ -858,7 +858,7 @@
 
                             <div>
                                 <label for="SelectSaleCoin">Moneda <a style="color:#A52A2A;">*</a></label>
-                                <select id="SelectSaleCoin" class="selectControl" onclick="fnLoadSelect('SelectSaleCoin', 'Coins/GetCoins')">                                    
+                                <select id="SelectSaleCoin" class="selectControl" onclick="fnLoadSelect('SelectSaleCoin', 'Coins/GetCoins')" value="2">                                    
                                 </select>
                             </div>
 
@@ -1075,6 +1075,11 @@
                                 <input type="text" id="TxtMkupSaleDetail" value="0.00"/>
                             </div>
 
+                            <div>
+                                <label for="TxtCurrencySaleDetail">Divisa <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtCurrencySaleDetail" value="0"/>
+                            </div>
+
                             <div id="SectionAudit" style="display:none;">
                                 <label for="chkAudit">Registro auditado</label>
                                 <input type="checkbox" id="chkAudit"/>
@@ -1134,7 +1139,7 @@
                     <th width="19%">Vendedor</th> 
                     <th width="12%">Número</th>
                     <th>Monto</th> 
-                    <th width="13%">Opciones</th>
+                    <th width="15%">Opciones</th>
                 </thead>
                 <tbody id="rowsSales">
                 </tbody>
@@ -1206,6 +1211,7 @@
                     <th>Monto</th> 
                     <th>Utilidad</th> 
                     <th>Mkup(%)</th> 
+                    <th>Divisa</th> 
                     <th width="10%">Opciones</th>
                 </thead>
                 <tbody id="rowsSalesDetail">
@@ -1640,7 +1646,7 @@
 
             <div id="btnsDestinations" class="btnsActions_ col-4">
                 <button class="btnActions" id="btnDestinations" onclick="fnSearchDestinations()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnDestinations" onclick="fnAddDestinations('0')" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                              
+                <button class="btnActions" id="btnDestinations" onclick="fnAddDestinations('0','')" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                              
             </div>
             <br />
             <hr />
@@ -1667,8 +1673,8 @@
                 <thead class="bg-dark text-light">
                     <th style="display:none;">Id</th>
                     <th>País</th>
-                    <th>Es provincia?</th>
-                    <th>Nombre provincia</th>
+                    @*<th>Es provincia?</th>*@
+                    <th>Tipo</th>
                     <th width="10%">Opciones</th>
                 </thead>
                 <tbody id="rowsDestinations">
@@ -1837,19 +1843,34 @@
                                 <input type="date" id="DpickerDateGoal" />
                             </div>
 
-                            <div class="highlightSection">
+                            <div>
                                 <label>Tipo de objetivo <a style="color:#A52A2A;">*</a></label>
                                 <br />
-                                <input type="radio" id="radioSeller" name="selectCase" value="S" onclick="fnGoalSelect('S')">
-                                <label for="radioSeller">Vendedor</label><br>
-                                <input type="radio" id="radioBranch" name="selectCase" value="B" onclick="fnGoalSelect('B')">
-                                <label for="radioBranch">Sucursal</label><br>  
+                                <div class="col-12">
+                                    <div class="col-6 highlightSection" style="float:left;" for="radioSeller">
+                                        <input type="radio" id="radioSeller" name="selectCase" value="S" onclick="fnGoalSelect('S')">
+                                        <label for="radioSeller">Vendedor</label><br>
+                                    </div>
+                                    <div class="col-6 highlightSection" style="float:left;" for="radioBranch">
+                                        <input type="radio" id="radioBranch" name="selectCase" value="B" onclick="fnGoalSelect('B')">
+                                        <label for="radioBranch">Sucursal</label><br>
+                                    </div>
+                                    
+                                    
+                                </div>                                  
                             </div>
 
                             <div id="selGoalSeller" style="display:none;">
-                                <label for="SelectGoalSeller">Vendedor <a style="color:#A52A2A;">*</a></label>
-                                <select id="SelectGoalSeller" class="selectControl" onclick="fnLoadSelect('SelectGoalSeller', 'Account/GetUserSeller')">                                    
-                                </select>
+                                @*<label for="SelectGoalSeller">Vendedor <a style="color:#A52A2A;">*</a></label>*@
+                                @*<select id="SelectGoalSeller" class="selectControl" onclick="fnLoadSelect('SelectGoalSeller', 'Account/GetUserSeller')">                                    
+                                </select>*@
+
+                                <div class="col-md-12">
+                                    <label for="TxtSaleSellerGoal" class="col-4">Vendedor <a style="color:#A52A2A;">*</a></label>
+                                    <input type="text" class="txtMedium col-7" id="TxtSaleSellerGoal" autocomplete="off" placeholder="Vendedor"/>                                
+                                    <label id="lblSaleSellerGoal" style="display:none;"></label>
+                                    <ul id="SearchResultsSaleSellerGoal"></ul>
+                                </div>
                             </div>
 
                             <div id="selGoalBranch" style="display:none;">
@@ -1897,18 +1918,18 @@
                 
             </div>
 
-            <div class="row col-9">
-                <div class="col-3">
+            <div class="row col-12">
+                <div class="col-2">
                     <input type="radio" id="Rep1" name="option" value="Report1" onclick="fnSelectReport()">
 		            <label for="Rep1">Reporte por día</label><br>
                 </div>
 
-                <div class="col-3">
+                <div class="col-2">
                     <input type="radio" id="Rep2" name="option" value="Report2" onclick="fnSelectReport()">
 		            <label for="Rep2">Reporte por meses</label><br>
                 </div>
 
-                <div class="col-3">
+                <div class="col-2">
                     <input type="radio" id="Rep3" name="option" value="Report3" onclick="fnSelectReport()">
 		            <label for="Rep3">Gestion por fechas</label><br>
                 </div> 
@@ -1917,6 +1938,12 @@
                     <input type="radio" id="Rep4" name="option" value="Report4" onclick="fnSelectReport()">
 		            <label for="Rep4">Progresión mensual</label><br>
                 </div> 
+
+                <div class="col-2">
+                    <input type="radio" id="Rep5" name="option" value="Report5" onclick="fnSelectReport()">
+		            <label for="Rep5">Auditoría</label><br>
+                </div>                
+                
             </div>
 
             <br />
@@ -2064,6 +2091,25 @@
                 </table>
             </div>  
         
+        </div>
+
+        <!--Reporte 5, reporte de auditoría-->
+        <div id="Report5" style="display:none">
+            <div class="col-md-12 row">
+                <div class="col-md-4">
+                    <label for="DpickerReportAudit">Fecha inicio</label>
+                    <input type="date" id="DpickerReportAuditIni" />
+                </div>
+
+                <div class="col-md-4">
+                    <label for="DpickerReportAuditEnd">Fecha fin</label>
+                    <input type="date" id="DpickerReportAuditEnd" />
+                </div>
+            </div>
+
+            <br/>
+
+            <div id="gridAudit"></div>  
         </div>
 
         <!--<div id="TabReportGoals" class="container">

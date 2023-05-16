@@ -289,6 +289,17 @@ body {
     margin-left: 5px
 }
 
+.iconCheck {
+    border: none;
+    background-color: none;
+    color: #27AE60;
+    border-radius: 5px;
+    padding: 3px;
+    font-size: 20px;
+    font-weight: normal;
+    margin-left: 5px
+}
+
 .backGroundSearch {
     background-color: beige;
 }
@@ -394,3 +405,7 @@ ul, li {
     .StyleR4 td {
         width: 20px;
     }
+
+.center {
+    text-align: center;
+}

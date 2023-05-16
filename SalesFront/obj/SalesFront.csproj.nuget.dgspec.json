@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj": {}
+    "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj": {
+    "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj",
+        "projectUniqueName": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj",
         "projectName": "SalesFront",
-        "projectPath": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj",
-        "packagesPath": "C:\\Users\\MyHP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MyHP\\source\\repos\\Sales\\SalesFront\\SalesFront\\obj\\",
+        "projectPath": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj",
+        "packagesPath": "C:\\Users\\carlo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\MyHP\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\carlo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -73,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -52,6 +52,7 @@ function fnLoadSelect(nameControl, url) {
                     case ApiBackEndUrl + 'Coins/GetCoins':
                         option.val(result[cont].id);
                         option.text(result[cont].description);
+                        $('#SelectSaleCoin').val("2");
                         break;
                     case ApiBackEndUrl + 'Sellers/GetSellers':
                         option.val(result[cont].id);
@@ -81,7 +82,7 @@ function fnLoadSelect(nameControl, url) {
                 selectControl.val(JSON.parse(dataWeb).BranchId);
             }
             else if (url == ApiBackEndUrl + 'Coins/GetCoins') {
-                selectControl.val(1);
+                selectControl.val(2);
             }
         }));
     });
@@ -1427,6 +1428,7 @@ function fnLoadSales() {
         var cont = 0;
         for (var j in result) {
             var newRow = document.createElement("tr");
+            var audit = result[cont].Audit;
             var newCell = document.createElement("td");
             newCell.innerHTML = moment(result[cont].DateCredit).format("DD-MM-YYYY");
             newRow.append(newCell);
@@ -1466,10 +1468,17 @@ function fnLoadSales() {
             btn3.classList.add("btnGridUpdate");
             btn3.setAttribute('onclick', 'fnSalesPayment(' + result[cont].DocNum + ',' + result[cont].Amount + ')');
             btn3.setAttribute('data-title', 'Agregar pago');
+            var checkAudit = document.createElement("iconCheckAudit");
+            checkAudit.innerHTML = '<i class="fa-regular fa-circle-check"></i>';
+            checkAudit.classList.add("iconCheck");
+            checkAudit.setAttribute('data-title', 'Registro auditado');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
             newCell.appendChild(btn2);
             newCell.appendChild(btn3);
+            if (audit) {
+                newCell.appendChild(checkAudit);
+            }
             newRow.append(newCell);
             $("#rowsSales").append(newRow);
             cont++;
@@ -1645,6 +1654,7 @@ function fnLoadSalesDetail(CreditDocumentId, CarNumber) {
             var amount = Math.floor(result[cont].Amount);
             var utility = Math.floor(result[cont].Utility);
             var mkup = result[cont].Mkup;
+            var currency = result[cont].Currency;
             var newRow = document.createElement("tr");
             var newCell = document.createElement("td");
             newCell.innerHTML = result[cont].ItemsCreditDocumentsId;
@@ -1669,6 +1679,10 @@ function fnLoadSalesDetail(CreditDocumentId, CarNumber) {
             $("#rowsSalesDetail").append(newRow);
             var newCell = document.createElement("td");
             newCell.innerHTML = mkup.toLocaleString('en-US', { minimumFractionDigits: 1 });
+            newRow.append(newCell);
+            $("#rowsSalesDetail").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = currency.toLocaleString('en-US', { minimumFractionDigits: 1 });
             newRow.append(newCell);
             $("#rowsSalesDetail").append(newRow);
             var btn1 = document.createElement("btnDetailSaleDelete");
@@ -1771,6 +1785,7 @@ function fnSalesDetailUpdate(carNum, carItem) {
             var utility_ = result.utility.toLocaleString('en-US', { minimumFractionDigits: 0 });
             var mkup_ = result.mkup.toLocaleString('en-US', { minimumFractionDigits: 2 });
             var audit_ = result.audit;
+            var currency_ = result.currency;
             if (!isAdmin && audit_) {
                 Swal.fire({
                     icon: 'warning',
@@ -1787,26 +1802,38 @@ function fnSalesDetailUpdate(carNum, carItem) {
             $('#TxtUtilitySaleDetail').val(utility_);
             $('#TxtMkupSaleDetail').val(mkup_);
             $('#chkAudit').prop("checked", audit_);
+            $('#TxtCurrencySaleDetail').val(currency_);
             fnAddSalesDetail(false);
         }));
     });
 }
 function fnAddSalesDetail(isNew) {
-    if ($('#TxtIdSaleDetail').val() == "") {
-        Swal.fire({
-            icon: 'warning',
-            title: 'No tiene carrito seleccionado',
-            text: 'Seleccione un carrito para agregar un detalle'
-        });
-        return;
-    }
-    if (isNew) {
-        $("#SectionAudit").hide();
-        fnCleanSaleDetail();
-    }
-    var dataWeb = sessionStorage.getItem("TecnoData");
-    var roleId = JSON.parse(dataWeb).RoleId;
-    $('#ModalSalesDetail').modal('show');
+    return __awaiter(this, void 0, void 0, function* () {
+        if ($('#TxtIdSaleDetail').val() == "") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'No tiene carrito seleccionado',
+                text: 'Seleccione un carrito para agregar un detalle'
+            });
+            return;
+        }
+        if (isNew) {
+            var coinValue = 0;
+            yield fnCoinValueByDate(moment().format('YYYY-MM-DD'), 2)
+                .then(result => {
+                coinValue = result;
+            })
+                .catch(error => {
+                console.log('Error: ' + error.toString());
+            });
+            $("#SectionAudit").hide();
+            fnCleanSaleDetail();
+            $("#TxtCurrencySaleDetail").val(coinValue);
+        }
+        var dataWeb = sessionStorage.getItem("TecnoData");
+        var roleId = JSON.parse(dataWeb).RoleId;
+        $('#ModalSalesDetail').modal('show');
+    });
 }
 function fnCleanSaleDetail() {
     var today = new Date();
@@ -1829,6 +1856,7 @@ function fnBtnSaveSaleDetail() {
     var TravelDate = $('#DpickerDateSaleDetail').val();
     var SaleDetailId_ = $('#lblSalesDetailId').html();
     var Product_ = $('#SelectSaleDeailProduct').val();
+    var Currency_ = $('#TxtCurrencySaleDetail').val();
     var To_ = $('#lblSaleDeailTo').html();
     var AmountN = +$('#TxtAmountSaleDetail').val().replace(',', '');
     var UtilityN = +$('#TxtUtilitySaleDetail').val().replace(',', '');
@@ -1877,6 +1905,14 @@ function fnBtnSaveSaleDetail() {
         });
         return;
     }
+    else if (Currency_ == "" || Currency_ == null) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el campo Divisa'
+        });
+        return;
+    }
     if (!isUpdate) {
         data.push({
             "id": 0,
@@ -1888,6 +1924,7 @@ function fnBtnSaveSaleDetail() {
             "amount": Amount_,
             "utility": Utility_,
             "mkup": Mkup_,
+            "currency": Currency_,
             "InsertUser": (JSON.parse(dataWeb).userId).toString(),
             "DateInsertUser": new Date()
         });
@@ -1940,9 +1977,11 @@ function fnBtnSaveSaleDetail() {
             "amount": Amount_,
             "utility": Utility_,
             "mkup": Mkup_,
+            "currency": Currency_,
             "updateUser": (JSON.parse(dataWeb).userId).toString(),
             "dateUpdateUser": new Date()
         });
+        console.log(JSON.stringify(data[0]));
         let url = ApiBackEndUrl + 'ItemsCreditDocuments/updateItemsCreditDocuments';
         var audit_ = $("#chkAudit").prop('checked');
         let response = fetch(url, {
@@ -1962,6 +2001,9 @@ function fnBtnSaveSaleDetail() {
                 text: 'Se guard� correctamente el cambio.'
             });
             $('#ModalSalesDetail').modal('hide');
+            var CarNumber = $('#lblCarNumber').html();
+            CarNumber = CarNumber === null || CarNumber === void 0 ? void 0 : CarNumber.toString().substring(0, CarNumber === null || CarNumber === void 0 ? void 0 : CarNumber.toString().indexOf('- renglones'));
+            fnLoadSalesDetail(SaleId_, CarNumber);
             fnCleanSaleDetail();
         })
             .catch(error => {
@@ -2674,6 +2716,25 @@ function fnGetValueCoin(CoinId) {
         });
     });
 }
+function fnCoinValueByDate(date, coinId) {
+    let url = ApiBackEndUrl + 'Coins/GetCoinsValueByDate';
+    var dataWeb = sessionStorage.getItem("TecnoData");
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+            DateValue: date.toString(),
+            CoinId: coinId.toString(),
+            Authorization: JSON.parse(dataWeb).token
+        }
+    })
+        .then(response => response.json())
+        .then(result => {
+        return result;
+    })
+        .catch(error => {
+        return 0;
+    });
+}
 function fnCleanHistoryCoins() {
     var Today = new Date();
     var TodayString = moment(Today).format("YYYY-MM-DD");
@@ -2860,10 +2921,6 @@ function fnLoadDestinations() {
             newRow.append(newCell);
             $("#rowsDestinations").append(newRow);
             var newCell = document.createElement("td");
-            newCell.innerHTML = province_;
-            newRow.append(newCell);
-            $("#rowsDestinations").append(newRow);
-            var newCell = document.createElement("td");
             newCell.innerHTML = nameProvince_;
             newRow.append(newCell);
             $("#rowsDestinations").append(newRow);
@@ -2875,7 +2932,7 @@ function fnLoadDestinations() {
             var btn2 = document.createElement("btnDestinationsUpdate");
             btn2.innerHTML = iconUpdate;
             btn2.classList.add("btnGridUpdate");
-            btn2.setAttribute('onclick', 'fnDestinationsUpdate(' + id_ + ')');
+            btn2.setAttribute('onclick', 'fnAddDestinations(' + id_ + ',"' + description_ + '")');
             btn2.setAttribute('data-title', 'Actualizar destino');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
@@ -2894,6 +2951,7 @@ function fnPositionDestinations() {
 }
 function fnChangeDataGroupDestinations(num) {
     $('#selDataCoinsDestinations').html(num);
+    fnCleanDestinations();
     fnLoadDestinations();
 }
 function fnDestinationsDelete(id) {
@@ -2932,15 +2990,10 @@ function fnDestinationsDelete(id) {
 function fnCleanDestinations() {
     $('#TxtDestinationsName').val('');
 }
-function fnAddDestinations(id) {
+function fnAddDestinations(id, description) {
     $('#TxtIdDestinations').val(id);
-    fnCleanDestinations();
+    $('#TxtDestinationsName').val(description);
     $('#ModalDestinations').modal('show');
-}
-function fnSearchDestinations() {
-    var description = $('#txtSearchDestinations').val();
-    var position = $('#DestinationsNPosition').val();
-    var select = "select top " + position + " * from Clients ";
 }
 function fnBtnSaveDestinations() {
     let data = [];
@@ -2995,6 +3048,7 @@ function fnBtnSaveDestinations() {
             "updateUser": (JSON.parse(dataWeb).userId).toString(),
             "dateUpdateUser": new Date()
         });
+        console.log(JSON.stringify(data[0]));
         let url = ApiBackEndUrl + 'Destinations/updateDestinations';
         let response = fetch(url, {
             method: 'PUT',
@@ -3006,15 +3060,90 @@ function fnBtnSaveDestinations() {
         })
             .then(response => response.json())
             .then(result => {
-            Swal.fire({
-                icon: 'info',
-                title: 'Registro actualizado exitosamente!',
-                text: 'Se actualiz� correctamente el registro'
-            });
+            if (result) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Registro actualizado exitosamente!',
+                    text: 'Se actualiz� correctamente el registro'
+                });
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al actualizar el registro!',
+                    text: 'No se actualiz� correctamente el registro'
+                });
+            }
             fnCleanDestinations();
             fnLoadDestinations();
         });
     }
+    $('#ModalDestinations').modal('hide');
+}
+function fnSearchDestinations() {
+    var position = $('#DestinationsNPosition').val();
+    var description = $('#txtSearchDestinations').val();
+    var select = "select * from Destinations where Description like('%" + description + "%')";
+    var skip = 1;
+    var take = 5;
+    $('#spinnerDestinations').show();
+    let url = ApiBackEndUrl + 'Destinations/DynamicGetDestinations';
+    var dataWeb = sessionStorage.getItem("TecnoData");
+    let response = fetch(url, {
+        method: 'GET',
+        headers: {
+            select: select.toString(),
+            page: skip.toString(),
+            pageSize: take.toString(),
+            Authorization: JSON.parse(dataWeb).token
+        }
+    })
+        .then(response => response.json())
+        .then(result => {
+        $("#TabDestinationsT > tbody").empty();
+        var cont = 0;
+        for (var j in result) {
+            var id_ = result[cont].id;
+            var description_ = result[cont].description;
+            var province_ = result[cont].province;
+            var nameProvince_ = result[cont].provinceName;
+            var newRow = document.createElement("tr");
+            var newCell = document.createElement("td");
+            newCell.innerHTML = id_;
+            newRow.append(newCell);
+            newCell.style.display = 'none';
+            $("#rowsDestinations").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = description_;
+            newRow.append(newCell);
+            $("#rowsDestinations").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = province_;
+            newRow.append(newCell);
+            $("#rowsDestinations").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = nameProvince_;
+            newRow.append(newCell);
+            $("#rowsDestinations").append(newRow);
+            var btn1 = document.createElement("btnDestinationsDelete");
+            btn1.innerHTML = iconDelete;
+            btn1.classList.add("btnGridDelete");
+            btn1.setAttribute('onclick', 'fnDestinationsDelete(' + id_ + ')');
+            btn1.setAttribute('data-title', 'Borrar destino');
+            var btn2 = document.createElement("btnDestinationsUpdate");
+            btn2.innerHTML = iconUpdate;
+            btn2.classList.add("btnGridUpdate");
+            btn2.setAttribute('onclick', 'fnAddDestinations(' + id_ + ',"' + description_ + '")');
+            btn2.setAttribute('data-title', 'Actualizar destino');
+            var newCell = document.createElement("td");
+            newCell.appendChild(btn1);
+            newCell.appendChild(btn2);
+            newRow.append(newCell);
+            $("#rowsDestinations").append(newRow);
+            cont++;
+        }
+        $('#spinnerDestinations').hide();
+    });
 }
 function fnLoadGoals() {
     let url = ApiBackEndUrl + 'Goals/GetGoals';
@@ -3116,7 +3245,7 @@ function fnBtnSaveGoal() {
     var dataWeb = sessionStorage.getItem("TecnoData");
     var deadLine_ = $('#DpickerDateGoal').val();
     var branch_ = $('#SelectGoalBranch').val();
-    var seller_ = $('#SelectGoalSeller').val();
+    var seller_ = $('#lblSaleSellerGoal').html();
     var amount_ = $('#TxtAmountGoal').val();
     var user_ = JSON.parse(dataWeb).userName;
     var selection_ = $("#selGoalSeller").is(":visible") ? "S" : "B";
@@ -3193,12 +3322,12 @@ function fnCleanGoal() {
     var Today = new Date();
     var TodayString = moment(Today).format("YYYY-MM-DD");
     $("#DpickerDateGoal").val(TodayString);
-    $('#SelectGoalSeller').empty();
     $('#SelectGoalBranch').empty();
     $('#TxtAmountGoal').val('');
     $('input[name="selectCase"]').prop('checked', false);
     $('#selGoalSeller').hide();
     $('#selGoalBranch').hide();
+    $('#TxtSaleSellerGoal').val('');
 }
 function fnGoalSelect(sel) {
     if (sel == 'S') {
@@ -3246,6 +3375,53 @@ function fnGoalDelete(id_) {
         }
     });
 }
+$('#SearchResultsSaleSellerGoal').on('click', 'li', function () {
+    var searchResults = $('#SearchResultsSaleSellerGoal');
+    var text = $(this).text();
+    var id = $(this).attr('idSaleSellerGoal');
+    $("#TxtSaleSellerGoal").val(text);
+    $("#lblSaleSellerGoal").text(id);
+    searchResults.empty();
+});
+$("#TxtSaleSellerGoal").keyup(function () {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+        var seller_ = $("#TxtSaleSellerGoal").val();
+        var searchResults = $('#SearchResultsSaleSellerGoal');
+        if (seller_ != "") {
+            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
+            var dataWeb = sessionStorage.getItem("TecnoData");
+            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
+            var skip = 1;
+            var take = 10;
+            let response = fetch(url, {
+                method: 'GET',
+                headers: {
+                    select: select.toString(),
+                    page: skip.toString(),
+                    pageSize: take.toString(),
+                    Authorization: JSON.parse(dataWeb).token
+                }
+            })
+                .then(response => response.json())
+                .then(result => {
+                searchResults.empty();
+                var idSeller = 0;
+                for (const result_ of result) {
+                    idSeller++;
+                    const li = document.createElement('li');
+                    li.id = idSeller.toString();
+                    li.setAttribute('idSaleSellerGoal', result_.userId);
+                    li.textContent = result_.firstName + ' ' + result_.lastName;
+                    searchResults.append(li);
+                }
+            });
+        }
+        else {
+            searchResults.empty();
+        }
+    }, 500);
+});
 function fnRefreshReport() {
     if ($("#Report1").is(":visible")) {
         fnReportGoalsResume();
@@ -3258,6 +3434,9 @@ function fnRefreshReport() {
     }
     else if ($("#Report4").is(":visible")) {
         fnReportGoalsResumeMonthColumns();
+    }
+    else if ($("#Report5").is(":visible")) {
+        fnReportAudit();
     }
 }
 function fnReportGoalsResumeMonth() {
@@ -3327,8 +3506,8 @@ function fnReportGoalsResumeMonth() {
                 },
                 { caption: 'Sucursal', dataField: 'BranchName' },
                 { caption: 'Vendedor', dataField: 'SellerName' },
-                { caption: 'Fecha', dataField: 'Date', dataType: 'date' },
-                { caption: 'Monto', dataField: 'Amount', displayFormat: '{0:n0}' },
+                { caption: 'Fecha', dataField: 'Date', dataType: 'date', format: 'dd/MM/yyyy' },
+                { caption: 'Monto', dataField: 'Utility', displayFormat: '{0:n0}' },
             ],
             sortByGroupSummaryInfo: [{
                     summaryItem: 'count',
@@ -3339,7 +3518,7 @@ function fnReportGoalsResumeMonth() {
                         summaryType: 'count',
                     },
                     {
-                        column: 'Amount',
+                        column: 'Utility',
                         summaryType: 'sum',
                         valueFormat: 'currency',
                         alignByColumn: true,
@@ -3391,6 +3570,7 @@ function fnReportGoalsResumeMonthColumns() {
     })
         .then(response => response.json())
         .then(result => {
+        console.log(result);
         $("#TabReport4 > tbody").empty();
         $('#TabReport4 th:nth-child(n+3), table td:nth-child(n+3)').remove();
         var cont = 0;
@@ -3400,8 +3580,8 @@ function fnReportGoalsResumeMonthColumns() {
         for (var i = 1; i <= dayMonth; i++) {
             var valDay = i < 10 ? '0' + i : i;
             var valMon = Month_ < 10 ? '0' + Month_ : Month_;
-            table.find('thead tr').append('<th>' + valDay + "/" + valMon + '</th>');
-            table.find('tbody tr').append('<td></td>');
+            table.find('thead tr').append('<th class="center">' + valDay + "/" + valMon + '</th>');
+            table.find('tbody tr').append('<td class="center"></td>');
         }
         var IdAnt = 0;
         for (var j in result) {
@@ -3420,9 +3600,10 @@ function fnReportGoalsResumeMonthColumns() {
                     newRow.append(newCell);
                     $("#rowsTabReport4").append(newRow);
                     for (var i = 1; i <= dayMonth; i++) {
-                        var sale_ = moment(result[cont].Date, "YYYY-MM-DD").date() == i ? Math.floor(result[cont].Amount).toLocaleString('en-US', { minimumFractionDigits: 1 }) : '0';
+                        var sale_ = moment(result[cont].Date, "YYYY-MM-DD").date() == i ? Math.floor(result[cont].Utility).toLocaleString('en-US', { minimumFractionDigits: 0 }) : '0';
                         var newCell = document.createElement("td");
                         newCell.innerHTML = sale_;
+                        newCell.classList.add('center');
                         newRow.append(newCell);
                         $("#rowsTabReport4").append(newRow);
                     }
@@ -3440,9 +3621,10 @@ function fnReportGoalsResumeMonthColumns() {
                 newRow.append(newCell);
                 $("#rowsTabReport4").append(newRow);
                 for (var i = 1; i <= dayMonth; i++) {
-                    var sale_ = moment(result[cont].Date, "YYYY-MM-DD").date() == i ? Math.floor(result[cont].Amount).toLocaleString('en-US', { minimumFractionDigits: 1 }) : '0';
+                    var sale_ = moment(result[cont].Date, "YYYY-MM-DD").date() == i ? Math.floor(result[cont].Utility).toLocaleString('en-US', { minimumFractionDigits: 0 }) : '0';
                     var newCell = document.createElement("td");
                     newCell.innerHTML = sale_;
+                    newCell.classList.add('center');
                     newRow.append(newCell);
                     $("#rowsTabReport4").append(newRow);
                 }
@@ -3513,7 +3695,7 @@ function fnReportGoalsResume() {
                         precision: 10,
                     },
                 },
-                { caption: 'Total Vendido', dataField: 'Total' }
+                { caption: 'Total Utilidad', dataField: 'Utility' }
             ],
             sortByGroupSummaryInfo: [{
                     summaryItem: 'count',
@@ -3662,6 +3844,94 @@ function fnReportGoals() {
         });
     });
 }
+function fnReportAudit() {
+    if ($('#gridAudit').is(':empty')) {
+        var Today = new Date();
+        var TodayString = moment(Today).format("YYYY-MM-DD");
+        $('#DpickerReportAuditIni').val(TodayString);
+        $('#DpickerReportAuditEnd').val(TodayString);
+    }
+    var dataWeb = sessionStorage.getItem("TecnoData");
+    let url = ApiBackEndUrl + 'CreditDocuments/GetCreditDocumentsAudit';
+    var dateIni = $('#DpickerReportAuditIni').val();
+    var dateEnd = $('#DpickerReportAuditEnd').val();
+    let response = fetch(url, {
+        method: 'GET',
+        headers: {
+            dateIni: dateIni,
+            dateEnd: dateEnd,
+            Date: dateIni,
+            SellerId: JSON.parse(dataWeb).userId,
+            Authorization: JSON.parse(dataWeb).token
+        }
+    })
+        .then(response => response.json())
+        .then(result => {
+        const dataGrid = $('#gridAudit').dxDataGrid({
+            dataSource: result,
+            keyExpr: 'ID',
+            allowColumnReordering: true,
+            allowColumnResizing: true,
+            rowAlternationEnabled: true,
+            showBorders: true,
+            grouping: {
+                autoExpandAll: false,
+            },
+            export: {
+                enabled: true,
+            },
+            searchPanel: {
+                visible: true,
+            },
+            paging: {
+                pageSize: 20,
+            },
+            groupPanel: {
+                visible: true,
+            },
+            onExporting: function (e) {
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('Main sheet');
+                DevExpress.excelExporter.exportDataGrid({
+                    worksheet: worksheet,
+                    component: e.component
+                }).then(function () {
+                    workbook.xlsx.writeBuffer().then(function (buffer) {
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Reporte_auditor�a.xlsx');
+                    });
+                });
+                e.cancel = true;
+            },
+            columns: [
+                { caption: 'Nro Carrito', dataField: 'CarNumber' },
+                { caption: 'Vendedor', dataField: 'SellerFullName' },
+                { caption: 'Fecha', dataField: 'DateCredit', dataType: 'date', format: 'dd/MM/yyyy' },
+                { caption: 'Cliente', dataField: 'ClientsFullName' },
+                { caption: 'Producto', dataField: 'Product' },
+                { caption: 'Destino', dataField: 'Destination' },
+                { caption: 'Monto', dataField: 'Amount', displayFormat: '{0:n0}' },
+                { caption: 'Utilidad', dataField: 'Utility', displayFormat: '{0:n0}' },
+                { caption: 'Mkup', dataField: 'Mkup', displayFormat: '{0:n0}' },
+                { caption: 'Auditado', dataField: 'Audit' },
+            ],
+            sortByGroupSummaryInfo: [{
+                    summaryItem: 'count',
+                }],
+            summary: {
+                groupItems: [{
+                        column: 'ID',
+                        summaryType: 'count',
+                    },
+                    {
+                        column: 'Utility',
+                        summaryType: 'sum',
+                        valueFormat: 'currency',
+                        alignByColumn: true,
+                    }],
+            }
+        }).dxDataGrid('instance');
+    });
+}
 function fnSelectReport() {
     var radios = document.getElementsByName('option');
     for (var i = 0; i < radios.length; i++) {
@@ -3671,6 +3941,7 @@ function fnSelectReport() {
             $('#Report2').hide();
             $('#Report3').hide();
             $('#Report4').hide();
+            $('#Report5').hide();
             $('#' + report).show();
             if (report == 'Report1') {
                 fnReportGoalsResume();
@@ -3683,6 +3954,9 @@ function fnSelectReport() {
             }
             else if (report == 'Report4') {
                 fnReportGoalsResumeMonthColumns();
+            }
+            else if (report == 'Report5') {
+                fnReportAudit();
             }
             break;
         }
