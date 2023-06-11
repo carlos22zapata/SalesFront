@@ -1015,11 +1015,24 @@
                                 <input type="text" class="txtSmall" id="TxtIdSaleDetail" readonly />
                             </div>
                             
-                            <div>
-                                <label for="TxtIdSaleCarNumber">Número</label>
-                                <input type="text" class="txtMedium" id="TxtCarNumberSale"                                     
-		                        placeholder="000-000-000" 
-		                        minlength="11" maxlength="11" readonly/>
+                            @*<div>
+                                <label for="TxtCarNumberSale">Número</label>
+                                    <input type="text" class="txtMedium" id="TxtCarNumberSale"                                     
+		                            placeholder="000-000-000" 
+		                            minlength="11" maxlength="11"/>
+                            </div>*@
+
+                            <div id="SalesNumCarModalDetail">
+	                            <label for="TxtNumberSaleDetail">Número 
+		                            <a style="color:#A52A2A;">*</a> &nbsp;
+		                            <i id="lblNumberSaleDetail" class="fa-solid fa-triangle-exclamation" style="color:#A52A2A; display:none;" data-title="Formato del número incorrecto!!!"></i>
+		                            <i id="lblNumberSaleDetailOk" class="fa-regular fa-circle-check" style="color:#27AE60; display:none;" data-title="Formato correcto!"></i>
+	                            </label>
+	                            <input type="text" class="txtMedium" id="TxtNumberSaleDetail"                                     
+		                            placeholder="000-000-000" 
+		                            minlength="11" maxlength="11" 
+		                            data-title="Inserte 9 números en bloques de 3 divididos por un guión, Ejemplo 000-000-000"
+                                    onblur="lostFocusNumberSaleDetail()" />
                             </div>
 
                             <div>
@@ -1061,13 +1074,13 @@
                             </div>
 
                             <div>
-                                <label for="TxtAmountSaleDetail">Monto <a style="color:#A52A2A;">*</a></label>
+                                <label for="TxtAmountSaleDetail">Gross Booking <a style="color:#A52A2A;">*</a></label>
                                 <input type="text" id="TxtAmountSaleDetail" value="0.00"/>
                             </div>
 
-                            <div>
-                                <label for="TxtUtilitySaleDetail">Utilidad <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtUtilitySaleDetail" value="0.00"/>
+                            <div data-title="Utilidad sin auditar">
+                                <label for="TxtUtilitySaleDetail">Gross Margin <a style="color:#A52A2A;">*</a></label>
+                            <input type="text" id="TxtUtilitySaleDetail" value="0.00"/>
                             </div>
 
                             <div>
@@ -1075,9 +1088,19 @@
                                 <input type="text" id="TxtMkupSaleDetail" value="0.00"/>
                             </div>
 
-                            <div>
+                            <div data-title="Valor de la divisa">
                                 <label for="TxtCurrencySaleDetail">Divisa <a style="color:#A52A2A;">*</a></label>
                                 <input type="text" id="TxtCurrencySaleDetail" value="0"/>
+                            </div>
+
+                            <div data-title="Utilidad en pesos">
+                                <label for="TxtUtilityReport">Utilidad Reporte </label>
+                                <input type="text" id="TxtUtilityReport" value="0" pattern="[0-9]+(\.[0-9]+)?" readonly/>
+                            </div>
+
+                            <div data-title="Utilidad final en dolares (Calculada)">
+                            <label for="TxtUtilityUSD">Utilidad USD </label>
+                                <input type="text" id="TxtUtilityUSD" value="0" pattern="[0-9]+(\.[0-9]+)?" readonly />
                             </div>
 
                             <div id="SectionAudit" style="display:none;">
@@ -1115,7 +1138,7 @@
                 
             </div>
             <div id="btnsSales" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnSearchSales" onclick="fnSearchSales()" data-title="Buscar venta"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnSearchSales" onclick="fnLoadSales()" data-title="Buscar venta"><i class="fa-solid fa-magnifying-glass"></i></button>
                 <button class="btnActions" id="btnAdvancedSearchSales" onclick="fnSearchAdvancedSales()" data-title="Buscar venta avanzada"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
                 <button class="btnActions" id="btnSalesNew" onclick="fnAddSales()" data-title="Agregar nueva venta"><i class="fa-solid fa-plus"></i></button>                 
             </div>
@@ -1124,6 +1147,45 @@
             <hr />
         </div>
 
+        <!--Busqueda básica de venta menú superior CAZA--> 
+        <div id="divSearchSales" class="row SearchGeneral">
+
+            
+            <h3>Busqueda</h3>                
+            
+            <div class="clientInfo row">
+                <div class="SalesP1 col-4">    
+                    <div>
+                        <label for="TxtCarNumberSaleBasicSearch">Nro Carrito </label>
+                        <input type="text" id="TxtCarNumberSaleBasicSearch" />
+                    </div>
+                    
+                    <div id="divSearchSalesAdvanced" class="SalesP1" style="display:none;">
+                        <label for="SelectSaleBranchAdvancedSearch">Sucursal </label>
+                        <select id="SelectSaleBranchAdvancedSearch" class="selectControl" onclick="fnLoadSelect('SelectSaleBranchAdvancedSearch', 'Branches/GetBranches')">
+                        </select>
+                    </div>
+                    <label id="LblBranchSaleAdvancedSearch" style="display:none;"></label>
+                </div>
+                
+                <div class="col-4">
+                    <label for="TxtIdDateSaleBasicSearch">Fecha  &nbsp;</label>
+                    <input type="date" id="TxtIdDateSaleBasicSearch" disabled />
+                    <input type="checkbox" id="isDateFilterSale" />
+                </div>
+                
+                <div class="col-4">
+                    <label for="TxtDocumSaleBasicSearch">Documento </label>
+                    <input type="text" id="TxtDocumSaleBasicSearch" />  
+                    
+                </div>                                                
+            </div>  
+            
+            <br />
+            <br />
+            <hr />
+        </div>
+       
         <!--Tabla de ventas-->
         <div id="TabSales" class="container">            
             <table class="table bg-white table-striped table-hover table-sortable TableDes"
@@ -1135,10 +1197,11 @@
                 <thead class="bg-dark text-light">
                     <th width="10%">Fecha</th>
                     <th width="19%">Cliente</th>
-                    <th width="15%">Documento</th>
-                    <th width="19%">Vendedor</th> 
-                    <th width="12%">Número</th>
-                    <th>Monto</th> 
+                    <th width="12%">Documento</th>
+                    <th width="16%">Vendedor</th>
+                    <th width="11%">Número</th>
+                    <th>G. Booking</th>
+                    <th>Util USD</th>
                     <th width="15%">Opciones</th>
                 </thead>
                 <tbody id="rowsSales">
@@ -1165,6 +1228,10 @@
                         min="1" max="99" class="numberPosition" 
                         onchange="fnLoadSales()"/>
                 </div>
+
+                <label id="lblOrderSales"></label> 
+                <br />
+                <label id="lblOrderSalesType"></label>
 
                 &nbsp;&nbsp;
 
@@ -1208,8 +1275,8 @@
                     <th style="display:none">IdItem</th>
                     <th>Producto</th>
                     <th>Descripción</th>
-                    <th>Monto</th> 
-                    <th>Utilidad</th> 
+                    <th>G. Booking</th> 
+                    <th>G. Margin</th> 
                     <th>Mkup(%)</th> 
                     <th>Divisa</th> 
                     <th width="10%">Opciones</th>
@@ -1366,7 +1433,7 @@
 
             <div id="btnsHolidays" class="btnsActions_ col-4">
                 <button class="btnActions" id="btnHolidaysSearch" onclick="fnSearchHolidays()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnHolidaysNew" onclick="fnAddHolidays()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                              
+                @*<button class="btnActions" id="btnHolidaysNew" onclick="fnAddHolidays()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>   *@                           
             </div>
             <br />
             <hr />
@@ -1486,8 +1553,8 @@
             </div>
 
             <div id="btnsCoins" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnCoins" onclick="fnSearchCoins()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnCoins" onclick="fnAddCoin()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                              
+                @*<button class="btnActions" id="btnCoins" onclick="fnSearchCoins()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="btnActions" id="btnCoins" onclick="fnAddCoin()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>    *@                          
             </div>
             <br />
             <hr />
@@ -1761,7 +1828,7 @@
             </div>
 
             <div id="btnsCoins" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnCoins" onclick="fnSearchGoals()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
+                @*<button class="btnActions" id="btnCoins" onclick="fnSearchGoals()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>*@
                 <button class="btnActions" id="btnCoins" onclick="fnAddGoal()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                              
             </div>
             <br />

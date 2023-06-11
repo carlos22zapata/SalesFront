@@ -1,7 +1,7 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\SalesFront.bundle.scp.css",
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\obj\\Release\\net6.0\\scopedcss\\projectbundle\\SalesFront.bundle.scp.css",
       "PackagePath": "staticwebassets\\SalesFront.bundle.scp.css"
     },
     {
@@ -321,19 +321,19 @@
       "PackagePath": "staticwebassets\\tscript\\tsconfig.json"
     },
     {
-      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.SalesFront.Microsoft.AspNetCore.StaticWebAssets.props",
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.SalesFront.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
     {
-      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.build.SalesFront.props",
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.build.SalesFront.props",
       "PackagePath": "build\\SalesFront.props"
     },
     {
-      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.SalesFront.props",
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.SalesFront.props",
       "PackagePath": "buildMultiTargeting\\SalesFront.props"
     },
     {
-      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildTransitive.SalesFront.props",
+      "Id": "obj\\Release\\net6.0\\staticwebassets\\msbuild.buildTransitive.SalesFront.props",
       "PackagePath": "buildTransitive\\SalesFront.props"
     }
   ],

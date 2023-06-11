@@ -6,6 +6,7 @@ import { Grid } from "ag-grid-community";
 //import { Workbook } from "exceljs"
 //import { exportDataGrid } from "devextreme/excel_exporter";
 //import { saveAs } from "file-saver";
+//var miCadena = "\u00E1\u00E9\u00ED\u00F3\u00FA";
 
 declare let Swal: any;
 declare let moment: any;
@@ -63,7 +64,7 @@ var FrontEnd: string = "https://localhost:7119/";
 
 //#region Funciones generales
 
-//Función para cargar todos los select
+//Funci\u00F3n para cargar todos los select
 async function fnLoadSelect(nameControl: string, url: string) {
     var dataWeb: any = sessionStorage.getItem("TecnoData");
 
@@ -193,7 +194,7 @@ async function showDiv(divSelPrincipal: string) {
 
 }
 
-//Función encargada de abrir y cerrar el contenido del menú principal
+//Funci\u00F3n encargada de abrir y cerrar el contenido del men\u00FA principal
 function fnExpandMenu(n: number) {
     if (n == 1) {
         if ($('#menu-principal-1').is(":visible"))
@@ -314,6 +315,10 @@ const months: monthOfYears = {
     "Diciembre": 12
 };
 
+function fnLoadBranchesOnDiv(){
+
+}
+
 //#endregion Funciones generales
 
 /*
@@ -322,7 +327,7 @@ const months: monthOfYears = {
  ##########################################################
  */
 
-//#region Sección de Login
+//#region Secci\u00F3n de Login
 
 function LogIn(user: string, password: string) {
 
@@ -332,7 +337,7 @@ function LogIn(user: string, password: string) {
         return;
     }
     else if (password == undefined) {
-        $('#lblMessages').html("La contraseña no debe estar vacía !!!");
+        $('#lblMessages').html("La contraseña no debe estar vac\u00EDa !!!");
         $('#lblMessages').show();
         return;
     }
@@ -408,8 +413,8 @@ function fnSelectUserBranch() {
     if (userId == null || userId == "" || userId == undefined) {
         Swal.fire({
             icon: "error",
-            title: "Inicie sesión nuevamente",
-            text: "Debe volver a iniciar sesión con su usuario y clave para poder seleccionar una sucursal!!!"
+            title: "Inicie sesi\u00F3n nuevamente",
+            text: "Debe volver a iniciar sesi\u00F3n con su usuario y clave para poder seleccionar una sucursal!!!"
         });
         return;
     }
@@ -443,7 +448,7 @@ function fnSelectUserBranch() {
             .catch(error => {
                 Swal.fire({
                     icon: 'error',
-                    title: 'No se pudo completar la operación!',
+                    title: 'No se pudo completar la operaci\u00F3n!',
                     text: 'Hubo un error: ' + error
                 });
             });
@@ -451,7 +456,7 @@ function fnSelectUserBranch() {
 
 }
 
-//#endregion Sección de Login
+//#endregion Secci\u00F3n de Login
 
 
 /*
@@ -460,7 +465,7 @@ function fnSelectUserBranch() {
  ##########################################################
  */
 
-//#region Sección de Productos
+//#region Secci\u00F3n de Productos
 
 function fnAddProduct() {
     $('#ModalProducts').modal('show');
@@ -553,7 +558,7 @@ function fnProductDelete(id: number) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result: any) => {
         if (result.isConfirmed) {
 
@@ -668,7 +673,7 @@ function fnBtnSaveProduct() {
                 Swal.fire({
                     icon: 'info',
                     title: 'Registro agregado exitosamente!',
-                    text: 'Se guardó correctamente el registro'
+                    text: 'Se guard\u00F3 correctamente el registro'
                 });
 
                 fnCleanProducts();
@@ -692,7 +697,7 @@ function fnCleanProducts() {
     $('#TxtProductPrice').val("");
 }
 
-//#endregion Sección de Productos
+//#endregion Secci\u00F3n de Productos
 
 
 /*
@@ -701,7 +706,7 @@ function fnCleanProducts() {
  ##########################################################
  */
 
-//#region Sección de Clientes
+//#region Secci\u00F3n de Clientes
 
 function fnAddClient(origin: string) {
     fnCleanClient();
@@ -784,13 +789,13 @@ function fnLoadClients() {
                     var btn1 = document.createElement("btnClientDelete");
                     btn1.innerHTML = iconDelete;
                     btn1.classList.add("btnGridDelete");
-                    btn1.setAttribute('onclick', 'fnProductDelete(' + result[cont].id + ')');
+                    btn1.setAttribute('onclick', 'fnClientsDelete(' + result[cont].id + ')');
                     btn1.setAttribute('data-title', 'Eliminar registro de cliente');
 
                     var btn2 = document.createElement("btnClientUpdate");
                     btn2.innerHTML = iconUpdate;
                     btn2.classList.add("btnGridUpdate");
-                    btn2.setAttribute('onclick', 'fnProductUpdate(' + result[cont].id + ')');
+                    btn2.setAttribute('onclick', 'fnClientUpdate(' + result[cont].id + ')');
                     btn2.setAttribute('data-title', 'Actualizar registro de cliente');
 
                     var btn3 = document.createElement("btnSalesClients");
@@ -802,7 +807,7 @@ function fnLoadClients() {
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
                     newCell.appendChild(btn2);
-                    newCell.appendChild(btn3);
+                    //newCell.appendChild(btn3);
                     newRow.append(newCell);
                     $("#rowsClient").append(newRow);
 
@@ -817,7 +822,7 @@ function fnLoadClients() {
 
                 //$("#TabClientsT").tablesorter({
                 //    headers: {
-                //        0: { sorter: false } // deshabilita el ordenamiento de la primera columna (números)
+                //        0: { sorter: false } // deshabilita el ordenamiento de la primera columna (n\u00FAmeros)
                 //    }
                 //});
             });
@@ -942,7 +947,7 @@ function fnSearchClient() {
 
             }
         }
-        else { //Busqueda básica
+        else { //Busqueda b\u00E1sica
 
             var fName: string = $('#TxtFirstNameClientBasicSearch').val();
             var lName: string = $('#TxtLastNameIdClientBasicSearch').val();
@@ -1184,7 +1189,7 @@ function fnBtnClientSave() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir al menos un correo electrónico.'
+            text: 'Debe incluir al menos un correo electr\u00F3nico.'
         });
         return;
     }
@@ -1192,7 +1197,7 @@ function fnBtnClientSave() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir al menos un teléfono válido.'
+            text: 'Debe incluir al menos un tel\u00E9fono v\u00E1lido.'
         });
         return;
     }
@@ -1200,7 +1205,7 @@ function fnBtnClientSave() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir el número de documento.'
+            text: 'Debe incluir el n\u00FAmero de documento.'
         });
         return;
     }
@@ -1264,7 +1269,7 @@ function fnBtnClientSave() {
                     Swal.fire({
                         icon: 'info',
                         title: 'Registro agregado exitosamente!',
-                        text: 'Se guardó correctamente el registro'
+                        text: 'Se guard\u00F3 correctamente el registro'
                     });
                 }
 
@@ -1284,7 +1289,7 @@ function fnPositionClient() {
         Position = $('#SalesGeneralSearchNPosition').val();
         Records = $('#selGeneralSearchGroup').html();
     }
-    else if ($("#MasterClients").is(":visible")) { //Si esta visible la sección de los clientes
+    else if ($("#MasterClients").is(":visible")) { //Si esta visible la secci\u00F3n de los clientes
         Position = $('#ClientsNPosition').val();
         Records = $('#selDataGroup').html();
     }
@@ -1305,7 +1310,7 @@ function fnClientsDelete(id: number) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!!!'
     }).then((result: any) => {
         if (result.isConfirmed) {
 
@@ -1419,6 +1424,10 @@ $('#SearchResultsSaleSeller1').on('click', 'li', function (this: HTMLElement) {
     searchResults.empty();
 });
 
+function fnClientUpdate(id: number) {
+
+}
+
 //#region campos de busqueda
 
 const txtNameCliente = $('#TxtFirstNameCliente');
@@ -1463,7 +1472,7 @@ txtNameCliente.on('input', async () => {
 
 //#endregion campos de busquedaz
 
-//#endregion Sección de Clientes
+//#endregion Secci\u00F3n de Clientes
 
 
 /*
@@ -1472,7 +1481,7 @@ txtNameCliente.on('input', async () => {
  ##########################################################
  */
 
-//#region Sección de Vendedores
+//#region Secci\u00F3n de Vendedores
 
 function fnLoadSellers(page: number, pageSize: number) {
 
@@ -1601,7 +1610,7 @@ function fnBtnSaveSeller() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir al menos un correo electrónico.'
+            text: 'Debe incluir al menos un correo electr\u00F3nico.'
         });
         return;
     }
@@ -1617,7 +1626,7 @@ function fnBtnSaveSeller() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir el número de documento.'
+            text: 'Debe incluir el n\u00FAmero de documento.'
         });
         return;
     }
@@ -1625,7 +1634,7 @@ function fnBtnSaveSeller() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir el número de sucursal.'
+            text: 'Debe incluir el n\u00FAmero de sucursal.'
         });
         return;
     }
@@ -1671,7 +1680,7 @@ function fnBtnSaveSeller() {
                     Swal.fire({
                         icon: 'error',
                         title: 'No se pudo acceder a la API!',
-                        text: 'No se guardó correctamente el registro'
+                        text: 'No se guard\u00F3 correctamente el registro'
                     });
 
                     return;
@@ -1681,7 +1690,7 @@ function fnBtnSaveSeller() {
                 Swal.fire({
                     icon: 'info',
                     title: 'Registro agregado exitosamente!',
-                    text: 'Se guardó correctamente el registro'
+                    text: 'Se guard\u00F3 correctamente el registro'
                 });
 
                 fnCleanSeller();
@@ -1789,7 +1798,7 @@ $("#TxtSaleSeller2").keyup(function () {
 
 });
 
-//#endregion Sección de Vendedores
+//#endregion Secci\u00F3n de Vendedores
 
 /*
  ##########################################################
@@ -1797,7 +1806,7 @@ $("#TxtSaleSeller2").keyup(function () {
  ##########################################################
  */
 
-//#region Sección de Ventas
+//#region Secci\u00F3n de Ventas
 
 function fnAddSales() {
     fnCleanSale();
@@ -1817,11 +1826,11 @@ function fnBtnSaveSale() {
     var SaleCoin = $('#SelectSaleCoin').val();
     var CommentSale = $('#TxtCommentSale').val();
 
-    if (!validarInputNumber($('#TxtNumberSale').val())) {
+    if (!validarInputNumber($('#TxtNumberSale'))) {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'El formato del número de carrito no es correcto'
+            text: 'El formato del n\u00FAmero de carrito no es correcto'
         });
         return;
     }
@@ -1836,7 +1845,7 @@ function fnBtnSaveSale() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'No puede estar vacio el número de carrito.'
+            text: 'No puede estar vacio el n\u00FAmero de carrito.'
         });
         return;
     } else if (SaleClient == "") {
@@ -1924,20 +1933,54 @@ function fnBtnSaveSale() {
                 fnLoadSales();
                 $('#lblCarNumber').html(shoppingCarNumber_);
                 $('#TxtIdSaleDetail').val(id_);
-                $('#TxtCarNumberSale').val(shoppingCarNumber_);
+                $('#TxtCarNumberSaleDetail').val(shoppingCarNumber_);
                 await fnLoadSalesDetail(id_, shoppingCarNumber_);
                 fnAddSalesDetail(true);
                 $('#ModalSales').modal('hide');
             });
 }
 
+function fnSearchAdvancedSales() {
+    var adv = $('#divSearchSalesAdvanced').is(':hidden');
+
+    if (adv) {
+        $('#divSearchSalesAdvanced').show();        
+    }
+    else {
+        $('#divSearchSalesAdvanced').hide();
+        $('#SelectSaleBranchAdvancedSearch').empty();
+    }
+}
+
 function fnLoadSales() {
+
+    $('#TxtIdDateSaleBasicSearch').datepicker({
+        dateFormat: 'dd-mm-yy'
+    } as any);
+
     var dataWeb: any = sessionStorage.getItem("TecnoData");
     let url = ApiBackEndUrl + 'CreditDocuments/GetCreditDocumentsClients';
     var position = fnPositionSale();
     var skip = position[0];
     var take = position[1];
+    var dateSearch = $("#TxtIdDateSaleBasicSearch").val();
+    var branchId = $('#SelectSaleBranchAdvancedSearch').val() || 0;
 
+    if (dateSearch === "") {
+        var Today = new Date();
+        var initDateString = moment(Today).format("YYYY-MM-DD");
+        $("#TxtIdDateSaleBasicSearch").val(initDateString);
+    }
+    
+    //Defino los parametros de busqueda
+    var shoppingCarNumber = $('#TxtCarNumberSaleBasicSearch').val() == "" ? "-" : $('#TxtCarNumberSaleBasicSearch').val();
+    var documentNumber = $('#TxtDocumSaleBasicSearch').val() == "" ? "-" : $('#TxtDocumSaleBasicSearch').val(); 
+
+    var date = '1900-01-01';
+    if ($('#isDateFilterSale').is(':checked')) {
+        date = dateSearch;
+    }    
+    
     let response = fetch(url,
         {
             method: 'GET',
@@ -1945,7 +1988,11 @@ function fnLoadSales() {
                 page: skip.toString(),
                 pageSize: take.toString(),
                 SellerId: JSON.parse(dataWeb).userId,
-                Authorization: JSON.parse(dataWeb).token
+                Authorization: JSON.parse(dataWeb).token,
+                ShoppingCarNumber: shoppingCarNumber,
+                DateIni: date,
+                DocumentNumber: documentNumber,
+                BranchId: branchId.toString()
             }
         })
         .then(
@@ -1993,6 +2040,11 @@ function fnLoadSales() {
                     newRow.append(newCell);
                     $("#rowsSales").append(newRow);
 
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = Math.floor(result[cont].UtilityUSD).toLocaleString('en-US', { minimumFractionDigits: 1 });
+                    newRow.append(newCell);
+                    $("#rowsSales").append(newRow);
+
                     //Creo los dos botones para la tabla
                     var btn1 = document.createElement("btnSaleDelete");
                     btn1.innerHTML = iconDelete;
@@ -2024,7 +2076,7 @@ function fnLoadSales() {
                     
                     if (audit) {
                         newCell.appendChild(checkAudit);
-                    }//Aquí se debe aplicar la condición si esta auditado o no
+                    }//Aqu\u00ED se debe aplicar la condici\u00F3n si esta auditado o no
 
                     newRow.append(newCell);
                     $("#rowsSales").append(newRow);
@@ -2055,7 +2107,7 @@ function fnSalesDelete(num: number) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result: any) => {
         if (result.isConfirmed) {
 
@@ -2164,14 +2216,14 @@ function fnChangeDataGroupSales(num: number) {
 //        return false;
 //}
 
-function validarInputNumber(inputText: string) {
+function validarInputNumber(inputText: any) { //El parametro que se recibe debe venir sin el .val()
     var regex = /^[0-9]{3}-[0-9]{3}-[0-9]{3}$/;
-    var resultX = regex.test(inputText);
+    var resultX = regex.test(inputText.val());
 
     if (!resultX) {
         regex = /^[0-9]{9}$/;
-        if (regex.test(inputText)) {
-            $('#TxtNumberSale').val(inputText.slice(0, 3) + '-' + inputText.slice(3, 6) + '-' + inputText.slice(6));
+        if (regex.test(inputText.val())) {
+            inputText.val(inputText.val().slice(0, 3) + '-' + inputText.val().slice(3, 6) + '-' + inputText.val().slice(6));
             resultX = true;
         }
 
@@ -2182,7 +2234,7 @@ function validarInputNumber(inputText: string) {
 
 function lostFocusNumberSale() {
 
-    var valid = validarInputNumber($('#TxtNumberSale').val());
+    var valid = validarInputNumber($('#TxtNumberSale'));
 
     if (!valid) {
         $('#lblNumberSale').show();
@@ -2260,16 +2312,104 @@ $("#TxtSaleClient2").keyup(function () {
 
 });
 
-//#endregion Sección de Ventas
+$('#isDateFilterSale').click(function (this: HTMLElement) {
+    if ($(this).is(':checked')) {
+        $('#TxtIdDateSaleBasicSearch').prop('disabled', false);
+    } else {
+        $('#TxtIdDateSaleBasicSearch').prop('disabled', true);
+    }
+});
 
-//#region Sección de detalle de Ventas
+function fnOrderSales(origin: string) {
+
+    var type = '';
+    if (origin == 'number') {
+
+        $('#lblOrderSales').html(origin);
+
+        var labelValue = $("#lblOrderSalesType").text();
+        if (labelValue === "" || labelValue === "A") {
+            $("#lblOrderSalesType").text("D");
+        }
+        else {
+            $("#lblOrderSalesType").text("A");
+        }
+    }
+
+    //fnLoadSales();
+}
+
+// Variable para llevar un seguimiento del orden actual (ascendente o descendente)
+let sortOrder = "asc";
+
+// Agregar un controlador de eventos click al encabezado de la columna Número
+$("#TabSalesT th:eq(4)").click(function () {
+   
+    // Obtener una referencia a la tabla
+    let table = $("#TabSalesT");
+
+    // Extraer los datos de la tabla en un arreglo de objetos
+    let data: any = [];
+    table.find("tbody tr").each(function (this: HTMLElement) {
+        let row = $(this);
+        let rowData = {
+            date: row.find("td:eq(0)").text(),
+            client: row.find("td:eq(1)").text(),
+            document: row.find("td:eq(2)").text(),
+            seller: row.find("td:eq(3)").text(),
+            number: row.find("td:eq(4)").text(),
+            booking: row.find("td:eq(5)").text(),
+            utility: row.find("td:eq(6)").text()
+        };
+        data.push(rowData);
+    });
+
+    // Ordenar el arreglo por el campo Número
+    if (sortOrder === "asc") {
+        data.sort((a: any, b: any) => a.number.localeCompare(b.number));
+        sortOrder = "desc";
+    } else {
+        data.sort((a: any, b: any) => b.number.localeCompare(a.number));
+        sortOrder = "asc";
+    }
+
+    // Actualizar el contenido de la tabla con los datos ordenados
+    table.find("tbody tr").each(function (this: HTMLElement, i: any) {
+        let row = $(this);
+        row.find("td:eq(0)").text(data[i].date);
+        row.find("td:eq(1)").text(data[i].client);
+        row.find("td:eq(2)").text(data[i].document);
+        row.find("td:eq(3)").text(data[i].seller);
+        row.find("td:eq(4)").text(data[i].number);
+        row.find("td:eq(5)").text(data[i].booking);
+        row.find("td:eq(6)").text(data[i].utility);
+    });
+});
+
+//#endregion Secci\u00F3n de Ventas
+
+//#region Secci\u00F3n de detalle de Ventas
 
 function fnSalesDetail(DocNum: number, CarNumber: string) {
     $('#lblCarNumber').html(DocNum.toString());
     $('#TxtIdSaleDetail').val(DocNum.toString());
-    $('#TxtCarNumberSale').val(CarNumber);
-    //fnChangeSelect();
+    $('#TxtNumberSaleDetail').val(CarNumber);
+    //fnChangeSelect();    
     fnLoadSalesDetail(DocNum, CarNumber);
+}
+
+function lostFocusNumberSaleDetail() {
+
+    var valid = validarInputNumber($('#TxtNumberSaleDetail'));
+
+    if (!valid) {
+        $('#lblNumberSaleDetail').show();
+        $('#lblNumberSaleDetailOk').hide();
+    }
+    else {
+        $('#lblNumberSaleDetail').hide();
+        $('#lblNumberSaleDetailOk').show();
+    }
 }
 
 //Carga los registros en el datagrid
@@ -2393,7 +2533,7 @@ function fnSalesDetailDelete(carNum: number, carItem: number) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result: any) => {
         if (result.isConfirmed) {
 
@@ -2423,6 +2563,7 @@ function fnSalesDetailDelete(carNum: number, carItem: number) {
                             );
 
                             fnLoadSalesDetail(carNum, CarNumber);
+                            fnLoadSales();
                         }
                         else {
                             Swal.fire(
@@ -2432,7 +2573,7 @@ function fnSalesDetailDelete(carNum: number, carItem: number) {
                             )
                         }
 
-
+                        
                     })
                 .catch(error => {
                     Swal.fire(
@@ -2447,9 +2588,50 @@ function fnSalesDetailDelete(carNum: number, carItem: number) {
     });
 }
 
-async function fnSalesDetailUpdate(carNum: number, carItem: number) {
+$('#TxtUtilityReport').on('input', function (this: HTMLElement) {
+    var value = $(this).val();
+    var newValue = value.replace(/[^0-9.]/g, '');
+    $(this).val(newValue);
 
+    var utilityFloat = parseFloat(newValue);
+    var usdFloat = parseFloat($('#TxtCurrencySaleDetail').val());
+
+    if (utilityFloat > 0 && usdFloat > 0) {
+        var calculatedValue = (utilityFloat / usdFloat).toFixed(2);
+        //console.log(calculatedValue);
+        $('#TxtUtilityUSD').val(calculatedValue);
+    }
+    else {
+        $('#TxtUtilityUSD').val('0');
+    }
+});
+
+$('#TxtCurrencySaleDetail').on('input', function (this: HTMLElement) {
+    var value = $(this).val();
+    var newValue = value.replace(/[^0-9.]/g, '');
+    $(this).val(newValue);
+
+    var utilityFloat = parseFloat($('#TxtUtilityReport').val());
+    var usdFloat = parseFloat(newValue); 
+
+    if (utilityFloat > 0 && usdFloat > 0) {
+        var calculatedValue = (utilityFloat / usdFloat).toFixed(2);
+        //console.log(calculatedValue);
+        $('#TxtUtilityUSD').val(calculatedValue);
+    }
+    else {
+        $('#TxtUtilityUSD').val('0');
+    }
+});
+
+async function fnSalesDetailUpdate(carNum: number, carItem: number) {
+    fnCleanSaleDetail();
     $('#lblSalesDetailId').html(carItem.toString());
+    //$('#lblNumberSaleDetail').hide();
+    //$('#lblNumberSaleDetailOk').hide();
+    //var stringCarNumber = $('#lblCarNumber').html().substring(0, 11);
+    //$('#TxtNumberSaleDetail').val(stringCarNumber); 
+
     await fnLoadSelect('SelectSaleDeailProduct', 'Products/GetProducts');
 
     let url = ApiBackEndUrl + 'ItemsCreditDocuments/GetItemsCreditDocumentsById';
@@ -2460,9 +2642,11 @@ async function fnSalesDetailUpdate(carNum: number, carItem: number) {
 
     if (roleId == 1) {
         $("#SectionAudit").show();
+        $('#TxtUtilityReport').prop('readonly', false);
         isAdmin = true;
     }
     else {
+        $('#TxtUtilityReport').prop('readonly', true);
         $("#SectionAudit").hide();
     }
 
@@ -2487,13 +2671,23 @@ async function fnSalesDetailUpdate(carNum: number, carItem: number) {
                 var utility_ = result.utility.toLocaleString('en-US', { minimumFractionDigits: 0 });
                 var mkup_ = result.mkup.toLocaleString('en-US', { minimumFractionDigits: 2 });
                 var audit_ = result.audit;
-                var currency_ = result.currency;
+                var currency_ = result.currency.toLocaleString('en-US', { minimumFractionDigits: 2 });
+                var auditedUtility = result.auditedUtility.toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+                var stringCurrency = currency_.replace(',', '');
+                var stringAuditedUtility = auditedUtility.replace(',', '');
+
+                var floatCurrency = parseFloat(stringCurrency);
+                var floatAuditedUtility = parseFloat(stringAuditedUtility);
+
+                var utilityUSD = (parseFloat(currency_) == 0 ? 0 : (floatAuditedUtility / floatCurrency).toFixed(2));
+                var stringUtilityUSD = utilityUSD.toLocaleString('en-US', { minimumFractionDigits: 2 });
 
                 if (!isAdmin && audit_) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'El registro esta auditado',
-                        text: 'Este registro esta auditado por un administrador, si desea hacer un cambio debe solicitar el permiso al usuario que lo porcesó...'
+                        text: 'Este registro esta auditado por un administrador, si desea hacer un cambio debe solicitar el permiso al usuario que lo porces\u00F3...'
                     });
                     return;
                 }
@@ -2508,6 +2702,8 @@ async function fnSalesDetailUpdate(carNum: number, carItem: number) {
                 $('#TxtMkupSaleDetail').val(mkup_);
                 $('#chkAudit').prop("checked", audit_);
                 $('#TxtCurrencySaleDetail').val(currency_);
+                $('#TxtUtilityReport').val(auditedUtility.toString());
+                $('#TxtUtilityUSD').val(stringUtilityUSD);
 
                 fnAddSalesDetail(false);
             });
@@ -2517,7 +2713,7 @@ async function fnSalesDetailUpdate(carNum: number, carItem: number) {
 
 }
 
-async function fnAddSalesDetail(isNew: boolean) {
+async function fnAddSalesDetail(isNew: boolean) {    
 
     if ($('#TxtIdSaleDetail').val() == "") {
         Swal.fire({
@@ -2559,7 +2755,10 @@ async function fnAddSalesDetail(isNew: boolean) {
 function fnCleanSaleDetail() {
 
     var today: Date = new Date();
-
+    var stringCarNumber = $('#lblCarNumber').html().substring(0, 11);    
+    $('#TxtNumberSaleDetail').val(stringCarNumber);
+    $('#lblNumberSaleDetail').hide();
+    $('#lblNumberSaleDetailOk').hide();
     $("#SelectSaleDeailProduct").empty();
     $('#DpickerDateSaleDetail').val(moment(today).format('YYYY-MM-DD'))
     $("#SelectSaleDeailTo").empty();
@@ -2568,6 +2767,8 @@ function fnCleanSaleDetail() {
     $('#TxtMkupSaleDetail').val('0');
     $('#lblSalesDetailId').html('');
     $('#TxtSaleDeailTo').val('');
+    $('#TxtUtilityReport').val('0');
+    $('#TxtUtilityUSD').val('0');
     $('#SearchResultsSaleDeailTo').empty();
     $('#lblSaleDeailTo').html('');
 }
@@ -2582,9 +2783,12 @@ function fnBtnSaveSaleDetail() {
     var SaleDetailId_ = $('#lblSalesDetailId').html();
     var Product_ = $('#SelectSaleDeailProduct').val();
     var Currency_ = $('#TxtCurrencySaleDetail').val();
+    var stringCarNumber = $('#TxtNumberSaleDetail').val();
+    var newStringCarNumber = stringCarNumber + $('#lblCarNumber').html().substring(11, $('#lblCarNumber').html().length)
     //var From_ = $('#SelectSaleDeailFrom').val();
     //var To_ = $('#TxtSaleDeailTo').val();
     var To_ = $('#lblSaleDeailTo').html();
+    var AuditedUtility = $('#TxtUtilityReport').val();
 
     var AmountN = +$('#TxtAmountSaleDetail').val().replace(',', '');
     var UtilityN = +$('#TxtUtilitySaleDetail').val().replace(',', '');
@@ -2593,6 +2797,7 @@ function fnBtnSaveSaleDetail() {
     var Amount_ = AmountN.toString().replace(',', '');
     var Utility_ = UtilityN.toString().replace(',', '');
     var Mkup_ = MkupN.toString().replace(',', '');
+    var AuditedUtility_ = AuditedUtility.replace(',', '');
 
     var isUpdate: boolean = (SaleDetailId_ == "" ? false : true)
 
@@ -2600,17 +2805,18 @@ function fnBtnSaveSaleDetail() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Atención: No puede estar vacio el producto'
+            text: 'Atenci\u00F3n: No puede estar vacio el producto'
         });
         return;
     }
-    //else if (From_ == "" || From_ == null) {
-    //    Swal.fire({
-    //        icon: 'warning',
-    //        title: 'Complete todos los campos',
-    //        text: 'No puede estar vacio el origen'
-    //    });
-    //    return;}
+    else if (!validarInputNumber($('#TxtNumberSaleDetail'))) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'El formato del n\u00FAmero de carrito no es correcto'
+        });
+        return;
+    }
     else if (To_ == "" || To_ == null) {
         Swal.fire({
             icon: 'warning',
@@ -2662,6 +2868,7 @@ function fnBtnSaveSaleDetail() {
             "utility": Utility_,
             "mkup": Mkup_,
             "currency": Currency_,
+            "auditedUtility": AuditedUtility_,
             "InsertUser": (JSON.parse(dataWeb).userId).toString(),
             "DateInsertUser": new Date()
         });
@@ -2689,7 +2896,7 @@ function fnBtnSaveSaleDetail() {
                         Swal.fire({
                             icon: 'info',
                             title: 'Registro agregado exitosamente!',
-                            text: 'Se guardó correctamente el registro'
+                            text: 'Se guard\u00F3 correctamente el registro'
                         });
 
                         var CarNumber: string = $('#lblCarNumber').html();
@@ -2698,12 +2905,13 @@ function fnBtnSaveSaleDetail() {
                         fnLoadSalesDetail(SaleId_, CarNumber);
                         fnCleanSaleDetail();
                         //fnLoadSalesDetail(Number(SaleId_));
+                        fnLoadSales();
                     }
                     else {
                         Swal.fire({
                             icon: 'error',
                             title: 'No se pudo guardar el registro!',
-                            text: 'Hubo un error, devolvió: ' + result
+                            text: 'Hubo un error, devolvi\u00F3: ' + result
                         });
                     }
 
@@ -2729,6 +2937,7 @@ function fnBtnSaveSaleDetail() {
             "utility": Utility_,
             "mkup": Mkup_,
             "currency": Currency_,
+            "auditedUtility": AuditedUtility_,
             "updateUser": (JSON.parse(dataWeb).userId).toString(),
             "dateUpdateUser": new Date()
         });
@@ -2744,6 +2953,7 @@ function fnBtnSaveSaleDetail() {
                 headers: {
                     'Content-Type': 'application/json;charset=UTF-8',
                     Audit: audit_.toString(),
+                    CarNumber: stringCarNumber,
                     Authorization: JSON.parse(dataWeb).token
                 },
                 body: JSON.stringify(data[0])
@@ -2756,14 +2966,13 @@ function fnBtnSaveSaleDetail() {
                     Swal.fire({
                         icon: 'info',
                         title: 'Registro actualizado exitosamente!',
-                        text: 'Se guardó correctamente el cambio.'
+                        text: 'Se guard\u00F3 correctamente el cambio.'
                     });
                     $('#ModalSalesDetail').modal('hide');
-
-                    var CarNumber: string = $('#lblCarNumber').html();
-                    CarNumber = CarNumber?.toString().substring(0, CarNumber?.toString().indexOf('- renglones'));
-                    fnLoadSalesDetail(SaleId_, CarNumber);
+                    $('#lblCarNumber').html(newStringCarNumber);
+                    fnLoadSalesDetail(SaleId_, stringCarNumber);
                     fnCleanSaleDetail();
+                    fnLoadSales();
                 })
             .catch(error => {
                 Swal.fire({
@@ -2842,7 +3051,7 @@ $("#TxtSaleDeailTo").keyup(function () {
 
 });
 
-//#endregion Sección de detalle de Ventas
+//#endregion Secci\u00F3n de detalle de Ventas
 
 //#region Seccion de Pagos
 
@@ -2931,7 +3140,7 @@ function fnBtnSavePayment() {
                                     Swal.fire({
                                         icon: 'info',
                                         title: 'Registro agregado exitosamente!',
-                                        text: 'Se guardó correctamente el registro'
+                                        text: 'Se guard\u00F3 correctamente el registro'
                                     });
 
                                     fnCleanPayment();
@@ -3162,7 +3371,7 @@ function fnDeletePayment() {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result: any) => {
         if (result.isConfirmed) {
 
@@ -3220,7 +3429,7 @@ function fnDeletePayment() {
  ##########################################################
  */
 
-//#region Sección de Sucursales
+//#region Secci\u00F3n de Sucursales
 
 function fnLoadBranches() {
     let url = ApiBackEndUrl + 'Branches/GetBranches';
@@ -3337,7 +3546,7 @@ function fnBranchesDelete(num: number) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result: any) => {
         if (result.isConfirmed) {
 
@@ -3412,7 +3621,7 @@ function fnBtnSaveBranches() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'No puede estar vacio el correo electrónico'
+            text: 'No puede estar vacio el correo electr\u00F3nico'
         });
         return;
     }
@@ -3452,7 +3661,7 @@ function fnBtnSaveBranches() {
                     Swal.fire({
                         icon: 'info',
                         title: 'Registro agregado exitosamente!',
-                        text: 'Se guardó correctamente el registro'
+                        text: 'Se guard\u00F3 correctamente el registro'
                     });
 
                     fnCleanBranches();
@@ -3502,7 +3711,7 @@ function fnBtnSaveBranches() {
                     Swal.fire({
                         icon: 'info',
                         title: 'Registro actualizado exitosamente!',
-                        text: 'Se actualizó correctamente el registro'
+                        text: 'Se actualiz\u00F3 correctamente el registro'
                     });
 
                     fnCleanBranches();
@@ -3555,7 +3764,7 @@ function fnBranchesUpdate(num: number) {
  ##########################################################
  */
 
-//#region Sección de Monedas
+//#region Secci\u00F3n de Monedas
 
 function fnLoadCoins() {
     let url = ApiBackEndUrl + 'Coins/GetCoinsDetail';
@@ -3657,7 +3866,7 @@ function fnCoinsDelete(id: number) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result: any) => {
         if (result.isConfirmed) {
 
@@ -3767,7 +3976,7 @@ function fnCoinValueByDate(date: Date, coinId: number): Promise<number> {
 
 //#endregion de Monedas
 
-//#region Sección de Historico de monedas
+//#region Secci\u00F3n de Historico de monedas
 
 function fnCleanHistoryCoins() {
     var Today: Date = new Date();
@@ -3852,7 +4061,7 @@ function fnCoinHistoryDelete(num: number) {
         text: '*ADVERTENCIA* tenga en cuenta que el borrar este tipo de registros puede ocasionar incosnsistencia en los datos, borrelo unicamente si lo acaba de incluir y no cuenta con transacciones.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result: any) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'CoinHistory/DeleteCoinHistory';
@@ -3959,7 +4168,7 @@ function fnBtnSaveCoinHistory() {
                 Swal.fire({
                     icon: 'info',
                     title: 'Registro agregado exitosamente!',
-                    text: 'Se guardó correctamente el registro'
+                    text: 'Se guard\u00F3 correctamente el registro'
                 });
 
                 fnLoadHistoryCoins();
@@ -3981,7 +4190,7 @@ function fnChangeDataGroupCoinHistory(num: number) {
 }
 
 
-//#endregion Sección de Historico de monedas
+//#endregion Secci\u00F3n de Historico de monedas
 
 /*
  ##########################################################
@@ -3989,7 +4198,7 @@ function fnChangeDataGroupCoinHistory(num: number) {
  ##########################################################
  */
 
-//#region Sección de Destinos
+//#region Secci\u00F3n de Destinos
 
 function fnLoadDestinations() {
     let url = ApiBackEndUrl + 'Destinations/GetDestinationsCountries';
@@ -4091,7 +4300,7 @@ function fnDestinationsDelete(id: number) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result: any) => {
         if (result.isConfirmed) {
 
@@ -4200,7 +4409,7 @@ function fnBtnSaveDestinations() {
                     Swal.fire({
                         icon: 'info',
                         title: 'Registro agregado exitosamente!',
-                        text: 'Se guardó correctamente el registro'
+                        text: 'Se guard\u00F3 correctamente el registro'
                     });
 
                     fnCleanDestinations();
@@ -4240,14 +4449,14 @@ function fnBtnSaveDestinations() {
                         Swal.fire({
                             icon: 'info',
                             title: 'Registro actualizado exitosamente!',
-                            text: 'Se actualizó correctamente el registro'
+                            text: 'Se actualiz\u00F3 correctamente el registro'
                         });
                     }
                     else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error al actualizar el registro!',
-                            text: 'No se actualizó correctamente el registro'
+                            text: 'No se actualiz\u00F3 correctamente el registro'
                         });
                     }
 
@@ -4357,7 +4566,7 @@ function fnSearchDestinations() {
  ##########################################################
  */
 
-//#region Sección de Objetivos
+//#region Secci\u00F3n de Objetivos
 
 function fnLoadGoals() {
     let url = ApiBackEndUrl + 'Goals/GetGoals';
@@ -4492,7 +4701,7 @@ function fnBtnSaveGoal() {
     var user_ = JSON.parse(dataWeb).userName;
 
     var selection_ = $("#selGoalSeller").is(":visible") ? "S" : "B";
-    //Condición de si esta seleccionado vendedor o sucursal
+    //Condici\u00F3n de si esta seleccionado vendedor o sucursal
     if (selection_ == "S") {
         branch_ = 0;
     }
@@ -4561,7 +4770,7 @@ function fnBtnSaveGoal() {
                 Swal.fire({
                     icon: 'info',
                     title: 'Registro agregado exitosamente!',
-                    text: 'Se guardó correctamente el registro'
+                    text: 'Se guard\u00F3 correctamente el registro'
                 });
 
                 fnCleanGoal();
@@ -4600,7 +4809,7 @@ function fnGoalDelete(id_: number) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result: any) => {
         if (result.isConfirmed) {
 
@@ -4717,7 +4926,7 @@ $("#TxtSaleSellerGoal").keyup(function () {
 
 });
 
-//#endregion Sección de Objetivos
+//#endregion Secci\u00F3n de Objetivos
 
 /*
  ##########################################################
@@ -4859,7 +5068,7 @@ function fnReportGoalsResumeMonth() {
 
 }
 
-function fnReportGoalsResumeMonthColumns() {
+function fnReportGoalsResumeMonthColumnsOpt() {
     var selMonth = $('#montsSelect');
     var selYear = $('#yearSelect');
 
@@ -4983,9 +5192,12 @@ function fnReportGoalsResumeMonthColumns() {
                         newRow.append(newCell);
                         $("#rowsTabReport4").append(newRow);
 
+                        var amount0 = 0;
+
                         for (var i = 1; i <= dayMonth; i++) {
 
                             var sale_ = moment(result[cont].Date, "YYYY-MM-DD").date() == i ? Math.floor(result[cont].Utility).toLocaleString('en-US', { minimumFractionDigits: 0 }) : '0'
+                            amount0 = amount0 + (+sale_);
 
                             var newCell = document.createElement("td");
                             newCell.innerHTML = sale_;
@@ -5053,6 +5265,199 @@ function fnReportGoalsResumeMonthColumns() {
             });
 
 
+}
+
+function fnReportGoalsResumeMonthColumns() {
+    var selMonth = $('#montsSelect');
+    var selYear = $('#yearSelect');
+
+    var RegsSel = $('#montsSelect > option').length;
+
+    if (RegsSel == 0) {
+        var actualDate = new Date();
+        var Month = actualDate.getMonth() + 1;
+        var Year = actualDate.getFullYear();
+
+        $.each(months, function (key: number, value: string) {
+            selMonth.append($("<option></option>")
+                .attr("value", value).text(key));
+        });
+
+        selMonth.val(Month);
+        selYear.val(Year);
+
+        $("#Sel1").prop("checked", true);
+    }
+
+    var dataWeb: any = sessionStorage.getItem("TecnoData");
+    let url = ApiBackEndUrl + 'CreditDocuments/GetSalesByMonthColumns';
+    var dateIni = $('#DpickerReportGoalsIniR2').val();
+    var dateEnd = $('#DpickerReportGoalsEndR2').val();
+
+    var Month_ = selMonth.val();
+    var Year_ = selYear.val();
+    var includeSellers = $('#Sel1').is(':checked');
+
+    let response = fetch(url,
+        {
+            method: 'GET',
+            headers: {
+                month: Month_.toString(),
+                year: Year_.toString(),
+                CoinId: "2",
+                SellerId: JSON.parse(dataWeb).userId,
+                IncludeSellers: includeSellers,
+                Authorization: JSON.parse(dataWeb).token
+            }
+        })
+        .then(
+            response => response.json())
+        .then(
+            result => {
+                console.log(result);
+
+                $("#TabReport4 > tbody").empty();
+                $('#TabReport4 th:nth-child(n+3), table td:nth-child(n+3)').remove();
+                var cont = 0;
+
+                var table = $('#TabReport4');
+
+                var dayMonth = new Date(Year_, Month_, 0).getDate();
+                var table = $('#TabReport4');
+
+                //pongo todo el encabezado de la tabla 
+                for (var i = 1; i <= dayMonth; i++) {
+
+                    var valDay = i < 10 ? '0' + i : i;
+                    var valMon = Month_ < 10 ? '0' + Month_ : Month_;
+
+                    table.find('thead tr').append('<th class="center">' + valDay + "/" + valMon + '</th>');
+                    table.find('tbody tr').append('<td class="center"></td>');
+                }
+
+                var branchPrev = "";
+                var sellerPrev = "";
+                var datePrev = new Date('1900-01-01');
+                var cont = 0;
+                var trCurrent = 0;
+
+                for (var j in result) {
+                    var branchName = result[cont].BranchName;
+                    var sellerName = result[cont].SellerName;
+                    var date = result[cont].Date;
+                    //var prevRecord = ((branchName === branchPrev && sellerName === sellerPrev) ? true : false);
+                    var prevRecord = branchName === branchPrev && sellerName === sellerPrev;
+                    var dayOnly = moment(date).format('DD');
+                    var dayPrev = moment(datePrev).format('DD');
+
+                    if (!prevRecord) {
+                        //Lo primero que hago es revisar si del proceso anterior quedaron espacios vacios por terminar de rellenar con ceros
+                        //para ello debo asegurarme de que la fecha sea diferente a 1900-01-01
+                        var missingDays = dayMonth - dayPrev;
+                        if (missingDays > 0) {
+                            //Calculo cuantos registros faltan por completar
+                            
+                            var trPrev = document.getElementById("tr" + trCurrent);
+
+                            for (var i = 0; i < missingDays; i++) {
+                                var newCell = document.createElement("td");
+                                newCell.innerHTML = '0';
+                                newCell.classList.add('center');
+
+                                if (trPrev) {
+                                    trPrev.appendChild(newCell);
+                                }
+                            }
+                        }
+
+                        //Otro vendedor de la misma sucursal
+                        //Mismo vendedor en otra sucursal
+                        trCurrent++;
+
+                        //1.- Meto el nombre de la sucursal y del vendedor
+                        var newRow = document.createElement("tr");
+                        newRow.id = "tr" + (trCurrent);
+                        var newCell = document.createElement("td");
+                        newCell.innerHTML = branchName;
+                        newRow.append(newCell);
+                        $("#rowsTabReport4").append(newRow);
+
+                        var newCell = document.createElement("td");
+                        newCell.innerHTML = sellerName;
+                        newRow.append(newCell);
+                        $("#rowsTabReport4").append(newRow);
+
+                        //2.- Debo saber el d\u00EDa de la fecha del registro que esta entrando
+                        //Para saber si voy a rellenar con ceros
+                                                
+                        for (var i = 1; i < dayOnly; i++) {
+                            var newCell = document.createElement("td");
+                            newCell.innerHTML = '0';
+                            newCell.classList.add('center');
+                            newRow.append(newCell);
+                            $("#rowsTabReport4").append(newRow);
+                        }
+
+                        var sale_ = Math.floor(result[cont].Utility).toLocaleString('en-US', { minimumFractionDigits: 0 });
+                        var newCell = document.createElement("td");
+                        newCell.innerHTML = sale_;
+                        newCell.classList.add('center');
+                        newRow.append(newCell);
+                        $("#rowsTabReport4").append(newRow);
+
+                    }
+                    else { //En caso de que sea el mismo vendedor y sucursal, entonces
+                        //1.- Debo revisar primero la fecha actual contra la fecha del registro anterior
+                        //para ver si hay que meter ceros o el registro  
+                        var dayDiference = dayOnly - dayPrev;
+                        //var newRow = document.createElement("tr");
+                        var newCell = document.createElement("td");
+                        var trPrev = document.getElementById("tr" + trCurrent); 
+
+                        for (var i = 1; i < dayDiference; i++) {
+                            var newCell = document.createElement("td");
+                            newCell.innerHTML = '0';
+                            newCell.classList.add('center');                                                       
+
+                            if (trPrev) {
+                                trPrev.appendChild(newCell);
+                            }
+                        }
+
+                        var sale_ = Math.floor(result[cont].Utility).toLocaleString('en-US', { minimumFractionDigits: 0 });
+                        var newCell = document.createElement("td");
+                        newCell.innerHTML = sale_;
+                        newCell.classList.add('center');
+
+                        if (trPrev) {
+                            trPrev.appendChild(newCell);
+                        }
+                    }
+
+                    //Aqu\u00ED completo los ceros del ultimo registro cuando llega al final]
+                    cont++;
+                    if (result.length == cont) {
+                        var trPrev = document.getElementById("tr" + trCurrent);
+                        var missingDays = dayMonth - moment(date).format('DD');
+
+                        for (var i = 0; i < missingDays; i++) {
+                            var newCell = document.createElement("td");
+                            newCell.innerHTML = '0';
+                            newCell.classList.add('center');
+
+                            if (trPrev) {
+                                trPrev.appendChild(newCell);
+                            }
+                        }
+                    }
+
+                    //Establece las variables para compararlas con los proximos registros a evaluar
+                    branchPrev = branchName;
+                    sellerPrev = sellerName;
+                    datePrev = date;
+                    
+                }
+            })
 }
 
 function fnReportGoalsResume() {
@@ -5228,7 +5633,7 @@ function fnReportGoals() { //Report3
                             component: e.component
                         }).then(function () {
                             workbook.xlsx.writeBuffer().then(function (buffer: any) {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Reporte_por_gestión.xlsx');
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Reporte_por_gesti\u00F3n.xlsx');
                             });
                         });
                         e.cancel = true;
@@ -5242,9 +5647,9 @@ function fnReportGoals() { //Report3
                             //showInGroupHeader: true
                         },
                         { caption: 'Vendedor', dataField: 'SellerName' },
-                        { caption: 'Groos B', dataField: 'GroosB', displayFormat: '{0:n0}' },
-                        { caption: 'Groos MA', dataField: 'GroosMA' },
-                        { caption: 'Groos MS', dataField: 'GroosMS' },
+                        { caption: 'Gross B', dataField: 'GroosB', displayFormat: '{0:n0}' },
+                        { caption: 'Gross MA', dataField: 'GroosMA' },
+                        { caption: 'Gross MS', dataField: 'GroosMS' },
                         { caption: 'Mkup(%)', dataField: 'Mkup' },
                         { caption: 'Utilidad', dataField: 'Utility' },
                         { caption: 'Objetivo', dataField: 'Objetive' },
@@ -5374,7 +5779,7 @@ function fnReportAudit() {
                             component: e.component
                         }).then(function () {
                             workbook.xlsx.writeBuffer().then(function (buffer: any) {
-                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Reporte_auditoría.xlsx');
+                                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Reporte_auditor\u00EDa.xlsx');
                             });
                         });
                         e.cancel = true;
@@ -5602,7 +6007,7 @@ async function fnSalesGraph() {
  ##########################################################
  */
 
-//#region días feriados
+//#region d\u00EDas feriados
 
 function fnLoadHolidays() {
     let url = ApiBackEndUrl + 'Holidays/GetHolidays';
@@ -5696,7 +6101,7 @@ function fnHolidaysDelete(id: number) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Sí, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result: any) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'Holidays/DeleteHolidays';
@@ -5784,7 +6189,7 @@ function fnBtnSaveHolidays() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'No puede estar vacia la descripción'
+            text: 'No puede estar vacia la descripci\u00F3n'
         });
         return;
     }
@@ -5816,7 +6221,7 @@ function fnBtnSaveHolidays() {
                 Swal.fire({
                     icon: 'info',
                     title: 'Registro agregado exitosamente!',
-                    text: 'Se guardó correctamente el registro'
+                    text: 'Se guard\u00F3 correctamente el registro'
                 });
 
                 fnCleanHolidays();
@@ -5824,4 +6229,4 @@ function fnBtnSaveHolidays() {
             });
 }
 
-//#endregion días feriados
+//#endregion d\u00EDas feriados

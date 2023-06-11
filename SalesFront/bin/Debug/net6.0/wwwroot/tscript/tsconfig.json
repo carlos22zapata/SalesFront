@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "charset": "UTF-8",
+    //"charset": "UTF-8",
     "outDir": "./build", /* Specify an output folder for all emitted files. */
     "removeComments": true,
     "esModuleInterop": true, /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */

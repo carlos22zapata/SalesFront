@@ -215,6 +215,8 @@ const months = {
     "Noviembre": 11,
     "Diciembre": 12
 };
+function fnLoadBranchesOnDiv() {
+}
 function LogIn(user, password) {
     if (user == "") {
         $('#lblMessages').html("El nombre de usuario no debe estar vacio !!!");
@@ -222,7 +224,7 @@ function LogIn(user, password) {
         return;
     }
     else if (password == undefined) {
-        $('#lblMessages').html("La contrase�a no debe estar vac�a !!!");
+        $('#lblMessages').html("La contrase�a no debe estar vac\u00EDa !!!");
         $('#lblMessages').show();
         return;
     }
@@ -274,8 +276,8 @@ function fnSelectUserBranch() {
     if (userId == null || userId == "" || userId == undefined) {
         Swal.fire({
             icon: "error",
-            title: "Inicie sesi�n nuevamente",
-            text: "Debe volver a iniciar sesi�n con su usuario y clave para poder seleccionar una sucursal!!!"
+            title: "Inicie sesi\u00F3n nuevamente",
+            text: "Debe volver a iniciar sesi\u00F3n con su usuario y clave para poder seleccionar una sucursal!!!"
         });
         return;
     }
@@ -303,7 +305,7 @@ function fnSelectUserBranch() {
             .catch(error => {
             Swal.fire({
                 icon: 'error',
-                title: 'No se pudo completar la operaci�n!',
+                title: 'No se pudo completar la operaci\u00F3n!',
                 text: 'Hubo un error: ' + error
             });
         });
@@ -377,7 +379,7 @@ function fnProductDelete(id) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'S�, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'Products/deleteProduct';
@@ -454,7 +456,7 @@ function fnBtnSaveProduct() {
         Swal.fire({
             icon: 'info',
             title: 'Registro agregado exitosamente!',
-            text: 'Se guard� correctamente el registro'
+            text: 'Se guard\u00F3 correctamente el registro'
         });
         fnCleanProducts();
         fnLoadProducts();
@@ -536,12 +538,12 @@ function fnLoadClients() {
             var btn1 = document.createElement("btnClientDelete");
             btn1.innerHTML = iconDelete;
             btn1.classList.add("btnGridDelete");
-            btn1.setAttribute('onclick', 'fnProductDelete(' + result[cont].id + ')');
+            btn1.setAttribute('onclick', 'fnClientsDelete(' + result[cont].id + ')');
             btn1.setAttribute('data-title', 'Eliminar registro de cliente');
             var btn2 = document.createElement("btnClientUpdate");
             btn2.innerHTML = iconUpdate;
             btn2.classList.add("btnGridUpdate");
-            btn2.setAttribute('onclick', 'fnProductUpdate(' + result[cont].id + ')');
+            btn2.setAttribute('onclick', 'fnClientUpdate(' + result[cont].id + ')');
             btn2.setAttribute('data-title', 'Actualizar registro de cliente');
             var btn3 = document.createElement("btnSalesClients");
             btn3.innerHTML = '<i class="fa-solid fa-file-invoice-dollar"></i>';
@@ -551,7 +553,6 @@ function fnLoadClients() {
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
             newCell.appendChild(btn2);
-            newCell.appendChild(btn3);
             newRow.append(newCell);
             $("#rowsClient").append(newRow);
             cont++;
@@ -841,7 +842,7 @@ function fnBtnClientSave() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir al menos un correo electr�nico.'
+            text: 'Debe incluir al menos un correo electr\u00F3nico.'
         });
         return;
     }
@@ -849,7 +850,7 @@ function fnBtnClientSave() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir al menos un tel�fono v�lido.'
+            text: 'Debe incluir al menos un tel\u00E9fono v\u00E1lido.'
         });
         return;
     }
@@ -857,7 +858,7 @@ function fnBtnClientSave() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir el n�mero de documento.'
+            text: 'Debe incluir el n\u00FAmero de documento.'
         });
         return;
     }
@@ -909,7 +910,7 @@ function fnBtnClientSave() {
             Swal.fire({
                 icon: 'info',
                 title: 'Registro agregado exitosamente!',
-                text: 'Se guard� correctamente el registro'
+                text: 'Se guard\u00F3 correctamente el registro'
             });
         }
         fnCleanClient();
@@ -941,7 +942,7 @@ function fnClientsDelete(id) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'S�, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!!!'
     }).then((result) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'Clients/DeleteClient';
@@ -1014,6 +1015,8 @@ $('#SearchResultsSaleSeller1').on('click', 'li', function () {
     $("#lblSaleSeller1").text(id);
     searchResults.empty();
 });
+function fnClientUpdate(id) {
+}
 const txtNameCliente = $('#TxtFirstNameCliente');
 const resultsNameCliente = $('#results');
 txtNameCliente.on('input', () => __awaiter(void 0, void 0, void 0, function* () {
@@ -1144,7 +1147,7 @@ function fnBtnSaveSeller() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir al menos un correo electr�nico.'
+            text: 'Debe incluir al menos un correo electr\u00F3nico.'
         });
         return;
     }
@@ -1160,7 +1163,7 @@ function fnBtnSaveSeller() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir el n�mero de documento.'
+            text: 'Debe incluir el n\u00FAmero de documento.'
         });
         return;
     }
@@ -1168,7 +1171,7 @@ function fnBtnSaveSeller() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Debe incluir el n�mero de sucursal.'
+            text: 'Debe incluir el n\u00FAmero de sucursal.'
         });
         return;
     }
@@ -1201,14 +1204,14 @@ function fnBtnSaveSeller() {
             Swal.fire({
                 icon: 'error',
                 title: 'No se pudo acceder a la API!',
-                text: 'No se guard� correctamente el registro'
+                text: 'No se guard\u00F3 correctamente el registro'
             });
             return;
         }
         Swal.fire({
             icon: 'info',
             title: 'Registro agregado exitosamente!',
-            text: 'Se guard� correctamente el registro'
+            text: 'Se guard\u00F3 correctamente el registro'
         });
         fnCleanSeller();
         fnLoadSellers(0, 10);
@@ -1300,11 +1303,11 @@ function fnBtnSaveSale() {
     var SaleBranch = $('#SelectSaleBranch').val();
     var SaleCoin = $('#SelectSaleCoin').val();
     var CommentSale = $('#TxtCommentSale').val();
-    if (!validarInputNumber($('#TxtNumberSale').val())) {
+    if (!validarInputNumber($('#TxtNumberSale'))) {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'El formato del n�mero de carrito no es correcto'
+            text: 'El formato del n\u00FAmero de carrito no es correcto'
         });
         return;
     }
@@ -1320,7 +1323,7 @@ function fnBtnSaveSale() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'No puede estar vacio el n�mero de carrito.'
+            text: 'No puede estar vacio el n\u00FAmero de carrito.'
         });
         return;
     }
@@ -1401,25 +1404,55 @@ function fnBtnSaveSale() {
         fnLoadSales();
         $('#lblCarNumber').html(shoppingCarNumber_);
         $('#TxtIdSaleDetail').val(id_);
-        $('#TxtCarNumberSale').val(shoppingCarNumber_);
+        $('#TxtCarNumberSaleDetail').val(shoppingCarNumber_);
         yield fnLoadSalesDetail(id_, shoppingCarNumber_);
         fnAddSalesDetail(true);
         $('#ModalSales').modal('hide');
     }));
 }
+function fnSearchAdvancedSales() {
+    var adv = $('#divSearchSalesAdvanced').is(':hidden');
+    if (adv) {
+        $('#divSearchSalesAdvanced').show();
+    }
+    else {
+        $('#divSearchSalesAdvanced').hide();
+        $('#SelectSaleBranchAdvancedSearch').empty();
+    }
+}
 function fnLoadSales() {
+    $('#TxtIdDateSaleBasicSearch').datepicker({
+        dateFormat: 'dd-mm-yy'
+    });
     var dataWeb = sessionStorage.getItem("TecnoData");
     let url = ApiBackEndUrl + 'CreditDocuments/GetCreditDocumentsClients';
     var position = fnPositionSale();
     var skip = position[0];
     var take = position[1];
+    var dateSearch = $("#TxtIdDateSaleBasicSearch").val();
+    var branchId = $('#SelectSaleBranchAdvancedSearch').val() || 0;
+    if (dateSearch === "") {
+        var Today = new Date();
+        var initDateString = moment(Today).format("YYYY-MM-DD");
+        $("#TxtIdDateSaleBasicSearch").val(initDateString);
+    }
+    var shoppingCarNumber = $('#TxtCarNumberSaleBasicSearch').val() == "" ? "-" : $('#TxtCarNumberSaleBasicSearch').val();
+    var documentNumber = $('#TxtDocumSaleBasicSearch').val() == "" ? "-" : $('#TxtDocumSaleBasicSearch').val();
+    var date = '1900-01-01';
+    if ($('#isDateFilterSale').is(':checked')) {
+        date = dateSearch;
+    }
     let response = fetch(url, {
         method: 'GET',
         headers: {
             page: skip.toString(),
             pageSize: take.toString(),
             SellerId: JSON.parse(dataWeb).userId,
-            Authorization: JSON.parse(dataWeb).token
+            Authorization: JSON.parse(dataWeb).token,
+            ShoppingCarNumber: shoppingCarNumber,
+            DateIni: date,
+            DocumentNumber: documentNumber,
+            BranchId: branchId.toString()
         }
     })
         .then(response => response.json())
@@ -1451,6 +1484,10 @@ function fnLoadSales() {
             $("#rowsSales").append(newRow);
             var newCell = document.createElement("td");
             newCell.innerHTML = Math.floor(result[cont].Amount).toLocaleString('en-US', { minimumFractionDigits: 1 });
+            newRow.append(newCell);
+            $("#rowsSales").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = Math.floor(result[cont].UtilityUSD).toLocaleString('en-US', { minimumFractionDigits: 1 });
             newRow.append(newCell);
             $("#rowsSales").append(newRow);
             var btn1 = document.createElement("btnSaleDelete");
@@ -1496,7 +1533,7 @@ function fnSalesDelete(num) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'S�, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'CreditDocuments/DeleteCreditDocuments';
@@ -1558,18 +1595,18 @@ function fnChangeDataGroupSales(num) {
 }
 function validarInputNumber(inputText) {
     var regex = /^[0-9]{3}-[0-9]{3}-[0-9]{3}$/;
-    var resultX = regex.test(inputText);
+    var resultX = regex.test(inputText.val());
     if (!resultX) {
         regex = /^[0-9]{9}$/;
-        if (regex.test(inputText)) {
-            $('#TxtNumberSale').val(inputText.slice(0, 3) + '-' + inputText.slice(3, 6) + '-' + inputText.slice(6));
+        if (regex.test(inputText.val())) {
+            inputText.val(inputText.val().slice(0, 3) + '-' + inputText.val().slice(3, 6) + '-' + inputText.val().slice(6));
             resultX = true;
         }
     }
     return resultX;
 }
 function lostFocusNumberSale() {
-    var valid = validarInputNumber($('#TxtNumberSale').val());
+    var valid = validarInputNumber($('#TxtNumberSale'));
     if (!valid) {
         $('#lblNumberSale').show();
         $('#lblNumberSaleOk').hide();
@@ -1628,11 +1665,79 @@ $("#TxtSaleClient2").keyup(function () {
         }
     }, 500);
 });
+$('#isDateFilterSale').click(function () {
+    if ($(this).is(':checked')) {
+        $('#TxtIdDateSaleBasicSearch').prop('disabled', false);
+    }
+    else {
+        $('#TxtIdDateSaleBasicSearch').prop('disabled', true);
+    }
+});
+function fnOrderSales(origin) {
+    var type = '';
+    if (origin == 'number') {
+        $('#lblOrderSales').html(origin);
+        var labelValue = $("#lblOrderSalesType").text();
+        if (labelValue === "" || labelValue === "A") {
+            $("#lblOrderSalesType").text("D");
+        }
+        else {
+            $("#lblOrderSalesType").text("A");
+        }
+    }
+}
+let sortOrder = "asc";
+$("#TabSalesT th:eq(4)").click(function () {
+    let table = $("#TabSalesT");
+    let data = [];
+    table.find("tbody tr").each(function () {
+        let row = $(this);
+        let rowData = {
+            date: row.find("td:eq(0)").text(),
+            client: row.find("td:eq(1)").text(),
+            document: row.find("td:eq(2)").text(),
+            seller: row.find("td:eq(3)").text(),
+            number: row.find("td:eq(4)").text(),
+            booking: row.find("td:eq(5)").text(),
+            utility: row.find("td:eq(6)").text()
+        };
+        data.push(rowData);
+    });
+    if (sortOrder === "asc") {
+        data.sort((a, b) => a.number.localeCompare(b.number));
+        sortOrder = "desc";
+    }
+    else {
+        data.sort((a, b) => b.number.localeCompare(a.number));
+        sortOrder = "asc";
+    }
+    table.find("tbody tr").each(function (i) {
+        let row = $(this);
+        row.find("td:eq(0)").text(data[i].date);
+        row.find("td:eq(1)").text(data[i].client);
+        row.find("td:eq(2)").text(data[i].document);
+        row.find("td:eq(3)").text(data[i].seller);
+        row.find("td:eq(4)").text(data[i].number);
+        row.find("td:eq(5)").text(data[i].booking);
+        row.find("td:eq(6)").text(data[i].utility);
+    });
+});
 function fnSalesDetail(DocNum, CarNumber) {
     $('#lblCarNumber').html(DocNum.toString());
     $('#TxtIdSaleDetail').val(DocNum.toString());
-    $('#TxtCarNumberSale').val(CarNumber);
+    $('#TxtNumberSaleDetail').val(CarNumber);
     fnLoadSalesDetail(DocNum, CarNumber);
+}
+function lostFocusNumberSaleDetail() {
+    var valid = validarInputNumber($('#TxtNumberSaleDetail'));
+    if (!valid) {
+        $('#lblNumberSaleDetail').show();
+        $('#lblNumberSaleDetailOk').hide();
+    }
+    else {
+        $('#lblNumberSaleDetail').hide();
+        $('#lblNumberSaleDetailOk').show();
+    }
 }
 function fnLoadSalesDetail(CreditDocumentId, CarNumber) {
     let url = ApiBackEndUrl + 'ItemsCreditDocuments/GetItemsCreditDocumentsDetail';
@@ -1724,7 +1829,7 @@ function fnSalesDetailDelete(carNum, carItem) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'S�, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'ItemsCreditDocuments/deleteItemsCreditDocuments';
@@ -1741,6 +1846,7 @@ function fnSalesDetailDelete(carNum, carItem) {
                 if (result == true) {
                     Swal.fire('Borrado!', 'Registro borrado satisfactoriamente.', 'success');
                     fnLoadSalesDetail(carNum, CarNumber);
+                    fnLoadSales();
                 }
                 else {
                     Swal.fire('Se detecto un error!', 'el archivo no pudo ser borrado.', 'error');
@@ -1752,8 +1858,37 @@ function fnSalesDetailDelete(carNum, carItem) {
         }
     });
 }
+$('#TxtUtilityReport').on('input', function () {
+    var value = $(this).val();
+    var newValue = value.replace(/[^0-9.]/g, '');
+    $(this).val(newValue);
+    var utilityFloat = parseFloat(newValue);
+    var usdFloat = parseFloat($('#TxtCurrencySaleDetail').val());
+    if (utilityFloat > 0 && usdFloat > 0) {
+        var calculatedValue = (utilityFloat / usdFloat).toFixed(2);
+        $('#TxtUtilityUSD').val(calculatedValue);
+    }
+    else {
+        $('#TxtUtilityUSD').val('0');
+    }
+});
+$('#TxtCurrencySaleDetail').on('input', function () {
+    var value = $(this).val();
+    var newValue = value.replace(/[^0-9.]/g, '');
+    $(this).val(newValue);
+    var utilityFloat = parseFloat($('#TxtUtilityReport').val());
+    var usdFloat = parseFloat(newValue);
+    if (utilityFloat > 0 && usdFloat > 0) {
+        var calculatedValue = (utilityFloat / usdFloat).toFixed(2);
+        $('#TxtUtilityUSD').val(calculatedValue);
+    }
+    else {
+        $('#TxtUtilityUSD').val('0');
+    }
+});
 function fnSalesDetailUpdate(carNum, carItem) {
     return __awaiter(this, void 0, void 0, function* () {
+        fnCleanSaleDetail();
         $('#lblSalesDetailId').html(carItem.toString());
         yield fnLoadSelect('SelectSaleDeailProduct', 'Products/GetProducts');
         let url = ApiBackEndUrl + 'ItemsCreditDocuments/GetItemsCreditDocumentsById';
@@ -1762,9 +1897,11 @@ function fnSalesDetailUpdate(carNum, carItem) {
         var isAdmin = false;
         if (roleId == 1) {
             $("#SectionAudit").show();
+            $('#TxtUtilityReport').prop('readonly', false);
             isAdmin = true;
         }
         else {
+            $('#TxtUtilityReport').prop('readonly', true);
             $("#SectionAudit").hide();
         }
         let response = fetch(url, {
@@ -1785,12 +1922,19 @@ function fnSalesDetailUpdate(carNum, carItem) {
             var utility_ = result.utility.toLocaleString('en-US', { minimumFractionDigits: 0 });
             var mkup_ = result.mkup.toLocaleString('en-US', { minimumFractionDigits: 2 });
             var audit_ = result.audit;
-            var currency_ = result.currency;
+            var currency_ = result.currency.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            var auditedUtility = result.auditedUtility.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            var stringCurrency = currency_.replace(',', '');
+            var stringAuditedUtility = auditedUtility.replace(',', '');
+            var floatCurrency = parseFloat(stringCurrency);
+            var floatAuditedUtility = parseFloat(stringAuditedUtility);
+            var utilityUSD = (parseFloat(currency_) == 0 ? 0 : (floatAuditedUtility / floatCurrency).toFixed(2));
+            var stringUtilityUSD = utilityUSD.toLocaleString('en-US', { minimumFractionDigits: 2 });
             if (!isAdmin && audit_) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'El registro esta auditado',
-                    text: 'Este registro esta auditado por un administrador, si desea hacer un cambio debe solicitar el permiso al usuario que lo porces�...'
+                    text: 'Este registro esta auditado por un administrador, si desea hacer un cambio debe solicitar el permiso al usuario que lo porces\u00F3...'
                 });
                 return;
             }
@@ -1803,6 +1947,8 @@ function fnSalesDetailUpdate(carNum, carItem) {
             $('#TxtMkupSaleDetail').val(mkup_);
             $('#chkAudit').prop("checked", audit_);
             $('#TxtCurrencySaleDetail').val(currency_);
+            $('#TxtUtilityReport').val(auditedUtility.toString());
+            $('#TxtUtilityUSD').val(stringUtilityUSD);
             fnAddSalesDetail(false);
         }));
     });
@@ -1837,6 +1983,10 @@ function fnAddSalesDetail(isNew) {
 }
 function fnCleanSaleDetail() {
     var today = new Date();
+    var stringCarNumber = $('#lblCarNumber').html().substring(0, 11);
+    $('#TxtNumberSaleDetail').val(stringCarNumber);
+    $('#lblNumberSaleDetail').hide();
+    $('#lblNumberSaleDetailOk').hide();
     $("#SelectSaleDeailProduct").empty();
     $('#DpickerDateSaleDetail').val(moment(today).format('YYYY-MM-DD'));
     $("#SelectSaleDeailTo").empty();
@@ -1845,6 +1995,8 @@ function fnCleanSaleDetail() {
     $('#TxtMkupSaleDetail').val('0');
     $('#lblSalesDetailId').html('');
     $('#TxtSaleDeailTo').val('');
+    $('#TxtUtilityReport').val('0');
+    $('#TxtUtilityUSD').val('0');
     $('#SearchResultsSaleDeailTo').empty();
     $('#lblSaleDeailTo').html('');
 }
@@ -1857,19 +2009,31 @@ function fnBtnSaveSaleDetail() {
     var SaleDetailId_ = $('#lblSalesDetailId').html();
     var Product_ = $('#SelectSaleDeailProduct').val();
     var Currency_ = $('#TxtCurrencySaleDetail').val();
+    var stringCarNumber = $('#TxtNumberSaleDetail').val();
+    var newStringCarNumber = stringCarNumber + $('#lblCarNumber').html().substring(11, $('#lblCarNumber').html().length);
     var To_ = $('#lblSaleDeailTo').html();
+    var AuditedUtility = $('#TxtUtilityReport').val();
     var AmountN = +$('#TxtAmountSaleDetail').val().replace(',', '');
     var UtilityN = +$('#TxtUtilitySaleDetail').val().replace(',', '');
     var MkupN = +$('#TxtMkupSaleDetail').val().replace(',', '');
     var Amount_ = AmountN.toString().replace(',', '');
     var Utility_ = UtilityN.toString().replace(',', '');
     var Mkup_ = MkupN.toString().replace(',', '');
+    var AuditedUtility_ = AuditedUtility.replace(',', '');
     var isUpdate = (SaleDetailId_ == "" ? false : true);
     if (Product_ == "" || Product_ == null) {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'Atenci�n: No puede estar vacio el producto'
+            text: 'Atenci\u00F3n: No puede estar vacio el producto'
+        });
+        return;
+    }
+    else if (!validarInputNumber($('#TxtNumberSaleDetail'))) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'El formato del n\u00FAmero de carrito no es correcto'
         });
         return;
     }
@@ -1925,6 +2089,7 @@ function fnBtnSaveSaleDetail() {
             "utility": Utility_,
             "mkup": Mkup_,
             "currency": Currency_,
+            "auditedUtility": AuditedUtility_,
             "InsertUser": (JSON.parse(dataWeb).userId).toString(),
             "DateInsertUser": new Date()
         });
@@ -1943,18 +2108,19 @@ function fnBtnSaveSaleDetail() {
                 Swal.fire({
                     icon: 'info',
                     title: 'Registro agregado exitosamente!',
-                    text: 'Se guard� correctamente el registro'
+                    text: 'Se guard\u00F3 correctamente el registro'
                 });
                 var CarNumber = $('#lblCarNumber').html();
                 CarNumber = CarNumber === null || CarNumber === void 0 ? void 0 : CarNumber.toString().substring(0, CarNumber === null || CarNumber === void 0 ? void 0 : CarNumber.toString().indexOf('- renglones'));
                 fnLoadSalesDetail(SaleId_, CarNumber);
                 fnCleanSaleDetail();
+                fnLoadSales();
             }
             else {
                 Swal.fire({
                     icon: 'error',
                     title: 'No se pudo guardar el registro!',
-                    text: 'Hubo un error, devolvi�: ' + result
+                    text: 'Hubo un error, devolvi\u00F3: ' + result
                 });
             }
         })
@@ -1978,6 +2144,7 @@ function fnBtnSaveSaleDetail() {
             "utility": Utility_,
             "mkup": Mkup_,
             "currency": Currency_,
+            "auditedUtility": AuditedUtility_,
             "updateUser": (JSON.parse(dataWeb).userId).toString(),
             "dateUpdateUser": new Date()
         });
@@ -1989,6 +2156,7 @@ function fnBtnSaveSaleDetail() {
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
                 Audit: audit_.toString(),
+                CarNumber: stringCarNumber,
                 Authorization: JSON.parse(dataWeb).token
             },
             body: JSON.stringify(data[0])
@@ -1998,13 +2166,13 @@ function fnBtnSaveSaleDetail() {
             Swal.fire({
                 icon: 'info',
                 title: 'Registro actualizado exitosamente!',
-                text: 'Se guard� correctamente el cambio.'
+                text: 'Se guard\u00F3 correctamente el cambio.'
             });
             $('#ModalSalesDetail').modal('hide');
-            var CarNumber = $('#lblCarNumber').html();
-            CarNumber = CarNumber === null || CarNumber === void 0 ? void 0 : CarNumber.toString().substring(0, CarNumber === null || CarNumber === void 0 ? void 0 : CarNumber.toString().indexOf('- renglones'));
-            fnLoadSalesDetail(SaleId_, CarNumber);
+            $('#lblCarNumber').html(newStringCarNumber);
+            fnLoadSalesDetail(SaleId_, stringCarNumber);
             fnCleanSaleDetail();
+            fnLoadSales();
         })
             .catch(error => {
             Swal.fire({
@@ -2129,7 +2297,7 @@ function fnBtnSavePayment() {
                             Swal.fire({
                                 icon: 'info',
                                 title: 'Registro agregado exitosamente!',
-                                text: 'Se guard� correctamente el registro'
+                                text: 'Se guard\u00F3 correctamente el registro'
                             });
                             fnCleanPayment();
                         })
@@ -2312,7 +2480,7 @@ function fnDeletePayment() {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'S�, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'Payments/DeletePayments';
@@ -2433,7 +2601,7 @@ function fnBranchesDelete(num) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'S�, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'Branches/DeleteBranch';
@@ -2482,7 +2650,7 @@ function fnBtnSaveBranches() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'No puede estar vacio el correo electr�nico'
+            text: 'No puede estar vacio el correo electr\u00F3nico'
         });
         return;
     }
@@ -2513,7 +2681,7 @@ function fnBtnSaveBranches() {
             Swal.fire({
                 icon: 'info',
                 title: 'Registro agregado exitosamente!',
-                text: 'Se guard� correctamente el registro'
+                text: 'Se guard\u00F3 correctamente el registro'
             });
             fnCleanBranches();
             fnLoadBranches();
@@ -2553,7 +2721,7 @@ function fnBtnSaveBranches() {
             Swal.fire({
                 icon: 'info',
                 title: 'Registro actualizado exitosamente!',
-                text: 'Se actualiz� correctamente el registro'
+                text: 'Se actualiz\u00F3 correctamente el registro'
             });
             fnCleanBranches();
             fnLoadBranches();
@@ -2664,7 +2832,7 @@ function fnCoinsDelete(id) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'S�, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'Coins/DeleteCoin';
@@ -2798,7 +2966,7 @@ function fnCoinHistoryDelete(num) {
         text: '*ADVERTENCIA* tenga en cuenta que el borrar este tipo de registros puede ocasionar incosnsistencia en los datos, borrelo unicamente si lo acaba de incluir y no cuenta con transacciones.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'S�, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'CoinHistory/DeleteCoinHistory';
@@ -2870,7 +3038,7 @@ function fnBtnSaveCoinHistory() {
         Swal.fire({
             icon: 'info',
             title: 'Registro agregado exitosamente!',
-            text: 'Se guard� correctamente el registro'
+            text: 'Se guard\u00F3 correctamente el registro'
         });
         fnLoadHistoryCoins();
     })
@@ -2961,7 +3129,7 @@ function fnDestinationsDelete(id) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'S�, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'Destinations/DeleteDestinations';
@@ -3033,7 +3201,7 @@ function fnBtnSaveDestinations() {
             Swal.fire({
                 icon: 'info',
                 title: 'Registro agregado exitosamente!',
-                text: 'Se guard� correctamente el registro'
+                text: 'Se guard\u00F3 correctamente el registro'
             });
             fnCleanDestinations();
             fnLoadDestinations();
@@ -3064,14 +3232,14 @@ function fnBtnSaveDestinations() {
                 Swal.fire({
                     icon: 'info',
                     title: 'Registro actualizado exitosamente!',
-                    text: 'Se actualiz� correctamente el registro'
+                    text: 'Se actualiz\u00F3 correctamente el registro'
                 });
             }
             else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error al actualizar el registro!',
-                    text: 'No se actualiz� correctamente el registro'
+                    text: 'No se actualiz\u00F3 correctamente el registro'
                 });
             }
             fnCleanDestinations();
@@ -3312,7 +3480,7 @@ function fnBtnSaveGoal() {
         Swal.fire({
             icon: 'info',
             title: 'Registro agregado exitosamente!',
-            text: 'Se guard� correctamente el registro'
+            text: 'Se guard\u00F3 correctamente el registro'
         });
         fnCleanGoal();
         fnLoadGoals();
@@ -3346,7 +3514,7 @@ function fnGoalDelete(id_) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'S�, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'Goals/DeleteGoals';
@@ -3534,7 +3702,7 @@ function fnReportGoalsResumeMonth() {
         });
     });
 }
-function fnReportGoalsResumeMonthColumns() {
+function fnReportGoalsResumeMonthColumnsOpt() {
     var selMonth = $('#montsSelect');
     var selYear = $('#yearSelect');
     var RegsSel = $('#montsSelect > option').length;
@@ -3620,8 +3788,10 @@ function fnReportGoalsResumeMonthColumns() {
                 newCell.innerHTML = sellerName;
                 newRow.append(newCell);
                 $("#rowsTabReport4").append(newRow);
+                var amount0 = 0;
                 for (var i = 1; i <= dayMonth; i++) {
                     var sale_ = moment(result[cont].Date, "YYYY-MM-DD").date() == i ? Math.floor(result[cont].Utility).toLocaleString('en-US', { minimumFractionDigits: 0 }) : '0';
+                    amount0 = amount0 + (+sale_);
                     var newCell = document.createElement("td");
                     newCell.innerHTML = sale_;
                     newCell.classList.add('center');
@@ -3630,6 +3800,144 @@ function fnReportGoalsResumeMonthColumns() {
                 }
             }
             cont++;
+        }
+    });
+}
+function fnReportGoalsResumeMonthColumns() {
+    var selMonth = $('#montsSelect');
+    var selYear = $('#yearSelect');
+    var RegsSel = $('#montsSelect > option').length;
+    if (RegsSel == 0) {
+        var actualDate = new Date();
+        var Month = actualDate.getMonth() + 1;
+        var Year = actualDate.getFullYear();
+        $.each(months, function (key, value) {
+            selMonth.append($("<option></option>")
+                .attr("value", value).text(key));
+        });
+        selMonth.val(Month);
+        selYear.val(Year);
+        $("#Sel1").prop("checked", true);
+    }
+    var dataWeb = sessionStorage.getItem("TecnoData");
+    let url = ApiBackEndUrl + 'CreditDocuments/GetSalesByMonthColumns';
+    var dateIni = $('#DpickerReportGoalsIniR2').val();
+    var dateEnd = $('#DpickerReportGoalsEndR2').val();
+    var Month_ = selMonth.val();
+    var Year_ = selYear.val();
+    var includeSellers = $('#Sel1').is(':checked');
+    let response = fetch(url, {
+        method: 'GET',
+        headers: {
+            month: Month_.toString(),
+            year: Year_.toString(),
+            CoinId: "2",
+            SellerId: JSON.parse(dataWeb).userId,
+            IncludeSellers: includeSellers,
+            Authorization: JSON.parse(dataWeb).token
+        }
+    })
+        .then(response => response.json())
+        .then(result => {
+        console.log(result);
+        $("#TabReport4 > tbody").empty();
+        $('#TabReport4 th:nth-child(n+3), table td:nth-child(n+3)').remove();
+        var cont = 0;
+        var table = $('#TabReport4');
+        var dayMonth = new Date(Year_, Month_, 0).getDate();
+        var table = $('#TabReport4');
+        for (var i = 1; i <= dayMonth; i++) {
+            var valDay = i < 10 ? '0' + i : i;
+            var valMon = Month_ < 10 ? '0' + Month_ : Month_;
+            table.find('thead tr').append('<th class="center">' + valDay + "/" + valMon + '</th>');
+            table.find('tbody tr').append('<td class="center"></td>');
+        }
+        var branchPrev = "";
+        var sellerPrev = "";
+        var datePrev = new Date('1900-01-01');
+        var cont = 0;
+        var trCurrent = 0;
+        for (var j in result) {
+            var branchName = result[cont].BranchName;
+            var sellerName = result[cont].SellerName;
+            var date = result[cont].Date;
+            var prevRecord = branchName === branchPrev && sellerName === sellerPrev;
+            var dayOnly = moment(date).format('DD');
+            var dayPrev = moment(datePrev).format('DD');
+            if (!prevRecord) {
+                var missingDays = dayMonth - dayPrev;
+                if (missingDays > 0) {
+                    var trPrev = document.getElementById("tr" + trCurrent);
+                    for (var i = 0; i < missingDays; i++) {
+                        var newCell = document.createElement("td");
+                        newCell.innerHTML = '0';
+                        newCell.classList.add('center');
+                        if (trPrev) {
+                            trPrev.appendChild(newCell);
+                        }
+                    }
+                }
+                trCurrent++;
+                var newRow = document.createElement("tr");
+                newRow.id = "tr" + (trCurrent);
+                var newCell = document.createElement("td");
+                newCell.innerHTML = branchName;
+                newRow.append(newCell);
+                $("#rowsTabReport4").append(newRow);
+                var newCell = document.createElement("td");
+                newCell.innerHTML = sellerName;
+                newRow.append(newCell);
+                $("#rowsTabReport4").append(newRow);
+                for (var i = 1; i < dayOnly; i++) {
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = '0';
+                    newCell.classList.add('center');
+                    newRow.append(newCell);
+                    $("#rowsTabReport4").append(newRow);
+                }
+                var sale_ = Math.floor(result[cont].Utility).toLocaleString('en-US', { minimumFractionDigits: 0 });
+                var newCell = document.createElement("td");
+                newCell.innerHTML = sale_;
+                newCell.classList.add('center');
+                newRow.append(newCell);
+                $("#rowsTabReport4").append(newRow);
+            }
+            else {
+                var dayDiference = dayOnly - dayPrev;
+                var newCell = document.createElement("td");
+                var trPrev = document.getElementById("tr" + trCurrent);
+                for (var i = 1; i < dayDiference; i++) {
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = '0';
+                    newCell.classList.add('center');
+                    if (trPrev) {
+                        trPrev.appendChild(newCell);
+                    }
+                }
+                var sale_ = Math.floor(result[cont].Utility).toLocaleString('en-US', { minimumFractionDigits: 0 });
+                var newCell = document.createElement("td");
+                newCell.innerHTML = sale_;
+                newCell.classList.add('center');
+                if (trPrev) {
+                    trPrev.appendChild(newCell);
+                }
+            }
+            cont++;
+            if (result.length == cont) {
+                var trPrev = document.getElementById("tr" + trCurrent);
+                var missingDays = dayMonth - moment(date).format('DD');
+                for (var i = 0; i < missingDays; i++) {
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = '0';
+                    newCell.classList.add('center');
+                    if (trPrev) {
+                        trPrev.appendChild(newCell);
+                    }
+                }
+            }
+            branchPrev = branchName;
+            sellerPrev = sellerName;
+            datePrev = date;
         }
     });
 }
@@ -3774,7 +4082,7 @@ function fnReportGoals() {
                     component: e.component
                 }).then(function () {
                     workbook.xlsx.writeBuffer().then(function (buffer) {
-                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Reporte_por_gesti�n.xlsx');
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Reporte_por_gesti\u00F3n.xlsx');
                     });
                 });
                 e.cancel = true;
@@ -3785,9 +4093,9 @@ function fnReportGoals() {
                     groupIndex: 0
                 },
                 { caption: 'Vendedor', dataField: 'SellerName' },
-                { caption: 'Groos B', dataField: 'GroosB', displayFormat: '{0:n0}' },
-                { caption: 'Groos MA', dataField: 'GroosMA' },
-                { caption: 'Groos MS', dataField: 'GroosMS' },
+                { caption: 'Gross B', dataField: 'GroosB', displayFormat: '{0:n0}' },
+                { caption: 'Gross MA', dataField: 'GroosMA' },
+                { caption: 'Gross MS', dataField: 'GroosMS' },
                 { caption: 'Mkup(%)', dataField: 'Mkup' },
                 { caption: 'Utilidad', dataField: 'Utility' },
                 { caption: 'Objetivo', dataField: 'Objetive' },
@@ -3897,7 +4205,7 @@ function fnReportAudit() {
                     component: e.component
                 }).then(function () {
                     workbook.xlsx.writeBuffer().then(function (buffer) {
-                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Reporte_auditor�a.xlsx');
+                        saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Reporte_auditor\u00EDa.xlsx');
                     });
                 });
                 e.cancel = true;
@@ -4156,7 +4464,7 @@ function fnHolidaysDelete(id) {
         text: 'Confirme su solicitud.',
         showCancelButton: true,
         cancelButtonText: 'Cancelar',
-        confirmButtonText: 'S�, eliminar!'
+        confirmButtonText: 'S\u00ED, eliminar!'
     }).then((result) => {
         if (result.isConfirmed) {
             let url = ApiBackEndUrl + 'Holidays/DeleteHolidays';
@@ -4216,7 +4524,7 @@ function fnBtnSaveHolidays() {
         Swal.fire({
             icon: 'warning',
             title: 'Complete todos los campos',
-            text: 'No puede estar vacia la descripci�n'
+            text: 'No puede estar vacia la descripci\u00F3n'
         });
         return;
     }
@@ -4242,7 +4550,7 @@ function fnBtnSaveHolidays() {
         Swal.fire({
             icon: 'info',
             title: 'Registro agregado exitosamente!',
-            text: 'Se guard� correctamente el registro'
+            text: 'Se guard\u00F3 correctamente el registro'
         });
         fnCleanHolidays();
         fnLoadHolidays();

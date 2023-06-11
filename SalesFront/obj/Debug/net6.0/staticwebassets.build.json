@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "WVNn1e7WW3wCeeR72SMDjcH2i9MuMokJrqmj9IuwTTM=",
+  "Hash": "khU1eg4mIxFjDNrGegABucQ9rviCRH3woi1Eh6pgXJo=",
   "Source": "SalesFront",
   "BasePath": "_content/SalesFront",
   "Mode": "Default",
@@ -1324,6 +1324,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\tscript\\app.js"
+    },
+    {
+      "Identity": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\build\\app.js",
+      "SourceId": "SalesFront",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\",
+      "BasePath": "_content/SalesFront",
+      "RelativePath": "tscript/build/app.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\tscript\\build\\app.js"
     },
     {
       "Identity": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\build\\appConfig.json",
