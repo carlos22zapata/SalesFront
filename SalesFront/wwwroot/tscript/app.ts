@@ -45,16 +45,16 @@ var timer: any;
 //#endregion comandos TypeScript
 
 //############ Server mlapp ############
-var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
-var FrontEnd = "https://mlapp.tecnovoz.com.ar:8090/";
+//var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
+//var FrontEnd = "https://mlapp.tecnovoz.com.ar:8090/";
 
 //############ Server t7 ############
 //var ApiBackEndUrl: string = "https://t7.tecnovoz.com.ar:8091/api/";
 //var FrontEnd: string = "https://t7.tecnovoz.com.ar:8090/";
 
 //############ Desarrollo ############
-//var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
-//var FrontEnd: string = "https://localhost:7119/";
+var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
+var FrontEnd: string = "https://localhost:7119/";
 
 /*
  ##########################################################
@@ -5172,7 +5172,8 @@ function fnReportGoalsResumeMonth() {
                         { caption: 'Vendedor', dataField: 'SellerName' },
                         { caption: 'Fecha', dataField: 'Date', dataType: 'date', format: 'dd/MM/yyyy' },
                         //{ caption: 'Mes/año', dataField: 'Month' },
-                        { caption: 'Monto', dataField: 'Utility', displayFormat: '{0:n0}' },
+                        { caption: 'Utilidad sin auditar', dataField: 'Utility', displayFormat: '{0:n0}' },
+                        { caption: 'Utilidad auditada', dataField: 'UtilityUSD', displayFormat: '{0:n0}' }
 
                     ],
                     sortByGroupSummaryInfo: [{
@@ -5189,7 +5190,14 @@ function fnReportGoalsResumeMonth() {
                             valueFormat: 'currency',
                             //showInGroupFooter: true,
                             alignByColumn: true,
-                        }],
+                            },
+                            {
+                                column: 'UtilityUSD',
+                                summaryType: 'sum',
+                                valueFormat: 'currency',
+                                //showInGroupFooter: true,
+                                alignByColumn: true,
+                            }],
                     }
                 }).dxDataGrid('instance');
 
@@ -5225,6 +5233,7 @@ function fnReportGoalsResumeMonthColumnsOpt() {
         selYear.val(Year);
 
         $("#Sel1").prop("checked", true);
+        $("#Sel4").prop("checked", true);
     }
 
     var dataWeb: any = sessionStorage.getItem("TecnoData");
@@ -5235,6 +5244,7 @@ function fnReportGoalsResumeMonthColumnsOpt() {
     var Month_ = selMonth.val();
     var Year_ = selYear.val();
     var includeSellers = $('#Sel1').is(':checked');
+    var audited = $('#Sel3').is(':checked');
 
     let response = fetch(url,
         {
@@ -5245,6 +5255,7 @@ function fnReportGoalsResumeMonthColumnsOpt() {
                 CoinId: "2",
                 SellerId: JSON.parse(dataWeb).userId,
                 IncludeSellers: includeSellers,
+                Audited: audited,
                 Authorization: JSON.parse(dataWeb).token
             }
         })
@@ -5424,6 +5435,7 @@ function fnReportGoalsResumeMonthColumns() {
         selYear.val(Year);
 
         $("#Sel1").prop("checked", true);
+        $("#Sel4").prop("checked", true);
     }
 
     var dataWeb: any = sessionStorage.getItem("TecnoData");
@@ -5434,6 +5446,7 @@ function fnReportGoalsResumeMonthColumns() {
     var Month_ = selMonth.val();
     var Year_ = selYear.val();
     var includeSellers = $('#Sel1').is(':checked');
+    var audited = $('#Sel3').is(':checked');
 
     let response = fetch(url,
         {
@@ -5444,6 +5457,7 @@ function fnReportGoalsResumeMonthColumns() {
                 CoinId: "2",
                 SellerId: JSON.parse(dataWeb).userId,
                 IncludeSellers: includeSellers,
+                Audited: audited,
                 Authorization: JSON.parse(dataWeb).token
             }
         })
@@ -5671,7 +5685,7 @@ function fnReportGoalsResume() {
                                 precision: 10,
                             },
                         },
-                        { caption: 'Total Utilidad', dataField: 'Utility' }
+                        { caption: 'Utilidad sin auditar', dataField: 'Utility' }
                     ],
                     sortByGroupSummaryInfo: [{
                         summaryItem: 'count',
@@ -5784,12 +5798,12 @@ function fnReportGoals() { //Report3
                             //showInGroupHeader: true
                         },
                         { caption: 'Vendedor', dataField: 'SellerName' },
-                        { caption: 'Gross B', dataField: 'GroosB', displayFormat: '{0:n0}' },
-                        { caption: 'Gross MA', dataField: 'GroosMA' },
-                        { caption: 'Gross MS', dataField: 'GroosMS' },
+                        { caption: 'G. Booking', dataField: 'Amount', displayFormat: '{0:n0}' },
+                        { caption: 'Utilidad sin auditar', dataField: 'Utility', displayFormat: '{0:n0}' },
+                        { caption: 'Utilidad auditada', dataField: 'UtilityUSD', displayFormat: '{0:n0}' },
                         { caption: 'Mkup(%)', dataField: 'Mkup' },
-                        { caption: 'Utilidad', dataField: 'Utility' },
                         { caption: 'Objetivo', dataField: 'Objetive' },
+                        { caption: '% Cumplido', dataField: 'Reached' }
 
                     ],
                     sortByGroupSummaryInfo: [{
@@ -5801,28 +5815,21 @@ function fnReportGoals() { //Report3
                             summaryType: 'count',
                         },
                         {
-                            column: 'GroosB',
-                            summaryType: 'sum',
-                            valueFormat: 'currency',
-                            //showInGroupFooter: true,
-                            alignByColumn: true,
-                        },
-                        {
-                            column: 'GroosMA',
-                            summaryType: 'sum',
-                            valueFormat: 'currency',
-                            //showInGroupFooter: true,
-                            alignByColumn: true,
-                        },
-                        {
-                            column: 'GroosMS',
-                            summaryType: 'sum',
-                            valueFormat: 'currency',
-                            //showInGroupFooter: true,
-                            alignByColumn: true,
-                        },
-                        {
                             column: 'Utility',
+                            summaryType: 'sum',
+                            valueFormat: 'currency',
+                            //showInGroupFooter: true,
+                            alignByColumn: true,
+                        },
+                        {
+                            column: 'UtilityUSD',
+                            summaryType: 'sum',
+                            valueFormat: 'currency',
+                            //showInGroupFooter: true,
+                            alignByColumn: true,
+                        },
+                        {
+                            column: 'Objetive',
                             summaryType: 'sum',
                             valueFormat: 'currency',
                             //showInGroupFooter: true,
@@ -5926,13 +5933,16 @@ function fnReportAudit() {
                         { caption: 'Nro Carrito', dataField: 'CarNumber' },
                         { caption: 'Vendedor', dataField: 'SellerFullName' },
                         { caption: 'Fecha', dataField: 'DateCredit', dataType: 'date', format: 'dd/MM/yyyy' },
-                        { caption: 'Cliente', dataField: 'ClientsFullName' },
+                        /*{ caption: 'Cliente', dataField: 'ClientsFullName' },*/
+                        { caption: 'Sucursal', dataField: 'BranchName' },
                         { caption: 'Producto', dataField: 'Product' },
                         { caption: 'Destino', dataField: 'Destination' },
-                        { caption: 'Monto', dataField: 'Amount', displayFormat: '{0:n0}' },
-                        { caption: 'Utilidad', dataField: 'Utility', displayFormat: '{0:n0}' },
-                        { caption: 'Mkup', dataField: 'Mkup', displayFormat: '{0:n0}' },
+                        { caption: 'G. Booking', dataField: 'Amount', displayFormat: '{0:n0}' },
+                        { caption: 'G. Margin', dataField: 'Utility', displayFormat: '{0:n0}' },
+                        /*{ caption: 'Mkup', dataField: 'Mkup', displayFormat: '{0:n0}' },*/
+                        { caption: 'Util. USD', dataField: 'UtilityUSD', displayFormat: '{0:n0}' },
                         { caption: 'Auditado', dataField: 'Audit' },
+
                     ],
                     sortByGroupSummaryInfo: [{
                         summaryItem: 'count',
@@ -5987,6 +5997,10 @@ function fnSelectReport() {
             break;
         }
     }
+}
+
+function fnSelectReportAudit() {
+
 }
 
 //Viene en el controlador

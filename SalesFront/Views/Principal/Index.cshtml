@@ -2116,16 +2116,16 @@
         <div id="Report4" style="display:none">
             <div class="col-md-12 row">
                 
-                <div class="row col-6">
-                    <div class="col-md-4">
+                <div class="row col-4">
+                    <div class="col-md-5">
                         <label for="montsSelect">Mes: </label>
-                        <select id="montsSelect" class="selectControl">                                
+                        <select id="montsSelect" class="selectControlSmall">                                
                         </select>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <label for="yearSelect">Año: </label>
-                       <select id="yearSelect" class="selectControl">
+                        <select id="yearSelect" class="selectControlSmall">
                                     <option value="2023">2023</option>
                                     <option value="2024">2024</option>
                                     <option value="2025">2025</option>
@@ -2143,20 +2143,39 @@
                 </div>
                 
 
-                <div class="row col-6">
+                <div class="row col-3 d-flex">
 
-                    <div class="col-3">
+                    <div class="col-4 text-left">
                         <label>Incluye los vendedores?:</label>
                     </div>
 
-                    <div class="col-1">
+                    <div class="col-1"></div>
+
+                    <div class="col-2 text-right">
                         <input type="radio" id="Sel1" name="optionSeller" value="Seller1" onclick="fnSelectReport()">
-		                <label for="Sel1">Si</label><br>
+                        <label for="Sel1">Si</label><br>
+                    </div>
+
+                    <div class="col-2 text-right">
+                        <input type="radio" id="Sel2" name="optionSeller" value="Seller2" onclick="fnSelectReport()">
+                        <label for="Sel2">No</label><br>
+                    </div>
+                </div>
+
+                <div class="row col-5" >
+
+                    <div class="col-2">
+                        <label>Auditado:</label>
                     </div>
 
                     <div class="col-1">
-                        <input type="radio" id="Sel2" name="optionSeller" value="Seller2" onclick="fnSelectReport()">
-		                <label for="Sel2">No</label><br>
+                        <input type="radio" id="Sel3" name="optionAudit" value="Audit1" onclick="fnSelectReport()">
+		                <label for="Sel3">Si</label><br>
+                    </div>
+
+                    <div class="col-1">
+                        <input type="radio" id="Sel4" name="optionAudit" value="Audit2" onclick="fnSelectReport()">
+		                <label for="Sel4">No</label><br>
                     </div>
                     
                 </div>

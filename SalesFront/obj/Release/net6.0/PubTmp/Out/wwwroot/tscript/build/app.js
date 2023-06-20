@@ -3789,7 +3789,8 @@ function fnReportGoalsResumeMonth() {
                 { caption: 'Sucursal', dataField: 'BranchName' },
                 { caption: 'Vendedor', dataField: 'SellerName' },
                 { caption: 'Fecha', dataField: 'Date', dataType: 'date', format: 'dd/MM/yyyy' },
-                { caption: 'Monto', dataField: 'Utility', displayFormat: '{0:n0}' },
+                { caption: 'Utilidad sin auditar', dataField: 'Utility', displayFormat: '{0:n0}' },
+                { caption: 'Utilidad auditada', dataField: 'UtilityUSD', displayFormat: '{0:n0}' }
             ],
             sortByGroupSummaryInfo: [{
                     summaryItem: 'count',
@@ -3801,6 +3802,12 @@ function fnReportGoalsResumeMonth() {
                     },
                     {
                         column: 'Utility',
+                        summaryType: 'sum',
+                        valueFormat: 'currency',
+                        alignByColumn: true,
+                    },
+                    {
+                        column: 'UtilityUSD',
                         summaryType: 'sum',
                         valueFormat: 'currency',
                         alignByColumn: true,
@@ -3831,6 +3838,7 @@ function fnReportGoalsResumeMonthColumnsOpt() {
         selMonth.val(Month);
         selYear.val(Year);
         $("#Sel1").prop("checked", true);
+        $("#Sel4").prop("checked", true);
     }
     var dataWeb = sessionStorage.getItem("TecnoData");
     let url = ApiBackEndUrl + 'CreditDocuments/GetSalesByMonthColumns';
@@ -3839,6 +3847,7 @@ function fnReportGoalsResumeMonthColumnsOpt() {
     var Month_ = selMonth.val();
     var Year_ = selYear.val();
     var includeSellers = $('#Sel1').is(':checked');
+    var audited = $('#Sel3').is(':checked');
     let response = fetch(url, {
         method: 'GET',
         headers: {
@@ -3847,6 +3856,7 @@ function fnReportGoalsResumeMonthColumnsOpt() {
             CoinId: "2",
             SellerId: JSON.parse(dataWeb).userId,
             IncludeSellers: includeSellers,
+            Audited: audited,
             Authorization: JSON.parse(dataWeb).token
         }
     })
@@ -3932,6 +3942,7 @@ function fnReportGoalsResumeMonthColumns() {
         selMonth.val(Month);
         selYear.val(Year);
         $("#Sel1").prop("checked", true);
+        $("#Sel4").prop("checked", true);
     }
     var dataWeb = sessionStorage.getItem("TecnoData");
     let url = ApiBackEndUrl + 'CreditDocuments/GetSalesByMonthColumns';
@@ -3940,6 +3951,7 @@ function fnReportGoalsResumeMonthColumns() {
     var Month_ = selMonth.val();
     var Year_ = selYear.val();
     var includeSellers = $('#Sel1').is(':checked');
+    var audited = $('#Sel3').is(':checked');
     let response = fetch(url, {
         method: 'GET',
         headers: {
@@ -3948,6 +3960,7 @@ function fnReportGoalsResumeMonthColumns() {
             CoinId: "2",
             SellerId: JSON.parse(dataWeb).userId,
             IncludeSellers: includeSellers,
+            Audited: audited,
             Authorization: JSON.parse(dataWeb).token
         }
     })
@@ -4117,7 +4130,7 @@ function fnReportGoalsResume() {
                         precision: 10,
                     },
                 },
-                { caption: 'Total Utilidad', dataField: 'Utility' }
+                { caption: 'Utilidad sin auditar', dataField: 'Utility' }
             ],
             sortByGroupSummaryInfo: [{
                     summaryItem: 'count',
@@ -4207,12 +4220,12 @@ function fnReportGoals() {
                     groupIndex: 0
                 },
                 { caption: 'Vendedor', dataField: 'SellerName' },
-                { caption: 'Gross B', dataField: 'GroosB', displayFormat: '{0:n0}' },
-                { caption: 'Gross MA', dataField: 'GroosMA' },
-                { caption: 'Gross MS', dataField: 'GroosMS' },
+                { caption: 'G. Booking', dataField: 'Amount', displayFormat: '{0:n0}' },
+                { caption: 'Utilidad sin auditar', dataField: 'Utility', displayFormat: '{0:n0}' },
+                { caption: 'Utilidad auditada', dataField: 'UtilityUSD', displayFormat: '{0:n0}' },
                 { caption: 'Mkup(%)', dataField: 'Mkup' },
-                { caption: 'Utilidad', dataField: 'Utility' },
                 { caption: 'Objetivo', dataField: 'Objetive' },
+                { caption: '% Cumplido', dataField: 'Reached' }
             ],
             sortByGroupSummaryInfo: [{
                     summaryItem: 'count',
@@ -4223,25 +4236,19 @@ function fnReportGoals() {
                         summaryType: 'count',
                     },
                     {
-                        column: 'GroosB',
-                        summaryType: 'sum',
-                        valueFormat: 'currency',
-                        alignByColumn: true,
-                    },
-                    {
-                        column: 'GroosMA',
-                        summaryType: 'sum',
-                        valueFormat: 'currency',
-                        alignByColumn: true,
-                    },
-                    {
-                        column: 'GroosMS',
-                        summaryType: 'sum',
-                        valueFormat: 'currency',
-                        alignByColumn: true,
-                    },
-                    {
                         column: 'Utility',
+                        summaryType: 'sum',
+                        valueFormat: 'currency',
+                        alignByColumn: true,
+                    },
+                    {
+                        column: 'UtilityUSD',
+                        summaryType: 'sum',
+                        valueFormat: 'currency',
+                        alignByColumn: true,
+                    },
+                    {
+                        column: 'Objetive',
                         summaryType: 'sum',
                         valueFormat: 'currency',
                         alignByColumn: true,
@@ -4328,12 +4335,12 @@ function fnReportAudit() {
                 { caption: 'Nro Carrito', dataField: 'CarNumber' },
                 { caption: 'Vendedor', dataField: 'SellerFullName' },
                 { caption: 'Fecha', dataField: 'DateCredit', dataType: 'date', format: 'dd/MM/yyyy' },
-                { caption: 'Cliente', dataField: 'ClientsFullName' },
+                { caption: 'Sucursal', dataField: 'BranchName' },
                 { caption: 'Producto', dataField: 'Product' },
                 { caption: 'Destino', dataField: 'Destination' },
-                { caption: 'Monto', dataField: 'Amount', displayFormat: '{0:n0}' },
-                { caption: 'Utilidad', dataField: 'Utility', displayFormat: '{0:n0}' },
-                { caption: 'Mkup', dataField: 'Mkup', displayFormat: '{0:n0}' },
+                { caption: 'G. Booking', dataField: 'Amount', displayFormat: '{0:n0}' },
+                { caption: 'G. Margin', dataField: 'Utility', displayFormat: '{0:n0}' },
+                { caption: 'Util. USD', dataField: 'UtilityUSD', displayFormat: '{0:n0}' },
                 { caption: 'Auditado', dataField: 'Audit' },
             ],
             sortByGroupSummaryInfo: [{
@@ -4383,6 +4390,8 @@ function fnSelectReport() {
             break;
         }
     }
+}
+function fnSelectReportAudit() {
 }
 function fnSalesBySellers() {
     return __awaiter(this, void 0, void 0, function* () {

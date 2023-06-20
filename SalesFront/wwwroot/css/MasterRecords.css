@@ -256,6 +256,12 @@ body {
     border-radius: 3px;
 }
 
+.selectControlSmall {
+    width: 110px;
+    height: 28px;
+    border-radius: 3px;
+}
+
 .btnGridSalesClients {
     border: none;
     background-color: #efad35;
