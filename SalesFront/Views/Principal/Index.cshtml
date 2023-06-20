@@ -1099,8 +1099,13 @@
                             </div>
 
                             <div data-title="Utilidad final en dolares (Calculada)">
-                            <label for="TxtUtilityUSD">Utilidad USD </label>
+                                <label for="TxtUtilityUSD">Utilidad USD </label>
                                 <input type="text" id="TxtUtilityUSD" value="0" pattern="[0-9]+(\.[0-9]+)?" readonly />
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="TxtObservation" class="col-4">Observación</label>
+                                <input type="text" id="TxtObservation" class="col-7" />
                             </div>
 
                             <div id="SectionAudit" style="display:none;">
@@ -1149,35 +1154,52 @@
 
         <!--Busqueda básica de venta menú superior CAZA--> 
         <div id="divSearchSales" class="row SearchGeneral">
-
-            
+                        
             <h3>Busqueda</h3>                
             
-            <div class="clientInfo row">
+            <div class="clientInfo row col-12">
                 <div class="SalesP1 col-4">    
                     <div>
                         <label for="TxtCarNumberSaleBasicSearch">Nro Carrito </label>
                         <input type="text" id="TxtCarNumberSaleBasicSearch" />
                     </div>
                     
-                    <div id="divSearchSalesAdvanced" class="SalesP1" style="display:none;">
+                    <div class="SalesP1 Display" style="display:none;">
                         <label for="SelectSaleBranchAdvancedSearch">Sucursal </label>
                         <select id="SelectSaleBranchAdvancedSearch" class="selectControl" onclick="fnLoadSelect('SelectSaleBranchAdvancedSearch', 'Branches/GetBranches')">
+                            <option value="0">Todas</option>
                         </select>
+
                     </div>
+
                     <label id="LblBranchSaleAdvancedSearch" style="display:none;"></label>
                 </div>
                 
-                <div class="col-4">
-                    <label for="TxtIdDateSaleBasicSearch">Fecha  &nbsp;</label>
-                    <input type="date" id="TxtIdDateSaleBasicSearch" disabled />
-                    <input type="checkbox" id="isDateFilterSale" />
-                </div>
-                
-                <div class="col-4">
-                    <label for="TxtDocumSaleBasicSearch">Documento </label>
-                    <input type="text" id="TxtDocumSaleBasicSearch" />  
+                <div class="SalesP1 col-4">
+                    <div class="col-4" style="display: flex; align-items: flex-start;">
+                        <label for="TxtIdDateSaleBasicSearch">Fecha &nbsp;&nbsp;</label>
+                        <input type="date" id="TxtIdDateSaleBasicSearch" disabled style="min-width:150px; height:28px;" />
+                        <input type="checkbox" id="isDateFilterSale" />
+                    </div>    
                     
+                    
+                </div>  
+                                
+                <div class="col-4">
+                    <div class="col-4" style="display: flex;">
+                        <label for="TxtDocumSaleBasicSearch">Documento </label>
+                        <input type="text" id="TxtDocumSaleBasicSearch" />
+                    </div>
+
+                    <div class="SalesP1 Display" style="display:none; align-content:center;">
+                        <label for="SelectSaleAuditAdvancedSearch">Registros </label>
+                        <select id="SelectSaleAuditAdvancedSearch" class="selectControl">
+                            <option value="0">Todos</option>
+                            <option value="1">Auditados</option>
+                            <option value="2">No auditados</option>
+                        </select>
+                    </div>
+                     
                 </div>                                                
             </div>  
             
@@ -1278,7 +1300,8 @@
                     <th>G. Booking</th> 
                     <th>G. Margin</th> 
                     <th>Mkup(%)</th> 
-                    <th>Divisa</th> 
+                    <th>Divisa</th>
+                    <th>Observación</th>
                     <th width="10%">Opciones</th>
                 </thead>
                 <tbody id="rowsSalesDetail">

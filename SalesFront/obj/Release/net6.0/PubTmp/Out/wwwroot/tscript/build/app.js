@@ -19,8 +19,15 @@ function fnLoadSelect(nameControl, url) {
         var dataWeb = sessionStorage.getItem("TecnoData");
         nameControl = '#' + nameControl;
         var selectControl = $(nameControl);
-        if (selectControl[0].childNodes.length > 1)
-            return;
+        if (selectControl[0].childNodes.length > 1) {
+            if (nameControl == '#SelectSaleBranchAdvancedSearch') {
+                if ($("#SelectSaleBranchAdvancedSearch option").length > 1) {
+                    return;
+                }
+            }
+            else
+                return;
+        }
         url = ApiBackEndUrl + url;
         let response = yield fetch(url, {
             method: 'GET',
@@ -32,7 +39,8 @@ function fnLoadSelect(nameControl, url) {
         })
             .then(response => response.json())
             .then((result) => __awaiter(this, void 0, void 0, function* () {
-            selectControl.empty();
+            if (nameControl != '#SelectSaleBranchAdvancedSearch')
+                selectControl.empty();
             var cont = 0;
             for (var j in result) {
                 var option = $(document.createElement("option"));
@@ -216,6 +224,10 @@ const months = {
     "Diciembre": 12
 };
 function fnLoadBranchesOnDiv() {
+}
+function fnSetNumberForBd(numberString) {
+    var numberStringNew = numberString.replace(/,/g, "");
+    return numberStringNew;
 }
 function LogIn(user, password) {
     if (user == "") {
@@ -1411,13 +1423,14 @@ function fnBtnSaveSale() {
     }));
 }
 function fnSearchAdvancedSales() {
-    var adv = $('#divSearchSalesAdvanced').is(':hidden');
+    var adv = $('.Display').is(':hidden');
     if (adv) {
-        $('#divSearchSalesAdvanced').show();
+        $('.Display').show();
     }
     else {
-        $('#divSearchSalesAdvanced').hide();
-        $('#SelectSaleBranchAdvancedSearch').empty();
+        $('.Display').hide();
+        $('#SelectSaleBranchAdvancedSearch').val(0);
+        $('#SelectSaleAuditAdvancedSearch').val(0);
     }
 }
 function fnLoadSales() {
@@ -1431,6 +1444,7 @@ function fnLoadSales() {
     var take = position[1];
     var dateSearch = $("#TxtIdDateSaleBasicSearch").val();
     var branchId = $('#SelectSaleBranchAdvancedSearch').val() || 0;
+    var auditRecords = $('#SelectSaleAuditAdvancedSearch').val();
     if (dateSearch === "") {
         var Today = new Date();
         var initDateString = moment(Today).format("YYYY-MM-DD");
@@ -1452,7 +1466,8 @@ function fnLoadSales() {
             ShoppingCarNumber: shoppingCarNumber,
             DateIni: date,
             DocumentNumber: documentNumber,
-            BranchId: branchId.toString()
+            BranchId: branchId.toString(),
+            Audit: auditRecords.toString()
         }
     })
         .then(response => response.json())
@@ -1484,6 +1499,10 @@ function fnLoadSales() {
             $("#rowsSales").append(newRow);
             var newCell = document.createElement("td");
             newCell.innerHTML = Math.floor(result[cont].Amount).toLocaleString('en-US', { minimumFractionDigits: 1 });
+            newRow.append(newCell);
+            $("#rowsSales").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = Math.floor(result[cont].UtilityUSD).toLocaleString('en-US', { minimumFractionDigits: 1 });
             newRow.append(newCell);
             $("#rowsSales").append(newRow);
             var btn1 = document.createElement("btnSaleDelete");
@@ -1669,6 +1688,147 @@ $('#isDateFilterSale').click(function () {
         $('#TxtIdDateSaleBasicSearch').prop('disabled', true);
     }
 });
+function fnOrderSales(origin) {
+    var type = '';
+    if (origin == 'number') {
+        $('#lblOrderSales').html(origin);
+        var labelValue = $("#lblOrderSalesType").text();
+        if (labelValue === "" || labelValue === "A") {
+            $("#lblOrderSalesType").text("D");
+        }
+        else {
+            $("#lblOrderSalesType").text("A");
+        }
+    }
+}
+let sortOrder = "asc";
+function TableSalesOrder(numColumn) {
+    let table = $("#TabSalesT");
+    var sort_ = "";
+    let data = [];
+    table.find("tbody tr").each(function () {
+        let row = $(this);
+        let rowData = {
+            date: row.find("td:eq(0)").text(),
+            client: row.find("td:eq(1)").text(),
+            document: row.find("td:eq(2)").text(),
+            seller: row.find("td:eq(3)").text(),
+            number: row.find("td:eq(4)").text(),
+            booking: parseFloat(row.find("td:eq(5)").text().replace(/,/g, '')),
+            utility: parseFloat(row.find("td:eq(6)").text().replace(/,/g, '')),
+            options: row.find("td:eq(7)").children()
+        };
+        data.push(rowData);
+    });
+    switch (numColumn) {
+        case 0:
+            if (sortOrder === "asc") {
+                data.sort((a, b) => a.date.localeCompare(b.date));
+                sortOrder = "desc";
+            }
+            else {
+                data.sort((a, b) => b.date.localeCompare(a.date));
+                sortOrder = "asc";
+            }
+            break;
+        case 1:
+            if (sortOrder === "asc") {
+                data.sort((a, b) => a.client.localeCompare(b.client));
+                sortOrder = "desc";
+            }
+            else {
+                data.sort((a, b) => b.client.localeCompare(a.client));
+                sortOrder = "asc";
+            }
+            break;
+        case 2:
+            if (sortOrder === "asc") {
+                data.sort((a, b) => a.document.localeCompare(b.document));
+                sortOrder = "desc";
+            }
+            else {
+                data.sort((a, b) => b.document.localeCompare(a.document));
+                sortOrder = "asc";
+            }
+            break;
+        case 3:
+            if (sortOrder === "asc") {
+                data.sort((a, b) => a.seller.localeCompare(b.seller));
+                sortOrder = "desc";
+            }
+            else {
+                data.sort((a, b) => b.seller.localeCompare(a.seller));
+                sortOrder = "asc";
+            }
+            break;
+        case 4:
+            if (sortOrder === "asc") {
+                data.sort((a, b) => a.number.localeCompare(b.number));
+                sortOrder = "desc";
+            }
+            else {
+                data.sort((a, b) => b.number.localeCompare(a.number));
+                sortOrder = "asc";
+            }
+            break;
+        case 5:
+            if (sortOrder === "asc") {
+                data.sort((a, b) => a.booking - b.booking);
+                sortOrder = "desc";
+            }
+            else {
+                data.sort((a, b) => b.booking - a.booking);
+                sortOrder = "asc";
+            }
+            break;
+        case 6:
+            if (sortOrder === "asc") {
+                data.sort((a, b) => a.utility - b.utility);
+                sortOrder = "desc";
+            }
+            else {
+                data.sort((a, b) => b.utility - a.utility);
+                sortOrder = "asc";
+            }
+            break;
+        default:
+            break;
+    }
+    table.find("tbody tr").each(function (i) {
+        let row = $(this);
+        row.find("td:eq(0)").text(data[i].date);
+        row.find("td:eq(1)").text(data[i].client);
+        row.find("td:eq(2)").text(data[i].document);
+        row.find("td:eq(3)").text(data[i].seller);
+        row.find("td:eq(4)").text(data[i].number);
+        row.find("td:eq(5)").text(data[i].booking.toLocaleString('en-US', { minimumFractionDigits: 1 }));
+        row.find("td:eq(6)").text(data[i].utility.toLocaleString('en-US', { minimumFractionDigits: 1 }));
+        let optionsCell = row.find("td:eq(7)");
+        optionsCell.empty();
+        optionsCell.append(data[i].options);
+    });
+}
+$("#TabSalesT th:eq(0)").click(function () {
+    TableSalesOrder(0);
+});
+$("#TabSalesT th:eq(1)").click(function () {
+    TableSalesOrder(1);
+});
+$("#TabSalesT th:eq(2)").click(function () {
+    TableSalesOrder(2);
+});
+$("#TabSalesT th:eq(3)").click(function () {
+    TableSalesOrder(3);
+});
+$("#TabSalesT th:eq(4)").click(function () {
+    TableSalesOrder(4);
+});
+$("#TabSalesT th:eq(5)").click(function () {
+    TableSalesOrder(5);
+});
+$("#TabSalesT th:eq(6)").click(function () {
+    TableSalesOrder(6);
+});
 function fnSalesDetail(DocNum, CarNumber) {
     $('#lblCarNumber').html(DocNum.toString());
     $('#TxtIdSaleDetail').val(DocNum.toString());
@@ -1707,6 +1867,7 @@ function fnLoadSalesDetail(CreditDocumentId, CarNumber) {
             var utility = Math.floor(result[cont].Utility);
             var mkup = result[cont].Mkup;
             var currency = result[cont].Currency;
+            var observation = result[cont].Observation.substring(0, 20);
             var newRow = document.createElement("tr");
             var newCell = document.createElement("td");
             newCell.innerHTML = result[cont].ItemsCreditDocumentsId;
@@ -1735,6 +1896,10 @@ function fnLoadSalesDetail(CreditDocumentId, CarNumber) {
             $("#rowsSalesDetail").append(newRow);
             var newCell = document.createElement("td");
             newCell.innerHTML = currency.toLocaleString('en-US', { minimumFractionDigits: 1 });
+            newRow.append(newCell);
+            $("#rowsSalesDetail").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = observation;
             newRow.append(newCell);
             $("#rowsSalesDetail").append(newRow);
             var btn1 = document.createElement("btnDetailSaleDelete");
@@ -1871,6 +2036,7 @@ function fnSalesDetailUpdate(carNum, carItem) {
             var audit_ = result.audit;
             var currency_ = result.currency.toLocaleString('en-US', { minimumFractionDigits: 2 });
             var auditedUtility = result.auditedUtility.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            var observation = result.observation;
             var stringCurrency = currency_.replace(',', '');
             var stringAuditedUtility = auditedUtility.replace(',', '');
             var floatCurrency = parseFloat(stringCurrency);
@@ -1896,6 +2062,7 @@ function fnSalesDetailUpdate(carNum, carItem) {
             $('#TxtCurrencySaleDetail').val(currency_);
             $('#TxtUtilityReport').val(auditedUtility.toString());
             $('#TxtUtilityUSD').val(stringUtilityUSD);
+            $('#TxtObservation').val(observation);
             fnAddSalesDetail(false);
         }));
     });
@@ -1946,6 +2113,7 @@ function fnCleanSaleDetail() {
     $('#TxtUtilityUSD').val('0');
     $('#SearchResultsSaleDeailTo').empty();
     $('#lblSaleDeailTo').html('');
+    $('#TxtObservation').val('');
 }
 function fnBtnSaveSaleDetail() {
     let data = [];
@@ -1957,16 +2125,13 @@ function fnBtnSaveSaleDetail() {
     var Product_ = $('#SelectSaleDeailProduct').val();
     var Currency_ = $('#TxtCurrencySaleDetail').val();
     var stringCarNumber = $('#TxtNumberSaleDetail').val();
+    var observation = $('#TxtObservation').val().substring(0, 4900);
     var newStringCarNumber = stringCarNumber + $('#lblCarNumber').html().substring(11, $('#lblCarNumber').html().length);
     var To_ = $('#lblSaleDeailTo').html();
-    var AuditedUtility = $('#TxtUtilityReport').val();
-    var AmountN = +$('#TxtAmountSaleDetail').val().replace(',', '');
-    var UtilityN = +$('#TxtUtilitySaleDetail').val().replace(',', '');
-    var MkupN = +$('#TxtMkupSaleDetail').val().replace(',', '');
-    var Amount_ = AmountN.toString().replace(',', '');
-    var Utility_ = UtilityN.toString().replace(',', '');
-    var Mkup_ = MkupN.toString().replace(',', '');
-    var AuditedUtility_ = AuditedUtility.replace(',', '');
+    var Amount_ = fnSetNumberForBd($('#TxtAmountSaleDetail').val());
+    var Utility_ = fnSetNumberForBd($('#TxtUtilitySaleDetail').val());
+    var Mkup_ = fnSetNumberForBd($('#TxtMkupSaleDetail').val());
+    var AuditedUtility_ = fnSetNumberForBd($('#TxtUtilityReport').val());
     var isUpdate = (SaleDetailId_ == "" ? false : true);
     if (Product_ == "" || Product_ == null) {
         Swal.fire({
@@ -2037,6 +2202,7 @@ function fnBtnSaveSaleDetail() {
             "mkup": Mkup_,
             "currency": Currency_,
             "auditedUtility": AuditedUtility_,
+            "observation": observation,
             "InsertUser": (JSON.parse(dataWeb).userId).toString(),
             "DateInsertUser": new Date()
         });
@@ -2092,6 +2258,7 @@ function fnBtnSaveSaleDetail() {
             "mkup": Mkup_,
             "currency": Currency_,
             "auditedUtility": AuditedUtility_,
+            "observation": observation,
             "updateUser": (JSON.parse(dataWeb).userId).toString(),
             "dateUpdateUser": new Date()
         });

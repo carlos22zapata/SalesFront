@@ -412,3 +412,46 @@ ul, li {
 .center {
     text-align: center;
 }
+
+/*.dateFormat{
+    width:160px;
+    min-width:110px;
+    color:red;
+    height: 25px;
+}*/
+
+/*Para la pantalla de las ventas Inicio*/
+/* Estilo para pantallas con un ancho mínimo de 600px */
+/*
+@media screen and (min-width: 600px) {
+    .clientInfo {
+        display: flex;
+        flex-direction: row;
+    }
+
+        .clientInfo > div {
+            margin-right: 10px;
+        }
+}
+*/
+
+/* Estilo para pantallas con un ancho menor a 600px */
+/*
+@media screen and (max-width: 599px) {
+    .clientInfo {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .clientInfo > div {
+            margin-bottom: 10px;
+        }
+}
+*/
+/* Alinear los controles a la izquierda */
+/*
+.clientInfo {
+    text-align: left;
+}
+*/
+/*Para la pantalla de las ventas Fin*/

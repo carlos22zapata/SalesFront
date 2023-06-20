@@ -45,16 +45,16 @@ var timer: any;
 //#endregion comandos TypeScript
 
 //############ Server mlapp ############
-//var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
-//var FrontEnd = "https://mlapp.tecnovoz.com.ar:8090/";
+var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
+var FrontEnd = "https://mlapp.tecnovoz.com.ar:8090/";
 
 //############ Server t7 ############
 //var ApiBackEndUrl: string = "https://t7.tecnovoz.com.ar:8091/api/";
 //var FrontEnd: string = "https://t7.tecnovoz.com.ar:8090/";
 
 //############ Desarrollo ############
-var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
-var FrontEnd: string = "https://localhost:7119/";
+//var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
+//var FrontEnd: string = "https://localhost:7119/";
 
 /*
  ##########################################################
@@ -73,8 +73,20 @@ async function fnLoadSelect(nameControl: string, url: string) {
 
     //alert(selectControl[0].childNodes.length);
 
-    if (selectControl[0].childNodes.length > 1)
-        return;
+    if (selectControl[0].childNodes.length > 1) { 
+        //Evalúo si se trata de control de las sucursales, le doy otro tratamiento
+        if (nameControl == '#SelectSaleBranchAdvancedSearch') {
+            if ($("#SelectSaleBranchAdvancedSearch option").length > 1) {
+                return;
+            }
+        }            
+        else
+            return;
+    }
+        
+
+    //Evalúo si el select de las sucursales ya tiene registros incluidos
+    
 
     url = ApiBackEndUrl + url;
 
@@ -91,8 +103,10 @@ async function fnLoadSelect(nameControl: string, url: string) {
             response => response.json())
         .then(
             async result => {
+                //Evalúo si se trata de control de las sucursales, le doy otro tratamiento
+                if (nameControl != '#SelectSaleBranchAdvancedSearch')
+                    selectControl.empty();
 
-                selectControl.empty();
                 var cont = 0;
 
                 for (var j in result) {
@@ -317,6 +331,11 @@ const months: monthOfYears = {
 
 function fnLoadBranchesOnDiv(){
 
+}
+
+function fnSetNumberForBd(numberString: string): string {
+    var numberStringNew = numberString.replace(/,/g, "");
+    return numberStringNew;
 }
 
 //#endregion Funciones generales
@@ -1941,14 +1960,15 @@ function fnBtnSaveSale() {
 }
 
 function fnSearchAdvancedSales() {
-    var adv = $('#divSearchSalesAdvanced').is(':hidden');
+    var adv = $('.Display').is(':hidden');
 
     if (adv) {
-        $('#divSearchSalesAdvanced').show();        
+        $('.Display').show();        
     }
     else {
-        $('#divSearchSalesAdvanced').hide();
-        $('#SelectSaleBranchAdvancedSearch').empty();
+        $('.Display').hide();
+        $('#SelectSaleBranchAdvancedSearch').val(0);
+        $('#SelectSaleAuditAdvancedSearch').val(0);
     }
 }
 
@@ -1965,6 +1985,7 @@ function fnLoadSales() {
     var take = position[1];
     var dateSearch = $("#TxtIdDateSaleBasicSearch").val();
     var branchId = $('#SelectSaleBranchAdvancedSearch').val() || 0;
+    var auditRecords = $('#SelectSaleAuditAdvancedSearch').val();
 
     if (dateSearch === "") {
         var Today = new Date();
@@ -1992,13 +2013,19 @@ function fnLoadSales() {
                 ShoppingCarNumber: shoppingCarNumber,
                 DateIni: date,
                 DocumentNumber: documentNumber,
-                BranchId: branchId.toString()
+                BranchId: branchId.toString(),
+                Audit: auditRecords.toString()
             }
         })
         .then(
             response => response.json())
         .then(
             result => {
+
+                //if (auditRecords == 1)
+                //    result = result.filter((item: { Audit: boolean; }) => item.Audit === true);
+                //else if (auditRecords == 2)
+                //    result = result.filter((item: { Audit: boolean; }) => item.Audit === false);
 
                 $("#TabSalesT > tbody").empty();
                 var cont = 0;
@@ -2342,14 +2369,15 @@ function fnOrderSales(origin: string) {
 // Variable para llevar un seguimiento del orden actual (ascendente o descendente)
 let sortOrder = "asc";
 
-// Agregar un controlador de eventos click al encabezado de la columna Número
-$("#TabSalesT th:eq(4)").click(function () {
-   
+//#region para ordenar los registros haciendo click en el encabezado de cada uno
+
+function TableSalesOrder(numColumn: number) {
     // Obtener una referencia a la tabla
     let table = $("#TabSalesT");
 
-    // Extraer los datos de la tabla en un arreglo de objetos
+    var sort_ = "";
     let data: any = [];
+
     table.find("tbody tr").each(function (this: HTMLElement) {
         let row = $(this);
         let rowData = {
@@ -2358,19 +2386,87 @@ $("#TabSalesT th:eq(4)").click(function () {
             document: row.find("td:eq(2)").text(),
             seller: row.find("td:eq(3)").text(),
             number: row.find("td:eq(4)").text(),
-            booking: row.find("td:eq(5)").text(),
-            utility: row.find("td:eq(6)").text()
+            booking: parseFloat(row.find("td:eq(5)").text().replace(/,/g, '')),
+            utility: parseFloat(row.find("td:eq(6)").text().replace(/,/g, '')),
+            options: row.find("td:eq(7)").children()
         };
         data.push(rowData);
     });
 
-    // Ordenar el arreglo por el campo Número
-    if (sortOrder === "asc") {
-        data.sort((a: any, b: any) => a.number.localeCompare(b.number));
-        sortOrder = "desc";
-    } else {
-        data.sort((a: any, b: any) => b.number.localeCompare(a.number));
-        sortOrder = "asc";
+    switch (numColumn) {
+        case 0:
+            // Ordenar el arreglo por el campo Número
+            if (sortOrder === "asc") {
+                data.sort((a: any, b: any) => a.date.localeCompare(b.date));
+                sortOrder = "desc";
+            } else {
+                data.sort((a: any, b: any) => b.date.localeCompare(a.date));
+                sortOrder = "asc";
+            }
+            break;
+        case 1:
+            // Ordenar el arreglo por el campo Número
+            if (sortOrder === "asc") {
+                data.sort((a: any, b: any) => a.client.localeCompare(b.client));
+                sortOrder = "desc";
+            } else {
+                data.sort((a: any, b: any) => b.client.localeCompare(a.client));
+                sortOrder = "asc";
+            }
+            break;
+        case 2:
+            // Ordenar el arreglo por el campo Número
+            if (sortOrder === "asc") {
+                data.sort((a: any, b: any) => a.document.localeCompare(b.document));
+                sortOrder = "desc";
+            } else {
+                data.sort((a: any, b: any) => b.document.localeCompare(a.document));
+                sortOrder = "asc";
+            }
+            break;
+        case 3:
+            // Ordenar el arreglo por el campo Número
+            if (sortOrder === "asc") {
+                data.sort((a: any, b: any) => a.seller.localeCompare(b.seller));
+                sortOrder = "desc";
+            } else {
+                data.sort((a: any, b: any) => b.seller.localeCompare(a.seller));
+                sortOrder = "asc";
+            }
+            break;
+        case 4:
+            // Ordenar el arreglo por el campo Número
+            if (sortOrder === "asc") {
+                data.sort((a: any, b: any) => a.number.localeCompare(b.number));
+                sortOrder = "desc";
+            } else {
+                data.sort((a: any, b: any) => b.number.localeCompare(a.number));
+                sortOrder = "asc";
+            }
+            break;
+        case 5:
+            // Ordenar el arreglo por el campo Número
+            if (sortOrder === "asc") {
+                data.sort((a: any, b: any) => a.booking - b.booking);
+                sortOrder = "desc";
+            } else {
+                data.sort((a: any, b: any) => b.booking - a.booking);
+                sortOrder = "asc";
+            }
+            break;
+        case 6:
+            // Ordenar el arreglo por el campo Utilidad
+            if (sortOrder === "asc") {
+                data.sort((a: any, b: any) => a.utility - b.utility);
+                sortOrder = "desc";
+            } else {
+                data.sort((a: any, b: any) => b.utility - a.utility);
+                sortOrder = "asc";
+            }
+            break;
+        default:
+            break;
+
     }
 
     // Actualizar el contenido de la tabla con los datos ordenados
@@ -2381,10 +2477,50 @@ $("#TabSalesT th:eq(4)").click(function () {
         row.find("td:eq(2)").text(data[i].document);
         row.find("td:eq(3)").text(data[i].seller);
         row.find("td:eq(4)").text(data[i].number);
-        row.find("td:eq(5)").text(data[i].booking);
-        row.find("td:eq(6)").text(data[i].utility);
-    });
+        row.find("td:eq(5)").text(data[i].booking.toLocaleString('en-US', { minimumFractionDigits: 1 }));
+        row.find("td:eq(6)").text(data[i].utility.toLocaleString('en-US', { minimumFractionDigits: 1 }));
+        let optionsCell = row.find("td:eq(7)");
+        optionsCell.empty(); // Vaciar el contenido de la celda
+        optionsCell.append(data[i].options); // Agregar los botones a la celda
+    });      
+}
+
+// Columna Fecha
+$("#TabSalesT th:eq(0)").click(function () {
+    TableSalesOrder(0);
 });
+
+// Columna Cliente
+$("#TabSalesT th:eq(1)").click(function () {
+    TableSalesOrder(1);
+});
+
+// Columna Documento
+$("#TabSalesT th:eq(2)").click(function () {
+    TableSalesOrder(2);
+});
+
+// Columna Vendedor
+$("#TabSalesT th:eq(3)").click(function () {
+    TableSalesOrder(3);
+});
+
+// Columna Número
+$("#TabSalesT th:eq(4)").click(function () {
+    TableSalesOrder(4);
+});
+
+// Columna Bbooking
+$("#TabSalesT th:eq(5)").click(function () {
+    TableSalesOrder(5);
+});
+
+// Columna Utility
+$("#TabSalesT th:eq(6)").click(function () {
+    TableSalesOrder(6);
+});
+
+//#endregion ordenar los registros haciendo click en el encabezado
 
 //#endregion Secci\u00F3n de Ventas
 
@@ -2443,6 +2579,7 @@ function fnLoadSalesDetail(CreditDocumentId: number, CarNumber: string) {
                     var utility: number = Math.floor(result[cont].Utility);
                     var mkup: number = result[cont].Mkup;
                     var currency: number = result[cont].Currency;
+                    var observation: string = result[cont].Observation.substring(0,20);
 
                     var newRow = document.createElement("tr");
 
@@ -2480,6 +2617,11 @@ function fnLoadSalesDetail(CreditDocumentId: number, CarNumber: string) {
 
                     var newCell = document.createElement("td");
                     newCell.innerHTML = currency.toLocaleString('en-US', { minimumFractionDigits: 1 });
+                    newRow.append(newCell);
+                    $("#rowsSalesDetail").append(newRow);
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = observation;
                     newRow.append(newCell);
                     $("#rowsSalesDetail").append(newRow);
 
@@ -2673,6 +2815,7 @@ async function fnSalesDetailUpdate(carNum: number, carItem: number) {
                 var audit_ = result.audit;
                 var currency_ = result.currency.toLocaleString('en-US', { minimumFractionDigits: 2 });
                 var auditedUtility = result.auditedUtility.toLocaleString('en-US', { minimumFractionDigits: 2 });
+                var observation = result.observation;
 
                 var stringCurrency = currency_.replace(',', '');
                 var stringAuditedUtility = auditedUtility.replace(',', '');
@@ -2704,13 +2847,10 @@ async function fnSalesDetailUpdate(carNum: number, carItem: number) {
                 $('#TxtCurrencySaleDetail').val(currency_);
                 $('#TxtUtilityReport').val(auditedUtility.toString());
                 $('#TxtUtilityUSD').val(stringUtilityUSD);
+                $('#TxtObservation').val(observation);
 
                 fnAddSalesDetail(false);
             });
-
-
-
-
 }
 
 async function fnAddSalesDetail(isNew: boolean) {    
@@ -2771,6 +2911,7 @@ function fnCleanSaleDetail() {
     $('#TxtUtilityUSD').val('0');
     $('#SearchResultsSaleDeailTo').empty();
     $('#lblSaleDeailTo').html('');
+    $('#TxtObservation').val('');
 }
 
 function fnBtnSaveSaleDetail() {
@@ -2784,20 +2925,14 @@ function fnBtnSaveSaleDetail() {
     var Product_ = $('#SelectSaleDeailProduct').val();
     var Currency_ = $('#TxtCurrencySaleDetail').val();
     var stringCarNumber = $('#TxtNumberSaleDetail').val();
+    var observation = $('#TxtObservation').val().substring(0,4900);
     var newStringCarNumber = stringCarNumber + $('#lblCarNumber').html().substring(11, $('#lblCarNumber').html().length)
-    //var From_ = $('#SelectSaleDeailFrom').val();
-    //var To_ = $('#TxtSaleDeailTo').val();
     var To_ = $('#lblSaleDeailTo').html();
-    var AuditedUtility = $('#TxtUtilityReport').val();
-
-    var AmountN = +$('#TxtAmountSaleDetail').val().replace(',', '');
-    var UtilityN = +$('#TxtUtilitySaleDetail').val().replace(',', '');
-    var MkupN = +$('#TxtMkupSaleDetail').val().replace(',', '');
-
-    var Amount_ = AmountN.toString().replace(',', '');
-    var Utility_ = UtilityN.toString().replace(',', '');
-    var Mkup_ = MkupN.toString().replace(',', '');
-    var AuditedUtility_ = AuditedUtility.replace(',', '');
+    
+    var Amount_ = fnSetNumberForBd($('#TxtAmountSaleDetail').val()); 
+    var Utility_ = fnSetNumberForBd($('#TxtUtilitySaleDetail').val()); 
+    var Mkup_ = fnSetNumberForBd($('#TxtMkupSaleDetail').val()); 
+    var AuditedUtility_ = fnSetNumberForBd($('#TxtUtilityReport').val());
 
     var isUpdate: boolean = (SaleDetailId_ == "" ? false : true)
 
@@ -2869,6 +3004,7 @@ function fnBtnSaveSaleDetail() {
             "mkup": Mkup_,
             "currency": Currency_,
             "auditedUtility": AuditedUtility_,
+            "observation": observation,
             "InsertUser": (JSON.parse(dataWeb).userId).toString(),
             "DateInsertUser": new Date()
         });
@@ -2938,6 +3074,7 @@ function fnBtnSaveSaleDetail() {
             "mkup": Mkup_,
             "currency": Currency_,
             "auditedUtility": AuditedUtility_,
+            "observation": observation,
             "updateUser": (JSON.parse(dataWeb).userId).toString(),
             "dateUpdateUser": new Date()
         });
