@@ -4,6 +4,10 @@
     color: white;
 }
 
+.hidden-row {
+    display: none;
+}
+
 .BoldLetter {
     Font-weight: 700;
 }
@@ -20,6 +24,10 @@
 
 .BtnSearchIconOnly {
     color: #d67229;
+    cursor: pointer;
+}
+
+.IconPointer {
     cursor: pointer;
 }
 

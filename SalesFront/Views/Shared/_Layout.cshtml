@@ -70,31 +70,38 @@
         
         <div class="menu-float" id="first-menu" style="display:none;">
             <div class="menu-float-text row">
-
+                @*La clase allowedMenu es usada para ocultar las cosas de los operadores y la clase adminMenu esta hecha para ocultarle las opciones a todos menos a los administradores*@
                 <a class="menu-principal-text" onclick="fnExpandMenu(1)"><i class="fa-solid fa-table-list menu-principal-text"></i> &nbsp; Registros maestros</a><hr>
                 <div id="menu-principal-1" class="row" style="display:none;">
                     <a class="menu-text" onclick="showDiv('MasterClients')"><i class="fa-solid fa-address-card"></i> &nbsp; Clientes</a>
-                    <a class="menu-text" onclick="showDiv('MasterBranches')"><i class="fa-solid fa-code-branch"></i> &nbsp; Sucursales</a>
-                    <a class="menu-text" onclick="showDiv('MasterCoins')"><i class="fas fa-dollar-sign"></i> &nbsp; Monedas</a>
+                    <a class="menu-text allowedMenu" onclick="showDiv('MasterBranches')"><i class="fa-solid fa-code-branch"></i> &nbsp; Sucursales</a>
+                    <a class="menu-text allowedMenu" onclick="showDiv('MasterCoins')"><i class="fas fa-dollar-sign"></i> &nbsp; Monedas</a>
                     @*<a class="menu-text" onclick="showDiv('MasterChannels')"><i class="fa-brands fa-stack-exchange"></i> &nbsp; Channels</a>*@
                     @*<a class="menu-text" onclick="showDiv('MasterSellers')"><i class="fa-solid fa-people-robbery"></i> &nbsp; Vendedores</a>*@
-                    <a class="menu-text" onclick="showDiv('MasterProducts')"><i class="fa-solid fa-boxes-stacked"></i> &nbsp; Productos</a>
+                    <a class="menu-text allowedMenu" onclick="showDiv('MasterProducts')"><i class="fa-solid fa-boxes-stacked"></i> &nbsp; Productos</a>
                     <a class="menu-text" onclick="showDiv('MasterDestinations')"><i class="fa-solid fa-plane-arrival"></i> &nbsp; Destinos</a>
-                    <a class="menu-text" onclick="showDiv('MasterHolidays')"><i class="fa-regular fa-calendar-days"></i> &nbsp; Feriados</a>
+                    <a class="menu-text allowedMenu" onclick="showDiv('MasterHolidays')"><i class="fa-regular fa-calendar-days"></i> &nbsp; Feriados</a>
                 </div>
                              
                 <a class="menu-principal-text" onclick="fnExpandMenu(2)"><i class="fa-solid fa-chalkboard-user menu-principal-text"></i> &nbsp; Procesos</a><hr>
                 <div id="menu-principal-2" class="row" style="display:none;">
                     <a class="menu-text" onclick="showDiv('MasterSales')"><i class="fa-solid fa-address-card"></i> &nbsp; Registro de ventas</a>
                     <a class="menu-text" onclick="showDiv('MasterGoals')"><i class="fa-solid fa-bullseye"></i> &nbsp; Registro de objetivos</a>
+                    <a class="menu-text" onclick="showDiv('MasterEnvelopes')"><i class="fa-solid fa-envelope"></i> &nbsp; Registro de sobres</a>
                 </div>
 
                 <a class="menu-principal-text" onclick="fnExpandMenu(3)"><i class="fa-solid fa-chart-line menu-principal-text"></i> &nbsp; Informes</a><hr>
                 <div id="menu-principal-3" class="row" style="display:none;">
                     <a class="menu-text" onclick="showDiv('MasterCharts')"><i class="fa-solid fa-chart-simple"></i> &nbsp; Indicadores</a>
                 </div>
-                                
-                <a class="menu-text" id="aLogOut" asp-controller="Home" asp-action="Index"><i class="fa-solid fa-arrow-right-from-bracket"></i> &nbsp; LogOut</a>
+                         
+                <a class="menu-principal-text" onclick="fnExpandMenu(4)"><i class="fa-solid fa-gears menu-principal-text"></i> &nbsp; Configuración</a><hr>
+                <div id="menu-principal-4" class="row" style="display:none;">
+                    <a class="menu-text adminMenu" onclick="showDiv('MasterConfigUsers')"><i class="fa-solid fa-users"></i> &nbsp; Usuarios</a>
+                    <a class="menu-text" onclick="showDiv('MasterConfigPassword')"><i class="fa-solid fa-key"></i> &nbsp; Cambio de contraseña</a>
+                </div>
+                
+                <a class="menu-principal-text" id="aLogOut" asp-controller="Home" asp-action="Index"><i class="fa-solid fa-arrow-right-from-bracket menu-principal-text"></i> &nbsp; LogOut</a>
             </div>
         </div>
         <main role="main" class="pb-3">

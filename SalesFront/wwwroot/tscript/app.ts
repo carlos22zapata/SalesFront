@@ -154,6 +154,10 @@ async function fnLoadSelect(nameControl: string, url: string) {
                             option.val(result[cont].id);
                             option.text(result[cont].provinceName);
                             break;
+                        case ApiBackEndUrl + 'Users/GetRoles':
+                            option.val(result[cont].roleId);
+                            option.text(result[cont].name);
+                            break;
                         //case ApiBackEndUrl + 'Account/GetUserSeller':
                         //    //option.val(result[cont].userId);
                         //    $('#lblSaleSeller').html(result[cont].userId);
@@ -203,13 +207,26 @@ async function showDiv(divSelPrincipal: string) {
         fnLoadGoals();
     if (divSelPrincipal == "MasterHolidays")
         fnLoadHolidays();
+    if (divSelPrincipal == "MasterConfigUsers")
+        fnLoadConfigUsers();
 
     showMenu();
-
 }
 
 //Funci\u00F3n encargada de abrir y cerrar el contenido del men\u00FA principal
 function fnExpandMenu(n: number) {
+
+    var dataWeb: any = sessionStorage.getItem("TecnoData");
+    var roleId = JSON.parse(dataWeb).RoleId;
+
+    if (roleId == 2) { 
+        $('.allowedMenu').hide();
+    }
+
+    if (roleId != 1) {
+        $('.adminMenu').hide();
+    }
+
     if (n == 1) {
         if ($('#menu-principal-1').is(":visible"))
             $('#menu-principal-1').hide(100);
@@ -217,6 +234,7 @@ function fnExpandMenu(n: number) {
             $('#menu-principal-1').show(100);
             $('#menu-principal-2').hide(100);
             $('#menu-principal-3').hide(100);
+            $('#menu-principal-4').hide(100);
         }
     }
     else if (n == 2) {
@@ -226,15 +244,27 @@ function fnExpandMenu(n: number) {
             $('#menu-principal-1').hide(100);
             $('#menu-principal-2').show(100);
             $('#menu-principal-3').hide(100);
+            $('#menu-principal-4').hide(100);
         }
     }
-    else {
+    else if (n == 3) {
         if ($('#menu-principal-3').is(":visible"))
             $('#menu-principal-3').hide(100);
         else {
             $('#menu-principal-1').hide(100);
             $('#menu-principal-2').hide(100);
             $('#menu-principal-3').show(100);
+            $('#menu-principal-4').hide(100);
+        }
+    }
+    else {
+        if ($('#menu-principal-4').is(":visible"))
+            $('#menu-principal-4').hide(100);
+        else {
+            $('#menu-principal-1').hide(100);
+            $('#menu-principal-2').hide(100);
+            $('#menu-principal-3').hide(100);
+            $('#menu-principal-4').show(100);
         }
     }
 }
@@ -245,6 +275,7 @@ function showMenu() {
         $("#menu-principal-1").hide();
         $("#menu-principal-2").hide();
         $("#menu-principal-3").hide();
+        $("#menu-principal-4").hide();
     } else {
         $("#first-menu").show(100);
     }
@@ -256,6 +287,7 @@ function showNewSale() {
     $("#menu-principal-1").hide();
     $("#menu-principal-2").hide();
     $("#menu-principal-3").hide();
+    $("#menu-principal-4").hide();
 
     $('#MasterSales').show();
     fnLoadSales();
@@ -1825,7 +1857,7 @@ $("#TxtSaleSeller2").keyup(function () {
  ##########################################################
  */
 
-//#region Secci\u00F3n de Ventas
+//#region Sección de Ventas
 
 function fnAddSales() {
     fnCleanSale();
@@ -2082,7 +2114,7 @@ function fnLoadSales() {
                     var btn2 = document.createElement("btnDetailSaleDetail");
                     btn2.innerHTML = '<i class="fa-solid fa-cart-flatbed-suitcase"></i>';
                     btn2.classList.add("btnGridSalesClients");
-                    btn2.setAttribute('onclick', 'fnSalesDetail(' + result[cont].DocNum + ',"' + result[cont].CarNumber + '")');
+                    btn2.setAttribute('onclick', 'fnSalesDetail(' + result[cont].DocNum + ',"' + result[cont].CarNumber + '","' + result[cont].DateCredit + '")');
                     btn2.setAttribute('data-title', 'Ver detalle de la venta');
 
                     var btn3 = document.createElement("btnSalePayment");
@@ -2099,7 +2131,7 @@ function fnLoadSales() {
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
                     newCell.appendChild(btn2);
-                    newCell.appendChild(btn3);
+                    //newCell.appendChild(btn3);
                     
                     if (audit) {
                         newCell.appendChild(checkAudit);
@@ -2524,12 +2556,13 @@ $("#TabSalesT th:eq(6)").click(function () {
 
 //#endregion Secci\u00F3n de Ventas
 
-//#region Secci\u00F3n de detalle de Ventas
+//#region Sección de detalle de Ventas
 
-function fnSalesDetail(DocNum: number, CarNumber: string) {
+function fnSalesDetail(DocNum: number, CarNumber: string, CarDate: Date) {
     $('#lblCarNumber').html(DocNum.toString());
     $('#TxtIdSaleDetail').val(DocNum.toString());
     $('#TxtNumberSaleDetail').val(CarNumber);
+    $('#DpickerDateSaleCarDetail').val(moment(CarDate).format('YYYY-MM-DD'));
     //fnChangeSelect();    
     fnLoadSalesDetail(DocNum, CarNumber);
 }
@@ -2690,7 +2723,30 @@ function fnSalesDetailDelete(carNum: number, carItem: number) {
                         Authorization: JSON.parse(dataWeb).token
                     }
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (response.ok) {
+                        // The request was successful
+                        Swal.fire(
+                            'Borrado!',
+                            'Registro borrado satisfactoriamente.',
+                            'success'
+                        );
+
+                        fnLoadSalesDetail(carNum, CarNumber);
+                        fnLoadSales();
+
+                        return response.json();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'No se pudo borrar el registro!',
+                            text: 'Hubo un error: ' + response.status
+                        });
+
+                        // The request failed
+                        throw new Error('An error occurred: ' + response.status);
+                    }
+                })
                 .then(
                     result => {
 
@@ -2717,13 +2773,13 @@ function fnSalesDetailDelete(carNum: number, carItem: number) {
 
                         
                     })
-                .catch(error => {
-                    Swal.fire(
-                        'Se detecto un error!',
-                        'Error en la solicitud al sitio remoto (API).',
-                        'error'
-                    )
-                });
+                //.catch(error => {
+                //    Swal.fire(
+                //        'Se detecto un error!',
+                //        'Error en la solicitud al sitio remoto (API).',
+                //        'error'
+                //    )
+                //});
 
 
         }
@@ -2806,7 +2862,8 @@ async function fnSalesDetailUpdate(carNum: number, carItem: number) {
             async result => {
                 result = result[0];
                 var id_ = result.productsId;
-                var date_ = (moment(result.travelDate).format('YYYY-MM-DD'));
+                var dateSale_ = (moment(result.saleDate).format('YYYY-MM-DD'));
+                var dateFlight_ = (moment(result.travelDate).format('YYYY-MM-DD'));
                 var destination_ = result.destinationsTo;
                 var dname_ = result.destinationsToName;
                 var amount_ = result.amount.toLocaleString('en-US', { minimumFractionDigits: 1 });
@@ -2826,17 +2883,9 @@ async function fnSalesDetailUpdate(carNum: number, carItem: number) {
                 var utilityUSD = (parseFloat(currency_) == 0 ? 0 : (floatAuditedUtility / floatCurrency).toFixed(2));
                 var stringUtilityUSD = utilityUSD.toLocaleString('en-US', { minimumFractionDigits: 2 });
 
-                if (!isAdmin && audit_) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'El registro esta auditado',
-                        text: 'Este registro esta auditado por un administrador, si desea hacer un cambio debe solicitar el permiso al usuario que lo porces\u00F3...'
-                    });
-                    return;
-                }
-
                 $('#SelectSaleDeailProduct').val(id_);
-                $('#DpickerDateSaleDetail').val(date_);
+                $('#DpickerDateSaleCarDetail').val(dateSale_);
+                $('#DpickerDateSaleDetail').val(dateFlight_);
                 //await $('#SelectSaleDeailFrom').val(result.destinationsFrom);
                 $('#TxtSaleDeailTo').val(dname_);
                 $('#lblSaleDeailTo').html(destination_);
@@ -2848,6 +2897,19 @@ async function fnSalesDetailUpdate(carNum: number, carItem: number) {
                 $('#TxtUtilityReport').val(auditedUtility.toString());
                 $('#TxtUtilityUSD').val(stringUtilityUSD);
                 $('#TxtObservation').val(observation);
+
+                if (!isAdmin && audit_) {
+                    $("#ModalSalesDetail :input").attr("readonly", true);
+                    $("#SelectSaleDeailProduct").attr("disabled", true);
+                    $('#btnsModalSales').hide();
+                    $('#warningSelectSaleDeail').show();
+                }
+                else {
+                    $("#ModalSalesDetail :input").attr("readonly", false);
+                    $("#SelectSaleDeailProduct").attr("disabled", false);
+                    $('#btnsModalSales').show();
+                    $('#warningSelectSaleDeail').hide();
+                }
 
                 fnAddSalesDetail(false);
             });
@@ -2920,6 +2982,7 @@ function fnBtnSaveSaleDetail() {
     var dataWeb: any = sessionStorage.getItem("TecnoData");
 
     var SaleId_ = $('#TxtIdSaleDetail').val();
+    var SaleDate = $('#DpickerDateSaleCarDetail').val();
     var TravelDate = $('#DpickerDateSaleDetail').val();
     var SaleDetailId_ = $('#lblSalesDetailId').html();
     var Product_ = $('#SelectSaleDeailProduct').val();
@@ -2998,7 +3061,7 @@ function fnBtnSaveSaleDetail() {
             "travelDate": TravelDate,
             "productsId": Product_,
             "destinationsTo": To_,
-            "destinationsFrom": To_, //From_,
+            "destinationsFrom": To_,
             "amount": Amount_,
             "utility": Utility_,
             "mkup": Mkup_,
@@ -3023,42 +3086,69 @@ function fnBtnSaveSaleDetail() {
                 body: JSON.stringify(data[0])
 
             })
-            .then(
-                response => response.json())
-            .then(
-                result => {
+            .then(response => {
+                if (response.ok) {
+                    // The request was successful
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Registro agregado exitosamente!',
+                        text: 'Se guard\u00F3 correctamente el registro'
+                    });
 
-                    if (result) {
-                        Swal.fire({
-                            icon: 'info',
-                            title: 'Registro agregado exitosamente!',
-                            text: 'Se guard\u00F3 correctamente el registro'
-                        });
+                    var CarNumber: string = $('#lblCarNumber').html();
+                    CarNumber = CarNumber?.toString().substring(0, CarNumber?.toString().indexOf('- renglones'));
 
-                        var CarNumber: string = $('#lblCarNumber').html();
-                        CarNumber = CarNumber?.toString().substring(0, CarNumber?.toString().indexOf('- renglones'));
+                    fnLoadSalesDetail(SaleId_, CarNumber);
+                    fnCleanSaleDetail();
+                    //fnLoadSalesDetail(Number(SaleId_));
+                    fnLoadSales();
 
-                        fnLoadSalesDetail(SaleId_, CarNumber);
-                        fnCleanSaleDetail();
-                        //fnLoadSalesDetail(Number(SaleId_));
-                        fnLoadSales();
-                    }
-                    else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'No se pudo guardar el registro!',
-                            text: 'Hubo un error, devolvi\u00F3: ' + result
-                        });
-                    }
+                    return response.json();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'No se pudo guardar el registro!',
+                        text: 'Hubo un error: ' + response.status
+                    });
 
-                })
-            .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'No se pudo guardar el registro!',
-                    text: 'Hubo un error: ' + error
-                });
-            });
+                    // The request failed
+                    throw new Error('An error occurred: ' + response.status);
+                }
+            })
+            //.then(
+            //    result => {
+
+            //        if (result) {
+            //            Swal.fire({
+            //                icon: 'info',
+            //                title: 'Registro agregado exitosamente!',
+            //                text: 'Se guard\u00F3 correctamente el registro'
+            //            });
+
+            //            var CarNumber: string = $('#lblCarNumber').html();
+            //            CarNumber = CarNumber?.toString().substring(0, CarNumber?.toString().indexOf('- renglones'));
+
+            //            fnLoadSalesDetail(SaleId_, CarNumber);
+            //            fnCleanSaleDetail();
+            //            //fnLoadSalesDetail(Number(SaleId_));
+            //            fnLoadSales();
+            //        }
+            //        else {
+            //            Swal.fire({
+            //                icon: 'error',
+            //                title: 'No se pudo guardar el registro!',
+            //                text: 'Hubo un error, devolvi\u00F3: ' + result
+            //            });
+            //        }
+
+            //    })
+            //.catch(error => {
+            //    Swal.fire({
+            //        icon: 'error',
+            //        title: 'No se pudo guardar el registro!',
+            //        text: 'Hubo un error: ' + error
+            //    });
+            //});
     }
     else {
 
@@ -3091,15 +3181,15 @@ function fnBtnSaveSaleDetail() {
                     'Content-Type': 'application/json;charset=UTF-8',
                     Audit: audit_.toString(),
                     CarNumber: stringCarNumber,
+                    SaleDate: moment(SaleDate).format('YYYY-MM-DD'),
                     Authorization: JSON.parse(dataWeb).token
                 },
                 body: JSON.stringify(data[0])
 
             })
-            .then(
-                response => response.json())
-            .then(
-                result => {
+            .then(response => {
+                if (response.ok) {
+
                     Swal.fire({
                         icon: 'info',
                         title: 'Registro actualizado exitosamente!',
@@ -3110,14 +3200,41 @@ function fnBtnSaveSaleDetail() {
                     fnLoadSalesDetail(SaleId_, stringCarNumber);
                     fnCleanSaleDetail();
                     fnLoadSales();
-                })
-            .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'No se pudo guardar el registro!',
-                    text: 'Hubo un error: ' + error
-                });
-            });
+
+                    // The request was successful
+                    return response.json();
+                } else {
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'No se pudo guardar el registro!',
+                        text: 'Hubo un error: ' + response.status
+                    });
+
+                    // The request failed
+                    throw new Error('An error occurred: ' + response.status);
+                }
+            })
+            //.then(
+            //    result => {
+            //        Swal.fire({
+            //            icon: 'info',
+            //            title: 'Registro actualizado exitosamente!',
+            //            text: 'Se guard\u00F3 correctamente el cambio.'
+            //        });
+            //        $('#ModalSalesDetail').modal('hide');
+            //        $('#lblCarNumber').html(newStringCarNumber);
+            //        fnLoadSalesDetail(SaleId_, stringCarNumber);
+            //        fnCleanSaleDetail();
+            //        fnLoadSales();
+            //    })
+            //.catch(error => {
+            //    Swal.fire({
+            //        icon: 'error',
+            //        title: 'No se pudo guardar el registro!',
+            //        text: 'Hubo un error: ' + error
+            //    });
+            //});
     }
 
 
@@ -3190,7 +3307,7 @@ $("#TxtSaleDeailTo").keyup(function () {
 
 //#endregion Secci\u00F3n de detalle de Ventas
 
-//#region Seccion de Pagos
+//#region Seccion de Pagos (Se sustituye por la sección de sobres en un apartado Master)
 
 function fnSalesPayment(num: number, amount: number) {
     fnCleanPayment();
@@ -5075,8 +5192,9 @@ $("#TxtSaleSellerGoal").keyup(function () {
 
 function fnRefreshReport() {
 
-    if ($("#Report1").is(":visible")) {
-        fnReportGoalsResume();
+    if ($("#Report1").is(":visible")) {        
+        //fnReportGoalsResume();  
+        fnReport1Resume(); //Para la prueba, despues lo debo quitar
     }
     else if ($("#Report2").is(":visible")) {
         fnReportGoalsResumeMonth();
@@ -5611,7 +5729,216 @@ function fnReportGoalsResumeMonthColumns() {
             })
 }
 
+let intervalId: any;
+
+const checkbox = document.querySelector('#chkAutomaticReportUpdate');
+if (checkbox) {
+    checkbox.addEventListener('change', (event) => {
+        const target = event.target as HTMLInputElement;
+
+        if (target.checked && $('#Report1Resume').is(':visible')) {
+            //console.log("Se ejecuta la acción desde el evento por check");
+            intervalId = setInterval(fnReport1Resume, 300000);
+        } else {
+            //console.log("Se inactiva la acción desde el check");
+            clearInterval(intervalId);
+        }
+    });
+
+    //Iniciar la ejecución cuando la página se carga
+    if ($('#Report1Resume').is(':visible')) {
+        //console.log("Se ejecuta la acción desde el evento por primera vez");
+        intervalId = setInterval(fnReport1Resume, 300000);
+    }
+}
+
+function fnReport1Resume() {
+
+    if ($('#Report1Resume').is(':hidden')) {
+        clearInterval(intervalId);
+        //console.log("Se inactiva la acción desde la función");
+        return;
+    }
+    else {
+        console.log("Reporte visible desde la función");
+    }
+
+    // Tu código para crear y llenar la tabla
+    var table_ = "Treport1Resume";
+
+    if (!$('#' + table_ + '').length) {
+        var htmlTabla = "<table id='" + table_ + "' class='table bg-white table-striped table-hover table-sortable TableDes' data-toggle='table' data-flat='true' data-search='true' >\n\
+        <thead class='bg-dark text-light'>\n\
+        <tr>\n\
+        <th>Sucursal</th>\n\
+        <th>Vendedor</th>\n\
+        <th>Utilidad sin auditar</th>\n\
+        </tr>\n\
+        </thead>\n\
+        <tbody id='RowsTreport1Resume'>\n\
+        </tbody>\n\
+        </table>\n\
+        <label id='lblTotalAmount'><strong>Total general: </strong></label>";
+        $("#Report1Resume").append(htmlTabla);
+    }
+
+    if ($('#DpickerReportGoalsIniR1').val() == undefined || $('#DpickerReportGoalsIniR1').val() == "") {
+        var Today: Date = new Date();
+        var initDateString: string = moment(Today).format("YYYY-MM-DD");
+        var TodayString: string = moment(Today).format("YYYY-MM-DD");
+        $("#DpickerReportGoalsIniR1").val(TodayString);
+        $('#DpickerReportGoalsIniR1').val(initDateString);
+        $('#DpickerReportGoalsEndR1').val(TodayString);
+    }
+
+    var dataWeb: any = sessionStorage.getItem("TecnoData");
+
+    let url = ApiBackEndUrl + 'CreditDocuments/GetSalesWithSellersByDate';
+    var dateIni = $('#DpickerReportGoalsIniR1').val();
+    var dateEnd = $('#DpickerReportGoalsEndR1').val();
+    var userId = JSON.parse(dataWeb).userId;
+
+    let response = fetch(url, {
+        method: 'GET',
+        headers: {
+            dateIni: dateIni,
+            dateEnd: dateEnd,
+            CoinId: "2",
+            SellerId: userId,
+            Authorization: JSON.parse(dataWeb).token
+        }
+    })
+        .then(
+            response => response.json())
+        .then(
+            result => {
+
+                //console.log(JSON.stringify(result));
+
+                $("#Treport1Resume > tbody").empty();
+
+                var cont = 0;
+                var totalUtility = 0;
+                var branchNamePrev = "";
+                //var hiddenRowClass = "hidden-row";
+
+                for (var i in result) {
+                    var id = result[cont].Id;
+                    var sellerName = result[cont].SellerName;
+                    var branchName = result[cont].BranchName;
+                    var utility = result[cont].Utility;
+                    var branchGroup = "Branch" + result[cont].BranchId;
+                    totalUtility += utility;
+
+                    if (branchName != branchNamePrev) {
+
+                        var newRow = document.createElement("tr");
+                        newRow.classList.add("IconPointer");
+                        newRow.setAttribute('name', branchGroup + "_");
+                        newRow.setAttribute('onclick', 'fnSelectBranchReport1("' + branchGroup + '")');
+
+                        var newCell = document.createElement("td");
+                        newCell.innerHTML = "<strong><i class='fa-solid fa-building-circle-arrow-right'></i> ..:: " + branchName + " ::..</strong>";
+                        newRow.append(newCell);
+                        newCell.colSpan = 2;
+                        newCell.style.backgroundColor = '#CCD1D1';
+                        
+                        $("#RowsTreport1Resume").append(newRow);
+
+                        var resultFilter = result.filter(function (item:any) {
+                            return item.BranchName === branchName;
+                        });
+
+                        var total = 0;
+
+                        for (var j = 0; j < resultFilter.length; j++) {
+                            total += resultFilter[j].Utility;
+                        }
+
+                        var newCell = document.createElement("td");
+                        newCell.innerHTML = "<strong>Sub total: " + total.toLocaleString('en-US', { minimumFractionDigits: 1 }) + "</strong>";
+                        newRow.append(newCell);
+                        newCell.style.backgroundColor = '#CCD1D1';
+                        $("#RowsTreport1Resume").append(newRow);
+
+                        if (total > 0) {
+                            var newRow2 = document.createElement("tr");
+                            newRow2.style.display = 'none';
+                            newRow2.setAttribute('name', branchGroup);
+                            //newRow2.classList.add(hiddenRowClass);
+
+                            var newCell = document.createElement("td");
+                            newCell.innerHTML = "";
+                            newRow2.append(newCell);
+                            
+                            $("#RowsTreport1Resume").append(newRow2);
+
+                            var newCell = document.createElement("td");
+                            newCell.innerHTML = sellerName;
+                            newRow2.append(newCell);
+                            $("#RowsTreport1Resume").append(newRow2);
+
+                            var newCell = document.createElement("td");
+                            newCell.innerHTML = utility.toLocaleString('en-US', { minimumFractionDigits: 1 });
+                            newRow2.append(newCell);
+                            $("#RowsTreport1Resume").append(newRow2);
+                        }
+                    }
+                    else {
+
+                        var newRow = document.createElement("tr");
+                        newRow.style.display = 'none';
+                        newRow.setAttribute('name', branchGroup);
+                        //newRow.classList.add(hiddenRowClass);
+
+                        var newCell = document.createElement("td");
+                        newCell.innerHTML = "";
+                        newRow.append(newCell);
+                        $("#RowsTreport1Resume").append(newRow);
+
+                        var newCell = document.createElement("td");
+                        newCell.innerHTML = sellerName;
+                        newRow.append(newCell);
+                        //newCell.colSpan = 2;
+                        $("#RowsTreport1Resume").append(newRow);
+
+                        var newCell = document.createElement("td");
+                        newCell.innerHTML = utility.toLocaleString('en-US', { minimumFractionDigits: 1 });
+                        newRow.append(newCell);
+                        $("#RowsTreport1Resume").append(newRow);
+                    }
+                    
+                    cont++;
+
+                    branchNamePrev = branchName;
+                }
+                $('#spinnerReports').hide();
+                $('#lblTotalAmount').html('<strong>Total general: ' + totalUtility.toLocaleString('en-US', { minimumFractionDigits: 1 }) + '</strong>');
+            });
+
+}
+
+function fnSelectBranchReport1(groupName: string) {
+    // Get all rows associated with the group
+    const rows = document.querySelectorAll<HTMLElement>('tr[name="' + groupName + '"]');
+    // Loop through each row
+    for (let i = 0; i < rows.length; i++) {
+        // Get the current row
+        const row = rows[i];
+        // Check if the row is currently hidden
+        if (row.style.display === 'none') {
+            // If it is hidden, show it
+            row.style.display = '';
+        } else {
+            // If it is not hidden, hide it
+            row.style.display = 'none';
+        }
+    }
+}
+
 function fnReportGoalsResume() {
+    
+
     if ($('#DpickerReportGoalsIniR1').val() == undefined || $('#DpickerReportGoalsIniR1').val() == "") {
 
         var Today: Date = new Date();
@@ -5624,7 +5951,7 @@ function fnReportGoalsResume() {
     }
 
     var dataWeb: any = sessionStorage.getItem("TecnoData");
-    let url = ApiBackEndUrl + 'CreditDocuments/GetSalesByDate';
+    let url = ApiBackEndUrl + 'CreditDocuments/GetSalesWithSellersByDate';
     var dateIni = $('#DpickerReportGoalsIniR1').val();
     var dateEnd = $('#DpickerReportGoalsEndR1').val();
     var userId = JSON.parse(dataWeb).userId;
@@ -5649,11 +5976,14 @@ function fnReportGoalsResume() {
 
                 const dataGrid = $('#gridSalesByBranch').dxDataGrid({
                     dataSource: result,
-                    keyExpr: 'ID',
+                    keyExpr: 'Id',
                     allowColumnReordering: true,
                     allowColumnResizing: true,
                     rowAlternationEnabled: true,
                     showBorders: true,
+                    grouping: {
+                        autoExpandAll: false,
+                    },
                     export: {
                         enabled: true,
                     },
@@ -5680,23 +6010,30 @@ function fnReportGoalsResume() {
                     },
                     columns: [
                         {
-                            caption: 'Sucursal', dataField: 'BranchName', format: {
+                            caption: 'Sucursal',
+                            dataField: 'BranchName',
+                            groupIndex: 0,
+                            format: {
                                 type: 'fixedPoint',
                                 precision: 10,
                             },
+
                         },
-                        { caption: 'Utilidad sin auditar', dataField: 'Utility' }
+                        { caption: 'Vendedor', dataField: 'SellerName' },
+                        { caption: 'Utilidad sin auditarX', dataField: 'Utility' }
                     ],
                     sortByGroupSummaryInfo: [{
                         summaryItem: 'count',
                     }],
                     summary: {
-                        totalItems: [{
+                        groupItems: [{
                             column: 'ID',
                             summaryType: 'count',
+                            caption: 'Registros'
                         },
                         {
-                            column: 'Total',
+                            caption: 'Sumatoria',
+                            column: 'Utility',
                             summaryType: 'sum',
                             valueFormat: 'currency',
                             //showInGroupFooter: true,
@@ -5747,6 +6084,80 @@ function fnReportGoals() { //Report3
         .then(
             result => {
 
+                //console.log(JSON.stringify(result));
+                var color: any; 
+
+                const discountCellTemplate = function (container: any, options: any) {
+
+                    const wrapper = $('<div/>').css({
+                        position: 'relative',
+                        display: 'inline-block'
+                    }).appendTo(container);
+
+                    $('<div/>').dxBullet({
+                        onIncidentOccurred: null,
+                        size: {
+                            width: 110,
+                            height: 35,
+                        },
+                        margin: {
+                            top: 5,
+                            bottom: 0,
+                            left: 5,
+                        },
+                        showTarget: false,
+                        showZeroLevel: true,
+                        value: options.value,
+                        startScaleValue: 0,
+                        endScaleValue: 100,
+                        tooltip: {
+                            enabled: true,
+                            font: {
+                                size: 18,
+                            },
+                            paddingTopBottom: 2,
+                            customizeTooltip() {
+                                return { text: (options.value) + '%' };
+                            },
+                            zIndex: 5,
+                        },
+                        color: color,
+                        onDrawn: function (e: any) {
+                            var value = e.component.option('value');
+                            var color;
+
+
+                            if (value < 20) {
+                                color = '#FF756D'; //Rojo claro
+                            } else if (value < 40) {                                
+                                color = '#FF4844' //Rojo oscuro
+                            } else if (value < 60) {
+                                color = '#FFF49C'; //Amarillo claro                                
+                            } else if (value < 80) {
+                                color = '#FFF56E'; //Amarillo oscuro
+                            } else if (value < 100) {
+                                color = '#85DE77'; //Verde claro
+                            } else {
+                                color = '#5ACB43'; //Verde oscuro
+                            }
+                            e.component.option('color', color);
+                        }
+                    }).appendTo(wrapper);
+                    //$('<div/>').text(options.value + '%').appendTo(wrapper);
+
+                    $('<div/>').text(options.value + '%').css({
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                        //,fontWeight: 'bold'
+                    }).appendTo(wrapper);
+                }
+
                 $("#TabReportGoalsT > tbody").empty();
                 var cont = 0;
 
@@ -5769,7 +6180,7 @@ function fnReportGoals() { //Report3
                         visible: true,
                     },
                     paging: {
-                        pageSize: 40,
+                        pageSize: 20,
                     },
                     groupPanel: {
                         visible: true,
@@ -5802,8 +6213,17 @@ function fnReportGoals() { //Report3
                         { caption: 'Utilidad sin auditar', dataField: 'Utility', displayFormat: '{0:n0}' },
                         { caption: 'Utilidad auditada', dataField: 'UtilityUSD', displayFormat: '{0:n0}' },
                         { caption: 'Mkup(%)', dataField: 'Mkup' },
-                        { caption: 'Objetivo', dataField: 'Objetive' },
-                        { caption: '% Cumplido', dataField: 'Reached' }
+                        { caption: 'Objetivo', dataField: 'Objetive' },                        
+                        {
+                            dataField: 'Reached',
+                            caption: '% Alcanzado',
+                            dataType: 'number',
+                            format: 'percent',
+                            alignment: 'right',
+                            allowGrouping: false,
+                            cellTemplate: discountCellTemplate,
+                            cssClass: 'bullet',
+                        },
 
                     ],
                     sortByGroupSummaryInfo: [{
@@ -5979,7 +6399,8 @@ function fnSelectReport() {
             $('#' + report).show();
 
             if (report == 'Report1') {
-                fnReportGoalsResume();
+                //fnReportGoalsResume();
+                fnReport1Resume();
             }
             else if (report == 'Report2') {
                 fnReportGoalsResumeMonth();
@@ -6051,103 +6472,169 @@ async function fnSalesBySellers() {
 
 }
 
-async function fnSalesGraph() {
+async function fnShowHideGrap() {
+    var divGrap  = document.getElementById("Report1ResumeGrap");
+    var divTable = document.getElementById("Report1Resume");
 
-    let serieResult = [];
+    if (divGrap && divTable) {
+        if (divGrap.style.display === "none") {
+            divGrap.style.display = "block";
+            divTable.style.display = "none";
 
-    serieResult = [{
-        name: 'Installation & Developers',
-        data: [43934, 48656, 65165, 81827, 112143, 142383,
-            171533, 165174, 155157, 161454, 154610]
-    }, {
-        name: 'Manufacturing',
-        data: [24916, 37941, 29742, 29851, 32490, 30282,
-            38121, 36885, 33726, 34243, 31050]
-    }, {
-        name: 'Sales & Distribution',
-        data: [11744, 30000, 16005, 19771, 20185, 24377,
-            32147, 30912, 29243, 29213, 25663]
-    }, {
-        name: 'Operations & Maintenance',
-        data: [null, null, null, null, null, null, null,
-            null, 11164, 11218, 10077]
-    }, {
-        name: 'Other',
-        data: [21908, 5548, 8105, 11248, 8989, 11816, 18274,
-            17300, 13053, 11906, 10073]
-    }];
+            let url = ApiBackEndUrl + 'CreditDocuments/GetCreditSalesForGraph';
+            var dataWeb: any = sessionStorage.getItem("TecnoData");
 
-    Highcharts.chart('SalesGraph', {
+            const data:any = await fetch(
+                url,
+                {
+                    method: 'GET',
+                    headers: {
+                        dateIni: $('#DpickerReportGoalsIniR1').val(),
+                        dateEnd: $('#DpickerReportGoalsEndR1').val(),
+                        Authorization: JSON.parse(dataWeb).token
+                    }
+                }                
 
-        title: {
-            text: 'Ventas por vendedor con objetivo propuesto',
-            align: 'left'
-        },
+            ).then(response => response.json());
 
-        subtitle: {
-            //text: 'Source: <a href="https://irecusa.org/programs/solar-jobs-census/" target="_blank">IREC</a>',
-            //align: 'bootom'
-        },
+            fnSalesGraph(data);
+        } else {
+            divGrap.style.display = "none";
+            divTable.style.display = "block";
 
-        yAxis: {
-            title: {
-                text: 'Ventas por vendedor'
-            },
-            plotLines: [{
-                value: 160000,
-                width: 2,
-                color: '#FF0000',
-                dashStyle: 'ShortDash',
-                zIndex: 0,
-                label: {
-                    text: 'Objetivo'
-                }
-            }]
-        },
-
-        xAxis: {
-            accessibility: {
-                rangeDescription: 'Range: Quincenal'
-            },
-            title: {
-                text: 'Fecha de venta'
+            if ($('#Report1Resume').is(':visible') && $('#chkAutomaticReportUpdate').prop('checked')) {
+                //console.log("Se ejecuta la acción desde el evento por primera vez");
+                intervalId = setInterval(fnReport1Resume, 300000);
             }
+        }
+    }    
+}
 
-        },
+async function fnSalesGraph(dataRecive:any) {
 
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'middle'
-        },
+    //console.log(JSON.stringify(data));
 
-        plotOptions: {
-            series: {
-                label: {
-                    connectorAllowed: false
-                },
-                pointStart: 2010
-            }
-        },
+    let data:any = {};
 
-        series: serieResult,
+    for (let i = 0; i < dataRecive.length; i++) {
+        let branch = dataRecive[i];
+        let branchName = branch.branchName;
 
-        responsive: {
-            rules: [{
-                condition: {
-                    maxWidth: 500
-                },
-                chartOptions: {
-                    legend: {
-                        layout: 'horizontal',
-                        align: 'center',
-                        verticalAlign: 'bottom'
+        data[branchName] = {};
+
+        for (let j = 0; j < branch.sellers.length; j++) {
+            let seller = branch.sellers[j];
+            let sellerName = seller.sellerName;
+
+            data[branchName][sellerName] = seller.sales;
+
+        }
+    }
+
+    //console.log(data);
+
+    (async () => {
+
+        let regionP,
+            regionVal,
+            regionI = 0,
+            countryP,
+            countryI,
+            causeP,
+            causeI,
+            region,
+            country,
+            cause;
+
+        const points = [],
+            causeName:any = {
+                'Communicable & other Group I': 'Communicable diseases',
+                'Noncommunicable diseases': 'Non-communicable diseases',
+                Injuries: 'Injuries'
+            };
+
+        for (region in data) {
+            if (Object.hasOwnProperty.call(data, region)) {
+                regionVal = 0;
+                regionP = {
+                    id: 'id_' + regionI,
+                    name: region,
+                    color: Highcharts.getOptions().colors[regionI],
+                    value: 0
+                };
+                countryI = 0;
+                for (country in data[region]) {
+                    if (Object.hasOwnProperty.call(data[region], country)) {
+                        countryP = {
+                            id: regionP.id + '_' + countryI,
+                            name: country,
+                            parent: regionP.id
+                        };
+                        points.push(countryP);
+                        causeI = 0;
+                        for (cause in data[region][country]) {
+                            if (Object.hasOwnProperty.call(
+                                data[region][country], cause
+                            )) {
+                                causeP = {
+                                    id: countryP.id + '_' + causeI,
+                                    name: causeName[cause],
+                                    parent: countryP.id,
+                                    value: (+data[region][country][cause]) //Math.round(+data[region][country][cause])
+                                };
+                                regionVal += causeP.value;
+                                points.push(causeP);
+                                causeI = causeI + 1;
+                            }
+                        }
+                        countryI = countryI + 1;
                     }
                 }
-            }]
+                regionP.value = Math.round(regionVal * 100) / 100; //Math.round(regionVal / countryI);
+                points.push(regionP);
+                regionI = regionI + 1;
+            }
         }
-
-    });
+        Highcharts.chart('SalesGraph', {
+            series: [{
+                name: 'Sucursales',
+                type: 'treemap',
+                layoutAlgorithm: 'squarified',
+                allowDrillToNode: true,
+                animationLimit: 1000,
+                dataLabels: {
+                    enabled: false
+                },
+                levels: [{
+                    level: 1,
+                    dataLabels: {
+                        enabled: true
+                    },
+                    borderWidth: 3,
+                    levelIsConstant: false
+                }, {
+                    level: 1,
+                    dataLabels: {
+                        style: {
+                            fontSize: '14px'
+                        }
+                    }
+                }],
+                accessibility: {
+                    exposeAsGroupOnly: true
+                },
+                data: points
+            }],
+            subtitle: {
+                text: 'Haga click en una sucursal para ampliar la vista especifica',
+                align: 'left'
+            },
+            title: {
+                text: 'Mapa de las ventas por vendedor y fecha',
+                align: 'left'
+            }
+        });
+    })();
 }
 
 //#endregion Grafico de vendedores con sus ventas
@@ -6158,7 +6645,7 @@ async function fnSalesGraph() {
  ##########################################################
  */
 
-//#region d\u00EDas feriados
+//#region días feriados
 
 function fnLoadHolidays() {
     let url = ApiBackEndUrl + 'Holidays/GetHolidays';
@@ -6381,3 +6868,161 @@ function fnBtnSaveHolidays() {
 }
 
 //#endregion d\u00EDas feriados
+
+/*
+ ##########################################################
+ ######################### Sobres #########################
+ ##########################################################
+*/
+
+//#region Sobres
+
+function fnLoadEnvelopes() {
+    let url = ApiBackEndUrl + 'Payments/GetPayments';
+    var dataWeb: any = sessionStorage.getItem("TecnoData");
+    var position = fnPositionPayments();
+    var skip = position[0];
+    var take = position[1];
+
+    let response = fetch(url,
+        {
+            method: 'GET',
+            headers: {
+                page: skip.toString(),
+                pageSize: take.toString(),
+                Authorization: JSON.parse(dataWeb).token
+            }
+        })
+        .then(
+            response => response.json())
+        .then(
+            result => {
+
+            })
+}
+
+function fnPositionPayments() {
+    let Position = $('#PaymentsNPosition').val();
+    let Records = $('#selDataPaymentsGroup').html();
+    return [Position, Records];
+}
+
+//#endregion
+
+/*
+ ##########################################################
+ ###################### Configuración #####################
+ ##########################################################
+*/
+
+//#region Configuración de usuarios
+
+//Carga los datos del grid principal de usuarios
+function fnLoadConfigUsers() {
+    let url = ApiBackEndUrl + 'Users/GetUsers';
+    var dataWeb: any = sessionStorage.getItem("TecnoData");
+    var position = fnPositionConfigUsers();
+    var skip = position[0];
+    var take = position[1];
+
+    let response = fetch(url, {
+        method: 'GET',
+        headers: {
+            page: skip.toString(),
+            pageSize: take.toString(),
+            Authorization: JSON.parse(dataWeb).token
+        }
+    })
+        .then(
+            response => response.json())
+        .then(result => {
+            $("#TabConfigUsersT > tbody").empty();
+
+            for (var j in result) {
+
+                
+
+                var id = result[j].id;
+                var firstName = result[j].firstName;
+                var lastName = result[j].lastName;
+                var docNum = result[j].documentNumber;
+                var mail = result[j].emailId;
+
+                var newRow = document.createElement("tr");
+
+                
+                var newCell = document.createElement("td");
+                newCell.innerHTML = id;
+
+                newRow.append(newCell);
+                newCell.style.display = 'none';
+                $("#rowsConfigUsers").append(newRow);
+                var newCell = document.createElement("td");
+                newCell.innerHTML = firstName;
+
+                newRow.append(newCell);
+                $("#rowsConfigUsers").append(newRow);
+                var newCell = document.createElement("td");
+                newCell.innerHTML = lastName;
+
+                newRow.append(newCell);
+                $("#rowsConfigUsers").append(newRow);
+                var newCell = document.createElement("td");
+                newCell.innerHTML = docNum;
+
+                newRow.append(newCell);
+                $("#rowsConfigUsers").append(newRow);
+                var newCell = document.createElement("td");
+                newCell.innerHTML = mail;
+
+                newRow.append(newCell);
+                $("#rowsConfigUsers").append(newRow);
+
+                var btn1 = document.createElement("btnUserDelete");
+                btn1.innerHTML = iconDelete;
+                btn1.classList.add("btnGridDelete");
+                btn1.setAttribute('onclick', 'fnUsersDelete(' + id + ')');
+                btn1.setAttribute('data-title', 'Inactivar usuario');
+
+                var btn2 = document.createElement("btnUserUpdate");
+                btn2.innerHTML = iconUpdate;
+                btn2.classList.add("btnGridUpdate");
+                btn2.setAttribute('onclick', 'fnUserUpdate(' + id + ')');
+                btn2.setAttribute('data-title', 'Actualizar usuario');
+
+                var newCell = document.createElement("td");
+                newCell.appendChild(btn1);
+                newCell.appendChild(btn2);
+                newRow.append(newCell);
+                $("#rowsConfigUsers").append(newRow);
+                
+            }
+            $('#spinnerConfigUsers').hide();
+        });
+}
+
+function fnPositionConfigUsers() {
+    let Position = $('#ConfigUsersNPosition').val();
+    let Records = $('#selDataConfigUsersGroup').html();
+    return [Position, Records];
+}
+
+function fnChangeDataGroupConfigUsers(num: number) {
+    $('#selDataConfigUsersGroup').html(num);
+    fnCleanConfigUsers();
+    fnLoadConfigUsers();
+}
+
+function fnUsersDelete(id: number) {
+    alert("Borrar registro");
+}
+
+function fnUserUpdate(id: number) {
+    $('#ModalConfigUsers').modal('show');
+}
+
+function fnCleanConfigUsers() {
+    //alert("Actualizar registro");
+}
+
+//#endregion Configuración de usuarios

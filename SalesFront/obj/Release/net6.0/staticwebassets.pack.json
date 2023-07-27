@@ -49,6 +49,58 @@
       "PackagePath": "staticwebassets\\img\\maldives.jpg"
     },
     {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img1.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img10.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img10.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img11.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img11.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img12.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img12.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img13.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img13.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img2.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img3.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img3.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img4.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img4.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img5.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img5.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img6.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img6.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img7.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img7.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img8.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img8.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img9.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img9.jpg"
+    },
+    {
       "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\Popper\\dist\\popper-utils.js",
       "PackagePath": "staticwebassets\\lib\\Popper\\dist\\popper-utils.js"
     },

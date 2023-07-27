@@ -2,9 +2,15 @@
     ViewData["Title"] = "Principal";
 }
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
+@*<script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>*@
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/heatmap.js"></script>
+<script src="https://code.highcharts.com/modules/treemap.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 <link rel="stylesheet" href="~/css/MasterRecords.css" />
@@ -992,7 +998,7 @@
     <div class="modal fade" id="ModalSalesDetail" tabindex="-1" aria-labelledby="ModalSalesDetail1" aria-hidden="true">
             
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content" id="ModalSalesDetailContent">
 
                     <div class="modal-header">
                         <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> <a id="lblDetalleNro">Detalle del carrito</a></h5>
@@ -1000,9 +1006,11 @@
                     </div>
 
                     <div class="modal-body">
+                        <div id="btnsModalSales">
+                            <button class="btnActions" id="btnSaveSaleDetail" onclick="fnBtnSaveSaleDetail()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                            <button class="btnActions" id="btnCleanSaleDetail" onclick="fnCleanSaleDetail()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        </div>
                         
-                        <button class="btnActions" id="btnSaveSaleDetail" onclick="fnBtnSaveSaleDetail()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
-                        <button class="btnActions" id="btnCleanSaleDetail" onclick="fnCleanSaleDetail()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
                                                 
                         <div id="spinnerSalesModal" class="row col-4" style="display:none;">                    
                             <div  class="spinner-border text-warning col-4" role="status"></div>
@@ -1035,8 +1043,13 @@
                                     onblur="lostFocusNumberSaleDetail()" />
                             </div>
 
-                            <div>
-                                <label for="DpickerDateSaleDetail">Fecha vuelo <a style="color:#A52A2A;">*</a></label>
+                            <div data-title="Fecha del carrito">
+                                <label for="DpickerDateSaleCarDetail">Fecha de venta <a style="color:#A52A2A;">*</a></label>
+                                <input type="date" id="DpickerDateSaleCarDetail" />
+                            </div>
+
+                            <div data-title="Fecha en la que viajará el cliente">
+                                <label for="DpickerDateSaleDetail">Fecha de vuelo <a style="color:#A52A2A;">*</a></label>
                                 <input type="date" id="DpickerDateSaleDetail" />
                             </div>
 
@@ -1080,7 +1093,7 @@
 
                             <div data-title="Utilidad sin auditar">
                                 <label for="TxtUtilitySaleDetail">Gross Margin <a style="color:#A52A2A;">*</a></label>
-                            <input type="text" id="TxtUtilitySaleDetail" value="0.00"/>
+                                <input type="text" id="TxtUtilitySaleDetail" value="0.00"/>
                             </div>
 
                             <div>
@@ -1113,6 +1126,12 @@
                                 <input type="checkbox" id="chkAudit"/>
                             </div>
                             
+                            <br/>
+
+                        <div id="warningSelectSaleDeail" class="alert alert-warning" role="alert" style="display:none">
+                              ¡Advertencia! No se tiene acceso a editar la información.
+                            </div>
+
                         </div>                        
 
                     </div>
@@ -1456,7 +1475,7 @@
 
             <div id="btnsHolidays" class="btnsActions_ col-4">
                 <button class="btnActions" id="btnHolidaysSearch" onclick="fnSearchHolidays()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
-                @*<button class="btnActions" id="btnHolidaysNew" onclick="fnAddHolidays()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>   *@                           
+                <button class="btnActions" id="btnHolidaysNew" onclick="fnAddHolidays()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>                         
             </div>
             <br />
             <hr />
@@ -1923,7 +1942,7 @@
                         <button class="btnActions" id="btnGoalClean" onclick="fnCleanGoal()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
                         
                         <div class="ModalInfo">
-                            <div id="GoalIdModal">
+                            <div id="GoalIdModal" style="display:none;">
                                 <label for="TxtIdGoal">Id</label>
                                 <input type="text" class="txtSmall" id="TxtIdGoal" value="0" readonly />
                             </div>
@@ -1934,8 +1953,11 @@
                             </div>
 
                             <div>
+                                <br />
+
                                 <label>Tipo de objetivo <a style="color:#A52A2A;">*</a></label>
                                 <br />
+                                
                                 <div class="col-12">
                                     <div class="col-6 highlightSection" style="float:left;" for="radioSeller">
                                         <input type="radio" id="radioSeller" name="selectCase" value="S" onclick="fnGoalSelect('S')">
@@ -1945,10 +1967,11 @@
                                         <input type="radio" id="radioBranch" name="selectCase" value="B" onclick="fnGoalSelect('B')">
                                         <label for="radioBranch">Sucursal</label><br>
                                     </div>
-                                    
-                                    
                                 </div>                                  
                             </div>
+
+                            <br />
+                            <br />
 
                             <div id="selGoalSeller" style="display:none;">
                                 @*<label for="SelectGoalSeller">Vendedor <a style="color:#A52A2A;">*</a></label>*@
@@ -2041,23 +2064,41 @@
         </div>
 
         <!--Reporte 1 GM por día-->
+        
         <div id="Report1">
-
+                        
             <div class="col-md-12 row">
                 <div class="col-md-4">
-                    <label for="DpickerReportGoalsIni">Fecha inicio</label>
+                    <label for="DpickerReportGoalsIniR1">Fecha inicio</label>
                     <input type="date" id="DpickerReportGoalsIniR1" />
                 </div>
 
                 <div class="col-md-4">
                     <label for="DpickerReportGoalsEnd">Fecha fin</label>
-                    <input type="date" id="DpickerReportGoalsEndR1" />
+                    <input type="date" id="DpickerReportGoalsEndR1"/>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="chkAutomaticReportUpdate" data-title="">Actualización automática</label>
+                    <input id="chkAutomaticReportUpdate" type="checkbox" checked />
+                    <button class="btnActions" onclick="fnShowHideGrap()"><i class="fa-regular fa-chart-bar"></i></button>
                 </div>
             </div>
 
             <br/>
 
-            <div id="gridSalesByBranch"></div>            
+            <div id="Report1Resume"></div>
+            <div id="gridSalesByBranch"></div>    
+            
+            <div id="Report1ResumeGrap" class="col-md-12" style="display:none;">
+                
+                <figure class="highcharts-figure">
+                    <div id="SalesGraph"></div>                    
+                </figure>
+            </div>
+
+            
+
         </div>
 
         <!--Reporte 2 GM por día-->
@@ -2221,38 +2262,7 @@
             <div id="gridAudit"></div>  
         </div>
 
-        <!--<div id="TabReportGoals" class="container">
-            
-            <table class="table bg-white table-striped table-hover table-sortable TableDes"
-                   id="TabReportGoalsT"
-                   data-toggle="table"
-                   data-flat="true"
-                   data-search="true">
-
-                <thead class="bg-dark text-light">
-                    <th width="9%">Sucursal</th>
-                    <th width="11%">Gross B</th>
-                    <th width="11%">Gross M <br /> AUD</th>
-                    <th width="11%">Gross M <br /> S/AUD</th>
-                    <th width="6%">%</th>
-                    <th width="6%">MKUP</th>
-                    <th width="11%">Utilidad <br /> ARS</th>
-                    <th width="11%">OBJ. UTI</th>
-                    <th width="8%">Alcanzado</th>
-                    <th width="10%">PROY $</th>
-                    <th width="6%">PROY %</th>                    
-                </thead>
-                <tbody id="rowsReportGoals">
-                </tbody>
-            </table>
-
-        </div>-->
-
         <br />
-
-        <figure class="highcharts-figure">        
-            <div id="SalesGraph"></div>
-        </figure>
 
         <figure class="highcharts-figure">
             <div id="container2"></div>            
@@ -2260,6 +2270,168 @@
 
     </div>
     <!--Sección de graficos y reportes (Fin)-->
+    
+    <!--Sección de los sobres (Inicio)-->
+    <div>
+        <div id="MasterEnvelopes" class="divMaster" style="display:none;">
+            <div class="row">
+                <div class="row col-8">
+                    <h3 class="col-8">Panel principal de sobres</h3>
+
+                    <div id="spinnerEnvelopes" class="row col-4">
+                        <div class="spinner-border text-warning col-4" role="status"></div>
+                        <div class="text-warning col-8">Cargando...</div>
+                    </div>
+                </div>
+
+                <div id="btnsEnvelopes" class="btnsActions_ col-4">
+                    <button class="btnActions" id="btnEnvelopesSearch" onclick="fnSearchEnvelopes()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button class="btnActions" id="btnEnvelopesNew" onclick="fnAddEnvelopes()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <br />
+                <hr />
+            </div>
+            
+        </div>
+    </div>
+    <!--Sección de los sobres (Fin)-->
+    
+    <!--Sección de la configuración de los usuarios (Inicio)-->
+    <div>
+        <div id="MasterConfigUsers" class="divMaster" style="display:none;">
+            <div class="row">
+                <div class="row col-8">
+                    <h3 class="col-8">Configuración de los usuarios</h3>
+
+                    <div id="spinnerConfigUsers" class="row col-4">
+                        <div class="spinner-border text-warning col-4" role="status"></div>
+                        <div class="text-warning col-8">Cargando...</div>
+                    </div>
+                </div>
+
+                <div id="btnsConfigUsers" class="btnsActions_ col-4">
+                    <button class="btnActions" id="btnConfigUserSearch" onclick="fnSearchConfigUser()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button class="btnActions" id="btnConfigUserNew" onclick="fnAddConfigUser()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <br />
+                <hr />
+            </div>
+
+            <!--Tabla de configuración de usuarios-->
+            <div id="TabConfigUsers" class="container">
+
+                <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                       id="TabConfigUsersT"
+                       data-toggle="table"
+                       data-flat="true"
+                       data-search="true">
+
+                    <thead class="bg-dark text-light">
+                        <th style="display:none;">Id</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Documento</th>
+                        <th>Correo</th>
+                    <th width="10%">Opciones</th>
+                    </thead>
+                    <tbody id="rowsConfigUsers">
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-2">
+                        <a onclick="fnChangeDataGroupConfigUsers(5)" data-title="Registros por página">5</a>
+                        &nbsp;
+                        <a onclick="fnChangeDataGroupConfigUsers(10)" data-title="Registros por página">10</a>
+                        &nbsp;
+                        <a onclick="fnChangeDataGroupConfigUsers(15)" data-title="Registros por página">15</a>
+                        &nbsp;
+                        <a onclick="fnChangeDataGroupConfigUsers(20)" data-title="Registros por página">20</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <label id="selDataConfigUsersGroup" style="display:none;">5</label>
+                    </div>
+
+                    &nbsp;&nbsp;
+
+                    <div data-title="Cantidad de registros por página" class="col-1">
+                        <input id="ConfigUsersNPosition" type="number" value="1"
+                               min="1" max="99" class="numberPosition"
+                               onchange="fnLoadConfigUsers()" />
+                    </div>
+
+                    &nbsp;&nbsp;
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!--Modal de configuración de usuarios (inicio)-->
+    <div class="modal fade" id="ModalConfigUsers" tabindex="-1" aria-labelledby="ModalConfigUsers1" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Configuración general</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <button class="btnActions" id="btnSaveHolidays" onclick="fnBtnSaveHolidays()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+
+                    <br />
+
+                    <div class="ModalInfo">
+
+                        <div data-title="Rol que se asocia al usuario">
+                            <label for="rolSelect">Rol</label>
+                            <select id="rolSelect" class="selectControl" onclick="fnLoadSelect('rolSelect', 'Users/GetRoles')">
+                            </select>
+                        </div>
+
+                        <div data-title="Sucursal que se asocia al usuario por defecto">
+                            <label for="branchConfigSelect">Sucursal def</label>
+                            <select id="branchConfigSelect" class="selectControl" onclick="fnLoadSelect('branchConfigSelect', 'Branches/GetBranches')">
+                            </select>
+                        </div>
+
+                        <div id="HolidaysIdModal" style="display:none;">
+                            <label for="TxtIdHolidays">Id moneda</label>
+                            <input type="text" class="txtSmall" id="TxtIdHolidays" value="0" readonly />
+                        </div>
+
+                        <div>
+                            <label for="DpickerDateHolidays">Fecha valor <a style="color:#A52A2A;">*</a></label>
+                            <input type="date" id="DpickerDateHolidays" />
+                        </div>
+
+                        <div>
+                            <label for="DescriptionHolidays">Descripción <a style="color:#A52A2A;">*</a></label>
+                            <textarea rows="2" id="DescriptionHolidays"></textarea>
+                        </div>
+
+                        <br />
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <div class="row">
+                        <h5 class="col-md-4 alignRight"></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+    <!--Sección de la configuración de los usuarios (Fin)-->
 
     <div>
         
@@ -2279,6 +2451,14 @@
 
         var dataWeb = sessionStorage.getItem("TecnoData");
         var SucursalActual = sessionStorage.getItem("TecnoBranchName");
+        
+        //Primero aplico el fondo de pantalla al sistema
+        document.body.style.width = '100%';
+        document.body.style.height = '100%';
+        document.body.style.fontFamily = "'Open Sans', sans-serif";
+        document.body.style.background = '#34507c';
+        document.body.style.backgroundImage = "url('../img/wallpapers/" + JSON.parse(dataWeb).Img + "'";
+                
         $('#lblUsuario').html("");
         $('#lblSucursal').html("");
         $('#lblRol').html("");
@@ -2290,12 +2470,15 @@
         //$('#TxtNumberSale').mask('000-000-000');
 
         document.getElementById("Rep1").checked = true;
-        fnReportGoalsResume();
+        //fnReportGoalsResume();
+        fnReport1Resume();
+        
 
         //const Workbook = new ExcelJS.Workbook();
         //fnReportGoals();
     })
 </script>
+
 
 
 
