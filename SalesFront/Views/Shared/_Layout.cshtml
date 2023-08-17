@@ -32,7 +32,7 @@
                     <a href="#" id="btnMenuOptions" ><i class="fa-solid fa-bars" style="margin-top:17px;"></i></a>                    
                 </div>
 
-                <div class="btn-float-principal-small" onclick="showNewSale()" data-title="Acceso directo al carrito">
+                <div class="btn-float-principal-small observer" onclick="showNewSale()" data-title="Acceso directo al carrito">
                     <a href="#" id="btnMenuOptions" ><i class="fa-solid fa-cart-plus"></i></a>                    
                 </div>
 
@@ -73,21 +73,21 @@
                 @*La clase allowedMenu es usada para ocultar las cosas de los operadores y la clase adminMenu esta hecha para ocultarle las opciones a todos menos a los administradores*@
                 <a class="menu-principal-text" onclick="fnExpandMenu(1)"><i class="fa-solid fa-table-list menu-principal-text"></i> &nbsp; Registros maestros</a><hr>
                 <div id="menu-principal-1" class="row" style="display:none;">
-                    <a class="menu-text" onclick="showDiv('MasterClients')"><i class="fa-solid fa-address-card"></i> &nbsp; Clientes</a>
-                    <a class="menu-text allowedMenu" onclick="showDiv('MasterBranches')"><i class="fa-solid fa-code-branch"></i> &nbsp; Sucursales</a>
-                    <a class="menu-text allowedMenu" onclick="showDiv('MasterCoins')"><i class="fas fa-dollar-sign"></i> &nbsp; Monedas</a>
+                    <a class="menu-text observer" onclick="showDiv('MasterClients')"><i class="fa-solid fa-address-card"></i> &nbsp; Clientes</a>
+                    <a class="menu-text allowedMenu observer" onclick="showDiv('MasterBranches')"><i class="fa-solid fa-code-branch"></i> &nbsp; Sucursales</a>
+                    <a class="menu-text allowedMenu observer" onclick="showDiv('MasterCoins')"><i class="fas fa-dollar-sign"></i> &nbsp; Monedas</a>
                     @*<a class="menu-text" onclick="showDiv('MasterChannels')"><i class="fa-brands fa-stack-exchange"></i> &nbsp; Channels</a>*@
                     @*<a class="menu-text" onclick="showDiv('MasterSellers')"><i class="fa-solid fa-people-robbery"></i> &nbsp; Vendedores</a>*@
-                    <a class="menu-text allowedMenu" onclick="showDiv('MasterProducts')"><i class="fa-solid fa-boxes-stacked"></i> &nbsp; Productos</a>
-                    <a class="menu-text" onclick="showDiv('MasterDestinations')"><i class="fa-solid fa-plane-arrival"></i> &nbsp; Destinos</a>
-                    <a class="menu-text allowedMenu" onclick="showDiv('MasterHolidays')"><i class="fa-regular fa-calendar-days"></i> &nbsp; Feriados</a>
+                    <a class="menu-text allowedMenu observer" onclick="showDiv('MasterProducts')"><i class="fa-solid fa-boxes-stacked"></i> &nbsp; Productos</a>
+                    <a class="menu-text observer" onclick="showDiv('MasterDestinations')"><i class="fa-solid fa-plane-arrival"></i> &nbsp; Destinos</a>
+                    <a class="menu-text allowedMenu observer" onclick="showDiv('MasterHolidays')"><i class="fa-regular fa-calendar-days"></i> &nbsp; Feriados</a>
                 </div>
                              
                 <a class="menu-principal-text" onclick="fnExpandMenu(2)"><i class="fa-solid fa-chalkboard-user menu-principal-text"></i> &nbsp; Procesos</a><hr>
                 <div id="menu-principal-2" class="row" style="display:none;">
                     <a class="menu-text" onclick="showDiv('MasterSales')"><i class="fa-solid fa-address-card"></i> &nbsp; Registro de ventas</a>
-                    <a class="menu-text" onclick="showDiv('MasterGoals')"><i class="fa-solid fa-bullseye"></i> &nbsp; Registro de objetivos</a>
-                    <a class="menu-text" onclick="showDiv('MasterEnvelopes')"><i class="fa-solid fa-envelope"></i> &nbsp; Registro de sobres</a>
+                    <a class="menu-text observer" onclick="showDiv('MasterGoals')"><i class="fa-solid fa-bullseye"></i> &nbsp; Registro de objetivos</a>
+                    <a class="menu-text observer" onclick="showDiv('MasterEnvelopes')"><i class="fa-solid fa-envelope"></i> &nbsp; Registro de sobres</a>
                 </div>
 
                 <a class="menu-principal-text" onclick="fnExpandMenu(3)"><i class="fa-solid fa-chart-line menu-principal-text"></i> &nbsp; Informes</a><hr>
@@ -97,7 +97,7 @@
                          
                 <a class="menu-principal-text" onclick="fnExpandMenu(4)"><i class="fa-solid fa-gears menu-principal-text"></i> &nbsp; Configuración</a><hr>
                 <div id="menu-principal-4" class="row" style="display:none;">
-                    <a class="menu-text adminMenu" onclick="showDiv('MasterConfigUsers')"><i class="fa-solid fa-users"></i> &nbsp; Usuarios</a>
+                    <a class="menu-text adminMenu observer" onclick="showDiv('MasterConfigUsers')"><i class="fa-solid fa-users"></i> &nbsp; Usuarios</a>
                     <a class="menu-text" onclick="showDiv('MasterConfigPassword')"><i class="fa-solid fa-key"></i> &nbsp; Cambio de contraseña</a>
                 </div>
                 

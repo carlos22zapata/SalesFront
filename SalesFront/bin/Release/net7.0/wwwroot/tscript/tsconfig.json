@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    //"charset": "UTF-8",
+    "outDir": "./build", /* Specify an output folder for all emitted files. */
+    "removeComments": true,
+    "esModuleInterop": true, /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "strict": true, /* Enable all strict type-checking options. */
+    "target": "es2016", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    //"types": [ "node" ],
+    "moduleResolution": "node"    
+    //"paths": {
+    //  "build": [ "./build" ],
+    //  "front": [ "https://localhost:7119/" ]
+    //}    
+  },
+  "include": [
+    "**/*"
+  ],
+  "exclude": [
+    "./build"
+  ]
+}

@@ -1,6 +1,7 @@
 import { strict } from "assert";
 import { Console, error } from "console";
 import { Grid } from "ag-grid-community";
+import roleId_ from "./build/Globals"
 //import DevExpress from "ag-grid-community";
 //import ExcelJS from "exceljs";
 //import { Workbook } from "exceljs"
@@ -45,16 +46,16 @@ var timer: any;
 //#endregion comandos TypeScript
 
 //############ Server mlapp ############
-//var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
-//var FrontEnd = "https://mlapp.tecnovoz.com.ar:8090/";
+var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
+var FrontEnd = "https://mlapp.tecnovoz.com.ar:8090/";
 
 //############ Server t7 ############
 //var ApiBackEndUrl: string = "https://t7.tecnovoz.com.ar:8091/api/";
 //var FrontEnd: string = "https://t7.tecnovoz.com.ar:8090/";
 
 //############ Desarrollo ############
-var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
-var FrontEnd: string = "https://localhost:7119/";
+//var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
+//var FrontEnd: string = "https://localhost:7119/";
 
 /*
  ##########################################################
@@ -216,17 +217,6 @@ async function showDiv(divSelPrincipal: string) {
 //Funci\u00F3n encargada de abrir y cerrar el contenido del men\u00FA principal
 function fnExpandMenu(n: number) {
 
-    var dataWeb: any = sessionStorage.getItem("TecnoData");
-    var roleId = JSON.parse(dataWeb).RoleId;
-
-    if (roleId == 2) { 
-        $('.allowedMenu').hide();
-    }
-
-    if (roleId != 1) {
-        $('.adminMenu').hide();
-    }
-
     if (n == 1) {
         if ($('#menu-principal-1').is(":visible"))
             $('#menu-principal-1').hide(100);
@@ -256,7 +246,7 @@ function fnExpandMenu(n: number) {
             $('#menu-principal-3').show(100);
             $('#menu-principal-4').hide(100);
         }
-    }
+    }    
     else {
         if ($('#menu-principal-4').is(":visible"))
             $('#menu-principal-4').hide(100);
@@ -266,6 +256,24 @@ function fnExpandMenu(n: number) {
             $('#menu-principal-3').hide(100);
             $('#menu-principal-4').show(100);
         }
+    }
+}
+
+function fnActionRoles() {
+
+    var dataWeb: any = sessionStorage.getItem("TecnoData");
+    var roleId = JSON.parse(dataWeb).RoleId;
+
+    if (roleId != 1) {
+        $('.adminMenu').hide();
+    }
+
+    if (roleId == 2) {
+        $('.allowedMenu').hide();
+    }
+
+    if (roleId == 4) {
+        $('.observer').hide();
     }
 }
 
@@ -1849,6 +1857,70 @@ $("#TxtSaleSeller2").keyup(function () {
 
 });
 
+$('#SearchResultsSaleSellerFilter').on('click', 'li', function (this: HTMLElement) {
+    var searchResults = $('#SearchResultsSaleSellerFilter');
+    var text = $(this).text();
+    var id = $(this).attr('idSaleSeller');
+    $("#SelectSaleSellerFilter").val(text);
+    $("#lblSaleSellerFilter").text(id);
+    searchResults.empty();
+});
+
+$("#SelectSaleSellerFilter").keyup(function () {
+    clearTimeout(timer);
+
+    timer = setTimeout(function () {
+        var seller_ = $("#SelectSaleSellerFilter").val();
+        var searchResults = $('#SearchResultsSaleSellerFilter');
+
+        if (seller_ != "") {
+            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
+            var dataWeb: any = sessionStorage.getItem("TecnoData");
+            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
+            var skip = 1;
+            var take = 10;
+
+            let response = fetch(url,
+                {
+                    method: 'GET',
+                    headers: {
+                        select: select.toString(),
+                        page: skip.toString(),
+                        pageSize: take.toString(),
+                        Authorization: JSON.parse(dataWeb).token
+                    }
+                })
+                .then(
+                    response => response.json())
+                .then(
+                    result => {
+                        //console.log(result);
+
+                        // Mostrar los resultados en una lista debajo del input text
+                        searchResults.empty();
+                        var idSeller = 0;
+
+                        for (const result_ of result) {
+                            idSeller++;
+                            const li = document.createElement('li');
+                            li.id = idSeller.toString();
+                            li.setAttribute('idSaleSeller', result_.userId);
+                            li.textContent = result_.firstName + ' ' + result_.lastName;
+                            searchResults.append(li);
+
+                            //console.log(li);
+                        }
+                    });
+
+            //console.log(cliente_);
+        }
+        else {
+            searchResults.empty();
+        }
+    }, 500)
+
+});
+
 //#endregion Secci\u00F3n de Vendedores
 
 /*
@@ -2010,6 +2082,7 @@ function fnLoadSales() {
         dateFormat: 'dd-mm-yy'
     } as any);
 
+    $('#spinnerSales').show();
     var dataWeb: any = sessionStorage.getItem("TecnoData");
     let url = ApiBackEndUrl + 'CreditDocuments/GetCreditDocumentsClients';
     var position = fnPositionSale();
@@ -2018,6 +2091,8 @@ function fnLoadSales() {
     var dateSearch = $("#TxtIdDateSaleBasicSearch").val();
     var branchId = $('#SelectSaleBranchAdvancedSearch').val() || 0;
     var auditRecords = $('#SelectSaleAuditAdvancedSearch').val();
+    var sellerIdF = $('#SelectSaleSellerFilter').val() == '' ? '0' :
+                        $('#lblSaleSellerFilter').html();
 
     if (dateSearch === "") {
         var Today = new Date();
@@ -2046,6 +2121,7 @@ function fnLoadSales() {
                 DateIni: date,
                 DocumentNumber: documentNumber,
                 BranchId: branchId.toString(),
+                SellerIdF: sellerIdF.toString(),
                 Audit: auditRecords.toString()
             }
         })
@@ -5284,7 +5360,8 @@ function fnReportGoalsResumeMonth() {
                     columns: [
                         {
                             dataField: 'Month',
-                            groupIndex: 0
+                            groupIndex: 0,
+                            caption: 'Mes'
                         },
                         { caption: 'Sucursal', dataField: 'BranchName' },
                         { caption: 'Vendedor', dataField: 'SellerName' },
@@ -5296,11 +5373,13 @@ function fnReportGoalsResumeMonth() {
                     ],
                     sortByGroupSummaryInfo: [{
                         summaryItem: 'count',
+                        displayFormat: '{0}'
                     }],
                     summary: {
                         groupItems: [{
                             column: 'ID',
                             summaryType: 'count',
+                            displayFormat: '{0}'
                         },
                         {
                             column: 'Utility',
@@ -5308,14 +5387,16 @@ function fnReportGoalsResumeMonth() {
                             valueFormat: 'currency',
                             //showInGroupFooter: true,
                             alignByColumn: true,
-                            },
-                            {
-                                column: 'UtilityUSD',
-                                summaryType: 'sum',
-                                valueFormat: 'currency',
-                                //showInGroupFooter: true,
-                                alignByColumn: true,
-                            }],
+                            displayFormat: '{0}'
+                        },
+                        {
+                            column: 'UtilityUSD',
+                            summaryType: 'sum',
+                            valueFormat: 'currency',
+                            //showInGroupFooter: true,
+                            alignByColumn: true,
+                            displayFormat: '{0}'
+                        }],
                     }
                 }).dxDataGrid('instance');
 
@@ -5729,6 +5810,7 @@ function fnReportGoalsResumeMonthColumns() {
             })
 }
 
+//#region Esta sección de código es para actualizar el reporte 1 (Diario cada X minutos)
 let intervalId: any;
 
 const checkbox = document.querySelector('#chkAutomaticReportUpdate');
@@ -5751,9 +5833,11 @@ if (checkbox) {
         intervalId = setInterval(fnReport1Resume, 300000);
     }
 }
+//#endregion Esta sección de código es para actualizar el reporte 1 (Diario cada X minutos)
 
 function fnReport1Resume() {
 
+    //Para el caso de la actualización del reporte cada X Minutos
     if ($('#Report1Resume').is(':hidden')) {
         clearInterval(intervalId);
         //console.log("Se inactiva la acción desde la función");
@@ -5778,7 +5862,12 @@ function fnReport1Resume() {
         <tbody id='RowsTreport1Resume'>\n\
         </tbody>\n\
         </table>\n\
-        <label id='lblTotalAmount'><strong>Total general: </strong></label>";
+        <div class='row col-md-12'>\n\
+            <label id='lblTotalMonth' class='col-md-3'><strong>Total mes: </strong></label>\n\
+            <label id='lblTotalFortnight1' class='col-md-3'><strong>Primera quincena: </strong></label>\n\
+            <label id='lblTotalFortnight2' class='col-md-3'><strong>Segunda quincena: </strong></label>\n\
+            <label id='lblTotalAmount' class='col-md-3'><strong>Total general: </strong></label>\n\
+        <div>";
         $("#Report1Resume").append(htmlTabla);
     }
 
@@ -5820,6 +5909,9 @@ function fnReport1Resume() {
                 var cont = 0;
                 var totalUtility = 0;
                 var branchNamePrev = "";
+                var totalMonth = 0;
+                var totalLastFortnight1 = 0;
+                var totalLastFortnight2 = 0;
                 //var hiddenRowClass = "hidden-row";
 
                 for (var i in result) {
@@ -5827,9 +5919,17 @@ function fnReport1Resume() {
                     var sellerName = result[cont].SellerName;
                     var branchName = result[cont].BranchName;
                     var utility = result[cont].Utility;
-                    var branchGroup = "Branch" + result[cont].BranchId;
+                    var branchGroup = "Branch" + result[cont].BranchId;     
+                    var branchGroupCar = branchGroup + "Car" + id;
                     totalUtility += utility;
+                    var SalesBySeller = result[cont].ListCreditsDocuments;
 
+                    if (result[cont].LastFortnight > 0) {
+                        totalMonth = result[cont].TotalMonth;
+                        totalLastFortnight1 = result[cont].LastFortnight;
+                        totalLastFortnight2 = totalMonth - totalLastFortnight1;
+                    }
+                    
                     if (branchName != branchNamePrev) {
 
                         var newRow = document.createElement("tr");
@@ -5838,7 +5938,7 @@ function fnReport1Resume() {
                         newRow.setAttribute('onclick', 'fnSelectBranchReport1("' + branchGroup + '")');
 
                         var newCell = document.createElement("td");
-                        newCell.innerHTML = "<strong><i class='fa-solid fa-building-circle-arrow-right'></i> ..:: " + branchName + " ::..</strong>";
+                        newCell.innerHTML = "<strong><i class='fa-solid fa-building-circle-arrow-right'></i> ..:: " + branchName + " ::..</strong> <i id='" + branchGroup + "' class='fa-solid fa-caret-right'></i>";
                         newRow.append(newCell);
                         newCell.colSpan = 2;
                         newCell.style.backgroundColor = '#CCD1D1';
@@ -5862,9 +5962,12 @@ function fnReport1Resume() {
                         $("#RowsTreport1Resume").append(newRow);
 
                         if (total > 0) {
+
                             var newRow2 = document.createElement("tr");
                             newRow2.style.display = 'none';
                             newRow2.setAttribute('name', branchGroup);
+                            newRow2.classList.add("IconPointer");
+                            newRow2.setAttribute('onclick', 'fnSelectBranchReport1("' + branchGroupCar + '")');
                             //newRow2.classList.add(hiddenRowClass);
 
                             var newCell = document.createElement("td");
@@ -5874,7 +5977,7 @@ function fnReport1Resume() {
                             $("#RowsTreport1Resume").append(newRow2);
 
                             var newCell = document.createElement("td");
-                            newCell.innerHTML = sellerName;
+                            newCell.innerHTML = sellerName + " <i id='" + branchGroupCar + "' class='" + branchGroupCar + "_b fa-solid fa-caret-right'></i>";
                             newRow2.append(newCell);
                             $("#RowsTreport1Resume").append(newRow2);
 
@@ -5882,6 +5985,38 @@ function fnReport1Resume() {
                             newCell.innerHTML = utility.toLocaleString('en-US', { minimumFractionDigits: 1 });
                             newRow2.append(newCell);
                             $("#RowsTreport1Resume").append(newRow2);
+
+                            //Aquí se hace el nuevo for para recorrer la lista de las ventas que tiene en ListCreditsDocuments
+                            if (SalesBySeller.length > 0) {
+                                for (var j = 0; j < SalesBySeller.length; j++) {
+                                    var shoppingCarNumber = SalesBySeller[j].ShoppingCarNumber;
+                                    var sCUtility = SalesBySeller[j].Utility;
+
+                                    var newRow = document.createElement("tr");
+                                    newRow.style.display = 'none';
+                                    newRow.setAttribute('class', branchGroup);
+                                    newRow.setAttribute('name', branchGroupCar);
+                                    //newRow.classList.add(hiddenRowClass);
+
+                                    var newCell = document.createElement("td");
+                                    newCell.innerHTML = "";
+                                    newRow.append(newCell);
+                                    $("#RowsTreport1Resume").append(newRow);
+
+                                    var newCell = document.createElement("td");
+                                    newCell.innerHTML = "<i class='fa-solid fa-cart-arrow-down'></i> " + shoppingCarNumber;
+                                    newRow.append(newCell);
+                                    //newCell.colSpan = 2;
+                                    $("#RowsTreport1Resume").append(newRow);
+
+                                    var newCell = document.createElement("td");
+                                    newCell.innerHTML = sCUtility;
+                                    newRow.append(newCell);
+                                    //newCell.colSpan = 2;
+                                    $("#RowsTreport1Resume").append(newRow);
+
+                                }
+                            }
                         }
                     }
                     else {
@@ -5889,6 +6024,8 @@ function fnReport1Resume() {
                         var newRow = document.createElement("tr");
                         newRow.style.display = 'none';
                         newRow.setAttribute('name', branchGroup);
+                        newRow.classList.add("IconPointer");
+                        newRow.setAttribute('onclick', 'fnSelectBranchReport1("' + branchGroupCar + '")');
                         //newRow.classList.add(hiddenRowClass);
 
                         var newCell = document.createElement("td");
@@ -5897,7 +6034,7 @@ function fnReport1Resume() {
                         $("#RowsTreport1Resume").append(newRow);
 
                         var newCell = document.createElement("td");
-                        newCell.innerHTML = sellerName;
+                        newCell.innerHTML = sellerName + " <i id='" + branchGroupCar + "' class='fa-solid fa-caret-right'></i>";
                         newRow.append(newCell);
                         //newCell.colSpan = 2;
                         $("#RowsTreport1Resume").append(newRow);
@@ -5906,6 +6043,39 @@ function fnReport1Resume() {
                         newCell.innerHTML = utility.toLocaleString('en-US', { minimumFractionDigits: 1 });
                         newRow.append(newCell);
                         $("#RowsTreport1Resume").append(newRow);
+
+                        //Aquí se hace el nuevo for para recorrer la lista de las ventas que tiene en ListCreditsDocuments
+                        if (SalesBySeller.length > 0) {
+                            for (var j = 0; j < SalesBySeller.length; j++) {
+                                var shoppingCarNumber = SalesBySeller[j].ShoppingCarNumber;
+                                var sCUtility = SalesBySeller[j].Utility;
+
+                                var newRow = document.createElement("tr");
+                                newRow.style.display = 'none';
+                                newRow.setAttribute('class', branchGroup);
+                                newRow.setAttribute('name', branchGroupCar);
+                                //newRow.classList.add(hiddenRowClass);
+
+                                var newCell = document.createElement("td");
+                                newCell.innerHTML = "";
+                                newRow.append(newCell);
+                                $("#RowsTreport1Resume").append(newRow);
+
+                                var newCell = document.createElement("td");
+                                newCell.innerHTML = "<i class='fa-solid fa-cart-arrow-down'></i> " + shoppingCarNumber;
+                                newRow.append(newCell);
+                                //newCell.colSpan = 2;
+                                $("#RowsTreport1Resume").append(newRow);
+
+                                var newCell = document.createElement("td");
+                                newCell.innerHTML = sCUtility;
+                                newRow.append(newCell);
+                                //newCell.colSpan = 2;
+                                $("#RowsTreport1Resume").append(newRow);
+
+                            }
+                        }
+                        
                     }
                     
                     cont++;
@@ -5913,7 +6083,10 @@ function fnReport1Resume() {
                     branchNamePrev = branchName;
                 }
                 $('#spinnerReports').hide();
-                $('#lblTotalAmount').html('<strong>Total general: ' + totalUtility.toLocaleString('en-US', { minimumFractionDigits: 1 }) + '</strong>');
+                $('#lblTotalMonth').html('<strong>Ultimo mes: ' + totalMonth.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + '</strong>');
+                $('#lblTotalFortnight1').html('<strong>Primera quincena: ' + totalLastFortnight1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + '</strong>');
+                $('#lblTotalFortnight2').html('<strong>Segunda quincena: ' + totalLastFortnight2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + '</strong>');
+                $('#lblTotalAmount').html('<strong>Total general: ' + totalUtility.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + '</strong>');
             });
 
 }
@@ -5921,6 +6094,7 @@ function fnReport1Resume() {
 function fnSelectBranchReport1(groupName: string) {
     // Get all rows associated with the group
     const rows = document.querySelectorAll<HTMLElement>('tr[name="' + groupName + '"]');
+    //var rowsClass = document.getElementsByClassName(groupName);
     // Loop through each row
     for (let i = 0; i < rows.length; i++) {
         // Get the current row
@@ -5928,12 +6102,35 @@ function fnSelectBranchReport1(groupName: string) {
         // Check if the row is currently hidden
         if (row.style.display === 'none') {
             // If it is hidden, show it
-            row.style.display = '';
+            row.style.display = '';            
         } else {
             // If it is not hidden, hide it
             row.style.display = 'none';
+
+            if (row.classList.contains("fa-sort-down")) {
+                row.classList.remove("fa-sort-down");
+                row.classList.add("fa-caret-right");
+            }
+            
         }
     }
+
+    var elements = document.getElementsByClassName(groupName);
+    for (var i = 0; i < elements.length; i++) {
+        var element = elements[i] as HTMLElement;
+        element.style.display = 'none';
+    }
+
+
+
+    if ($('#' + groupName).hasClass("fa-caret-right")) {
+        $('#' + groupName).removeClass("fa-caret-right").addClass("fa-sort-down");
+    }
+    else if ($('#' + groupName).hasClass("fa-sort-down")) {
+        $('#' + groupName).removeClass("fa-sort-down").addClass("fa-caret-right");
+    }
+
+    
 }
 
 function fnReportGoalsResume() {
@@ -6203,10 +6400,8 @@ function fnReportGoals() { //Report3
                     columns: [
                         {
                             dataField: 'Branch',
-                            groupIndex: 0
-                            //summaryType: 'sum',
-                            //valueFormat: '{0:n2}',
-                            //showInGroupHeader: true
+                            groupIndex: 0,
+                            caption:''
                         },
                         { caption: 'Vendedor', dataField: 'SellerName' },
                         { caption: 'G. Booking', dataField: 'Amount', displayFormat: '{0:n0}' },
@@ -6233,6 +6428,7 @@ function fnReportGoals() { //Report3
                         groupItems: [{
                             column: 'SellerName',
                             summaryType: 'count',
+                            displayFormat: 'Vendedores: {0}'
                         },
                         {
                             column: 'Utility',
@@ -6240,6 +6436,7 @@ function fnReportGoals() { //Report3
                             valueFormat: 'currency',
                             //showInGroupFooter: true,
                             alignByColumn: true,
+                            displayFormat: '{0}'
                         },
                         {
                             column: 'UtilityUSD',
@@ -6247,6 +6444,7 @@ function fnReportGoals() { //Report3
                             valueFormat: 'currency',
                             //showInGroupFooter: true,
                             alignByColumn: true,
+                            displayFormat: '{0}'
                         },
                         {
                             column: 'Objetive',
@@ -6254,6 +6452,7 @@ function fnReportGoals() { //Report3
                             valueFormat: 'currency',
                             //showInGroupFooter: true,
                             alignByColumn: true,
+                            displayFormat: '{0}'
                         }
                         ],
                     }

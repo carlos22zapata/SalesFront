@@ -1,0 +1,409 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\SalesFront.bundle.scp.css",
+      "PackagePath": "staticwebassets\\SalesFront.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\Buttons.css",
+      "PackagePath": "staticwebassets\\css\\Buttons.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\CheckBoxes.css",
+      "PackagePath": "staticwebassets\\css\\CheckBoxes.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\Loaders.css",
+      "PackagePath": "staticwebassets\\css\\Loaders.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\Login.css",
+      "PackagePath": "staticwebassets\\css\\Login.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\LoginFail.css",
+      "PackagePath": "staticwebassets\\css\\LoginFail.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\MasterRecords.css",
+      "PackagePath": "staticwebassets\\css\\MasterRecords.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\RadioButtons.css",
+      "PackagePath": "staticwebassets\\css\\RadioButtons.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\TablesStyle.css",
+      "PackagePath": "staticwebassets\\css\\TablesStyle.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\Tooltips.css",
+      "PackagePath": "staticwebassets\\css\\Tooltips.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\Bariloche.png",
+      "PackagePath": "staticwebassets\\img\\Bariloche.png"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\login1.png",
+      "PackagePath": "staticwebassets\\img\\login1.png"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\login2.png",
+      "PackagePath": "staticwebassets\\img\\login2.png"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\maldives.jpg",
+      "PackagePath": "staticwebassets\\img\\maldives.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img1.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img10.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img10.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img11.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img11.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img12.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img12.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img13.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img13.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img2.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img3.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img3.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img4.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img4.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img5.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img5.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img6.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img6.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img7.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img7.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img8.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img8.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\img\\wallpapers\\img9.jpg",
+      "PackagePath": "staticwebassets\\img\\wallpapers\\img9.jpg"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\Popper\\dist\\popper-utils.js",
+      "PackagePath": "staticwebassets\\lib\\Popper\\dist\\popper-utils.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\Popper\\dist\\popper-utils.min.js",
+      "PackagePath": "staticwebassets\\lib\\Popper\\dist\\popper-utils.min.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\Popper\\dist\\popper-utils.min.map",
+      "PackagePath": "staticwebassets\\lib\\Popper\\dist\\popper-utils.min.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\Popper\\dist\\popper.js",
+      "PackagePath": "staticwebassets\\lib\\Popper\\dist\\popper.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\Popper\\dist\\popper.min.js",
+      "PackagePath": "staticwebassets\\lib\\Popper\\dist\\popper.min.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\Popper\\dist\\popper.min.map",
+      "PackagePath": "staticwebassets\\lib\\Popper\\dist\\popper.min.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\app.js",
+      "PackagePath": "staticwebassets\\tscript\\app.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\build\\app.js",
+      "PackagePath": "staticwebassets\\tscript\\build\\app.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\build\\appConfig.json",
+      "PackagePath": "staticwebassets\\tscript\\build\\appConfig.json"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\build\\build\\file.js",
+      "PackagePath": "staticwebassets\\tscript\\build\\build\\file.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\tsconfig.json",
+      "PackagePath": "staticwebassets\\tscript\\tsconfig.json"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.SalesFront.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.build.SalesFront.props",
+      "PackagePath": "build\\SalesFront.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.SalesFront.props",
+      "PackagePath": "buildMultiTargeting\\SalesFront.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildTransitive.SalesFront.props",
+      "PackagePath": "buildTransitive\\SalesFront.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

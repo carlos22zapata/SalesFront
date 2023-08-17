@@ -5,6 +5,18 @@
       "PackagePath": "staticwebassets\\SalesFront.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\Buttons.css",
+      "PackagePath": "staticwebassets\\css\\Buttons.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\CheckBoxes.css",
+      "PackagePath": "staticwebassets\\css\\CheckBoxes.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\Loaders.css",
+      "PackagePath": "staticwebassets\\css\\Loaders.css"
+    },
+    {
       "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\Login.css",
       "PackagePath": "staticwebassets\\css\\Login.css"
     },
@@ -15,6 +27,10 @@
     {
       "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\MasterRecords.css",
       "PackagePath": "staticwebassets\\css\\MasterRecords.css"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\RadioButtons.css",
+      "PackagePath": "staticwebassets\\css\\RadioButtons.css"
     },
     {
       "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\TablesStyle.css",

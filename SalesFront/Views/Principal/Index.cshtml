@@ -15,6 +15,10 @@
 
 <link rel="stylesheet" href="~/css/MasterRecords.css" />
 <link rel="stylesheet" href="~/css/TablesStyle.css" />
+<link rel="stylesheet" href="~/css/CheckBoxes.css" />
+<link rel="stylesheet" href="~/css/Buttons.css" />
+<link rel="stylesheet" href="~/css/RadioButtons.css" />
+<link rel="stylesheet" href="~/css/Loaders.css" />
 
 <script>var exports = {"__esModule": false};</script>
 
@@ -1007,8 +1011,8 @@
 
                     <div class="modal-body">
                         <div id="btnsModalSales">
-                            <button class="btnActions" id="btnSaveSaleDetail" onclick="fnBtnSaveSaleDetail()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
-                            <button class="btnActions" id="btnCleanSaleDetail" onclick="fnCleanSaleDetail()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
+                            <button class="btnActions observer" id="btnSaveSaleDetail" onclick="fnBtnSaveSaleDetail()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                            <button class="btnActions observer" id="btnCleanSaleDetail" onclick="fnCleanSaleDetail()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
                         </div>
                         
                                                 
@@ -1121,9 +1125,14 @@
                                 <input type="text" id="TxtObservation" class="col-7" />
                             </div>
 
-                            <div id="SectionAudit" style="display:none;">
+                            <div id="SectionAudit" style="display:none;" class="">
                                 <label for="chkAudit">Registro auditado</label>
-                                <input type="checkbox" id="chkAudit"/>
+                                @*<input type="checkbox" id="chkAudit"/>*@
+
+                                <label class="switch">
+                                    <input id="chkAudit" type="checkbox" class="checkbox">
+                                    <div class="slider"></div>
+                                </label>
                             </div>
                             
                             <br/>
@@ -1162,9 +1171,32 @@
                 
             </div>
             <div id="btnsSales" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnSearchSales" onclick="fnLoadSales()" data-title="Buscar venta"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="btnActions" id="btnAdvancedSearchSales" onclick="fnSearchAdvancedSales()" data-title="Buscar venta avanzada"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
-                <button class="btnActions" id="btnSalesNew" onclick="fnAddSales()" data-title="Agregar nueva venta"><i class="fa-solid fa-plus"></i></button>                 
+               @* <button class="btnActions" id="btnSearchSales" onclick="fnLoadSales()" data-title="Buscar venta"><i class="fa-solid fa-magnifying-glass"></i></button>*@
+                              
+                <button class="Btn" id="btnSearchSales" onclick="fnLoadSales()">
+                    <div class="sign">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <div class="text">Buscar</div>
+                </button>
+
+                <button class="Btn" id="btnAdvancedSearchSales" onclick="fnSearchAdvancedSales()">
+                    <div class="sign">
+                        <i class="fa-solid fa-arrow-down-short-wide"></i>
+                    </div>
+                    <div class="text">Filtrar</div>
+                </button>
+
+                <button class="Btn observer" id="btnSalesNew" onclick="fnAddSales()">
+                    <div class="sign">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div class="text">Agregar</div>
+                </button>
+
+                @*<button class="btnActions" id="btnAdvancedSearchSales" onclick="fnSearchAdvancedSales()" data-title="Buscar venta avanzada"><i class="fa-solid fa-arrow-down-short-wide"></i></button>
+                <button class="btnActions" id="btnSalesNew" onclick="fnAddSales()" data-title="Agregar nueva venta"><i class="fa-solid fa-plus"></i></button>*@
+
             </div>
 
             <br />
@@ -1188,20 +1220,24 @@
                         <select id="SelectSaleBranchAdvancedSearch" class="selectControl" onclick="fnLoadSelect('SelectSaleBranchAdvancedSearch', 'Branches/GetBranches')">
                             <option value="0">Todas</option>
                         </select>
-
                     </div>
-
                     <label id="LblBranchSaleAdvancedSearch" style="display:none;"></label>
                 </div>
                 
                 <div class="SalesP1 col-4">
-                    <div class="col-4" style="display: flex; align-items: flex-start;">
+                    <div class="col-4" style="display: flex; align-items: flex-start; height:27px;">
                         <label for="TxtIdDateSaleBasicSearch">Fecha &nbsp;&nbsp;</label>
                         <input type="date" id="TxtIdDateSaleBasicSearch" disabled style="min-width:150px; height:28px;" />
                         <input type="checkbox" id="isDateFilterSale" />
-                    </div>    
-                    
-                    
+                    </div>
+
+                    <div class="SalesP1 Display" style="display:none;">
+                        <label for="SelectSaleSellerFilter">Vendedor </label>
+                        <input type="text" class="txtMedium col-7" id="SelectSaleSellerFilter" autocomplete="off" placeholder="Vendedor" />
+                        <label id="lblSaleSellerFilter" style="display:none;"></label>
+                        <ul id="SearchResultsSaleSellerFilter"></ul>
+                    </div>
+
                 </div>  
                                 
                 <div class="col-4">
@@ -1217,8 +1253,7 @@
                             <option value="1">Auditados</option>
                             <option value="2">No auditados</option>
                         </select>
-                    </div>
-                     
+                    </div>                     
                 </div>                                                
             </div>  
             
@@ -1297,7 +1332,13 @@
             
             
             <div id="btnsSellersDetail" class="btnsActions_ col-4">              
-                <button class="btnActions" id="btnSalesDetailNew" onclick="fnAddSalesDetail(true)" data-title="Agregar detalle de la venta"><i class="fa-solid fa-plus"></i></button>           
+                @*<button class="btnActions" id="btnSalesDetailNew" onclick="fnAddSalesDetail(true)" data-title="Agregar detalle de la venta"><i class="fa-solid fa-plus"></i></button> *@          
+                <button class="Btn observer" id="btnSalesDetailNew" onclick="fnAddSalesDetail(true)">
+                    <div class="sign">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div class="text">Agregar</div>
+                </button>
             </div>
 
             <br />
@@ -2026,13 +2067,51 @@
                 </div>
             </div>
 
-            <div id="btnsCoins" class="btnsActions_ col-4">
-                <button class="btnActions" id="btnRefreshReport" onclick="fnRefreshReport()" data-title="Recalcular reporte"><i class="fa-solid fa-arrows-rotate"></i></button>   
-                
+            <div id="btnsCoins" class="btnsActions_ col-4" data-title="Recalcular reporte">
+                <button class="Btn" id="btnRefreshReport" onclick="fnRefreshReport()" >
+                    <div class="sign">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </div>
+                    <div class="text">Actualizar</div>
+                </button>
             </div>
 
             <div class="row col-12">
-                <div class="col-2">
+                
+                <div class="wrapper">
+                    <div class="option">
+                        <input class="input" id="Rep1" type="radio" name="option" value="Report1" onclick="fnSelectReport()" checked="">
+                        <div class="btn">
+                            <span class="span">Reporte por día</span>
+                        </div>
+                    </div>
+                    <div class="option">
+                        <input class="input" id="Rep2" type="radio" name="option" value="Report2" onclick="fnSelectReport()">
+                        <div class="btn">
+                            <span class="span">Reporte por meses</span>
+                        </div>
+                    </div>
+                    <div class="option">
+                        <input class="input" id="Rep3" type="radio" name="option" value="Report3" onclick="fnSelectReport()">
+                        <div class="btn">
+                            <span class="span">Gestion por fechas</span>
+                        </div>
+                    </div>
+                    <div class="option">
+                        <input class="input" id="Rep4" type="radio" name="option" value="Report4" onclick="fnSelectReport()">
+                        <div class="btn">
+                            <span class="span">Progresión mensual</span>
+                        </div>
+                    </div>
+                    <div class="option">
+                        <input class="input" id="Rep5" type="radio" name="option" value="Report5" onclick="fnSelectReport()">
+                        <div class="btn">
+                            <span class="span">Auditoría</span>
+                        </div>
+                    </div>
+                </div>
+                
+                @*<div class="col-2">
                     <input type="radio" id="Rep1" name="option" value="Report1" onclick="fnSelectReport()">
 		            <label for="Rep1">Reporte por día</label><br>
                 </div>
@@ -2055,7 +2134,7 @@
                 <div class="col-2">
                     <input type="radio" id="Rep5" name="option" value="Report5" onclick="fnSelectReport()">
 		            <label for="Rep5">Auditoría</label><br>
-                </div>                
+                </div>  *@              
                 
             </div>
 
@@ -2068,21 +2147,39 @@
         <div id="Report1">
                         
             <div class="col-md-12 row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <label for="DpickerReportGoalsIniR1">Fecha inicio</label>
                     <input type="date" id="DpickerReportGoalsIniR1" />
-                </div>
-
-                <div class="col-md-4">
+                    &nbsp;
                     <label for="DpickerReportGoalsEnd">Fecha fin</label>
                     <input type="date" id="DpickerReportGoalsEndR1"/>
                 </div>
 
-                <div class="col-md-4">
-                    <label for="chkAutomaticReportUpdate" data-title="">Actualización automática</label>
-                    <input id="chkAutomaticReportUpdate" type="checkbox" checked />
-                    <button class="btnActions" onclick="fnShowHideGrap()"><i class="fa-regular fa-chart-bar"></i></button>
+                <div class="col-md-6 row">
+                    <div class="col-md-6">
+                        <label for="chkAutomaticReportUpdate" data-title="Activa o desactiva la actualización automática de los datos cada 5 minutos">Actualización automática</label>
+                        @*<input id="chkAutomaticReportUpdate" type="checkbox" checked />*@
+                        <label class="switch col-md-4">
+                            <input id="chkAutomaticReportUpdate" type="checkbox" checked class="checkbox">
+                            <div class="slider"></div>
+                        </label>
+                    </div>
+
+                    <div class="col-md-6">
+                        <button class="Btn" onclick="fnShowHideGrap()">
+                            <div class="sign">
+                                <i class="fa-regular fa-chart-bar"></i>
+                            </div>
+                            <div class="text">Gráfico</div>
+                        </button>
+                   </div>
+                
                 </div>
+
+                
+
+                
+
             </div>
 
             <br/>
@@ -2472,10 +2569,8 @@
         document.getElementById("Rep1").checked = true;
         //fnReportGoalsResume();
         fnReport1Resume();
+        fnActionRoles();
         
-
-        //const Workbook = new ExcelJS.Workbook();
-        //fnReportGoals();
     })
 </script>
 
