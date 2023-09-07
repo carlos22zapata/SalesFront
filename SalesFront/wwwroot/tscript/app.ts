@@ -46,16 +46,16 @@ var timer: any;
 //#endregion comandos TypeScript
 
 //############ Server mlapp ############
-var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
-var FrontEnd = "https://mlapp.tecnovoz.com.ar:8090/";
+//var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
+//var FrontEnd = "https://mlapp.tecnovoz.com.ar:8090/";
 
 //############ Server t7 ############
 //var ApiBackEndUrl: string = "https://t7.tecnovoz.com.ar:8091/api/";
 //var FrontEnd: string = "https://t7.tecnovoz.com.ar:8090/";
 
 //############ Desarrollo ############
-//var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
-//var FrontEnd: string = "https://localhost:7119/";
+var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
+var FrontEnd: string = "https://localhost:7119/";
 
 /*
  ##########################################################
@@ -5276,7 +5276,7 @@ function fnRefreshReport() {
         fnReportGoalsResumeMonth();
     }
     else if ($("#Report3").is(":visible")) {
-        fnReportGoals();
+        fnReportGoals("");
     }
     else if ($("#Report4").is(":visible")) {
         fnReportGoalsResumeMonthColumns();
@@ -5699,6 +5699,7 @@ function fnReportGoalsResumeMonthColumns() {
                     var prevRecord = branchName === branchPrev && sellerName === sellerPrev;
                     var dayOnly = moment(date).format('DD');
                     var dayPrev = moment(datePrev).format('DD');
+                    var totalDay = result[cont].TotalDay;
 
                     if (!prevRecord) {
                         //Lo primero que hago es revisar si del proceso anterior quedaron espacios vacios por terminar de rellenar con ceros
@@ -5737,7 +5738,7 @@ function fnReportGoalsResumeMonthColumns() {
                         newRow.append(newCell);
                         $("#rowsTabReport4").append(newRow);
 
-                        //2.- Debo saber el d\u00EDa de la fecha del registro que esta entrando
+                        //2.- Debo saber el día de la fecha del registro que esta entrando
                         //Para saber si voy a rellenar con ceros
                                                 
                         for (var i = 1; i < dayOnly; i++) {
@@ -5807,6 +5808,48 @@ function fnReportGoalsResumeMonthColumns() {
                     datePrev = date;
                     
                 }
+
+                //1.- Meto el nombre de la sucursal y del vendedor
+                var newRowTotal = document.createElement("tr");
+                newRowTotal.id = "trTotal";
+
+                var newCellTotal = document.createElement("td");
+                newCellTotal.innerHTML = "Totales";
+                newRowTotal.append(newCellTotal);
+                $("#rowsTabReport4").append(newRowTotal);
+
+                var newCellTotal = document.createElement("td");
+                newCellTotal.innerHTML = "";
+                newRowTotal.append(newCellTotal);
+                $("#rowsTabReport4").append(newRowTotal);
+
+                let filteredResult: any;
+
+                //pongo los totales 
+                for (var i = 1; i <= dayMonth; i++) {
+                    var newCellTotal = document.createElement("td");
+                    var day = Year_ + "-" + ((Month_ < 10) ? "0" + Month_ : "" + Month_) + "-" + ((i < 10) ? "0" + i : "" + i) + "T00:00:00";
+                    filteredResult = result.filter((item: { Date: string }) => item.Date === day);
+
+                    newCellTotal.innerHTML = filteredResult.length == 0 ? "0" : filteredResult[0].TotalDay;
+                    newCellTotal.classList.add('center'); 
+                    newRowTotal.append(newCellTotal);
+                    $("#rowsTabReport4").append(newRowTotal);
+                }
+
+               //const filteredResult = result.filter((item: {Date:string} ) => item.Date === "2023-08-01T00:00:00");
+
+                /*
+                for (var i = 1; i <= dayMonth; i++) {
+                    var newCellTotal = document.createElement("td");
+                    // Use the totalDay variable for each day
+                    newCellTotal.innerHTML = result[i - 1].totalDay;
+                    newCellTotal.classList.add('center');
+                    newRowTotal.append(newCellTotal);
+                    $("#rowsTabReport4").append(newRowTotal);
+                }
+                */
+                                
             })
 }
 
@@ -5863,9 +5906,9 @@ function fnReport1Resume() {
         </tbody>\n\
         </table>\n\
         <div class='row col-md-12'>\n\
-            <label id='lblTotalMonth' class='col-md-3'><strong>Total mes: </strong></label>\n\
-            <label id='lblTotalFortnight1' class='col-md-3'><strong>Primera quincena: </strong></label>\n\
-            <label id='lblTotalFortnight2' class='col-md-3'><strong>Segunda quincena: </strong></label>\n\
+            <label style='display:none' id='lblTotalMonth' class='col-md-3'><strong>Total mes: </strong></label>\n\
+            <label style='display:none' id='lblTotalFortnight1' class='col-md-3'><strong>Primera quincena: </strong></label>\n\
+            <label style='display:none' id='lblTotalFortnight2' class='col-md-3'><strong>Segunda quincena: </strong></label>\n\
             <label id='lblTotalAmount' class='col-md-3'><strong>Total general: </strong></label>\n\
         <div>";
         $("#Report1Resume").append(htmlTabla);
@@ -6246,10 +6289,9 @@ function fnReportGoalsResume() {
             });
 }
 
-function fnReportGoals() { //Report3
+function fnReportGoals(order: string) { //Report3
 
     if ($('#gridContainer').is(':empty')) {
-
 
         var Today: Date = new Date();
         var initDateString: string = moment(Today).format("YYYY-MM") + "-01";
@@ -6283,7 +6325,7 @@ function fnReportGoals() { //Report3
 
                 //console.log(JSON.stringify(result));
                 var color: any; 
-
+                
                 const discountCellTemplate = function (container: any, options: any) {
 
                     const wrapper = $('<div/>').css({
@@ -6359,8 +6401,95 @@ function fnReportGoals() { //Report3
                 var cont = 0;
 
                 //console.log(result);
+                
+                var firstCol, secondCol;
+                const dataSource = new DevExpress.data.DataSource(result);
+                let dataGrid: any = undefined;
 
-                const dataGrid = $('#gridContainer').dxDataGrid({
+                if (!order) {
+
+                    firstCol = {};
+
+                    secondCol = {
+                        dataField: 'Branch',
+                        groupIndex: 0,
+                        caption: ''
+                    };
+
+                    $('#LblorderReport3').html('');
+
+                } else {
+
+                    var orderByLbl = $('#LblorderReport3');
+                    var prueba = orderByLbl.html();
+
+                    if (orderByLbl.html() != 'Ranking por vendedores') {
+                        $('#gridContainer').dxDataGrid('instance').columnOption('Branch', 'groupIndex', undefined);
+                        result.sort((a: any, b: any) => b.Reached - a.Reached);
+
+                        for (let i = 0; i < result.length; i++) {
+                            result[i].Index = i + 1;
+                        }
+
+                        firstCol = {
+                            caption: 'Nro',
+                            dataField: 'Index'
+                        };
+
+                        secondCol = {
+                            caption: 'Sucursal',
+                            dataField: 'Branch'
+                        }
+
+                        orderByLbl.html('Ranking por vendedores');
+                    }
+                    else if (orderByLbl.html() == 'Ranking por vendedores') {
+
+                        $('#gridContainer').dxDataGrid('instance').columnOption('Branch', 'groupIndex', undefined);
+                        result.sort((a: any, b: any) => b.SumUtilityByGroup - a.SumUtilityByGroup);
+                        // Desactivar el orden interno de la librería DevExpress
+                        result.sortIndex = -1;
+
+                        result.forEach(function (item: any) {
+                            item.BranchAndSumUtilityByGroup = {
+                                SumUtilityByGroup: item.SumUtilityByGroup,
+                                Branch: item.Branch
+                            };
+                        });
+
+                        firstCol = {
+                            dataField: 'BranchAndSumUtilityByGroup.SumUtilityByGroup',
+                            groupIndex: 0,
+                            caption: '',
+                            groupCellTemplate: function (container: any, options: any) {
+                                // Aquí puede acceder a los datos del grupo y mostrar el valor de 'Branch'
+
+                                console.log(options.data);
+
+                                if (options.data.items === null) {
+                                    //var BrachName = options.data.collapsedItems[0].Branch;
+                                    container.text(options.data.collapsedItems[0].Branch);
+                                } else if (options.data.items[0] != undefined) {
+                                    container.text(options.data.items[0].Branch); 
+                                    //console.log(options.data.items[0].Branch);
+                                }
+                                //else {
+                                //    container.text('Indefinido');                                    
+                                //}                                
+                            }
+                        };
+
+                        secondCol = {
+                            dataField: 'Branch',
+                            //groupIndex: 0,
+                            caption: ''
+                        };
+
+                        $('#LblorderReport3').html('Ranking por sucursal');
+                    }
+                }
+
+                dataGrid = $('#gridContainer').dxDataGrid({
                     dataSource: result,
                     keyExpr: 'ID',
                     allowColumnReordering: true,
@@ -6368,7 +6497,7 @@ function fnReportGoals() { //Report3
                     rowAlternationEnabled: true,
                     showBorders: true,
                     grouping: {
-                        autoExpandAll: true,
+                        autoExpandAll: false,
                     },
                     export: {
                         enabled: true,
@@ -6398,17 +6527,15 @@ function fnReportGoals() { //Report3
                         e.cancel = true;
                     },
                     columns: [
-                        {
-                            dataField: 'Branch',
-                            groupIndex: 0,
-                            caption:''
-                        },
+                        firstCol,
+                        secondCol,
+                        //{ caption: 'SumUtilityByGroup', dataField: 'SumUtilityByGroup', visible: false },
                         { caption: 'Vendedor', dataField: 'SellerName' },
                         { caption: 'G. Booking', dataField: 'Amount', displayFormat: '{0:n0}' },
                         { caption: 'Utilidad sin auditar', dataField: 'Utility', displayFormat: '{0:n0}' },
                         { caption: 'Utilidad auditada', dataField: 'UtilityUSD', displayFormat: '{0:n0}' },
                         { caption: 'Mkup(%)', dataField: 'Mkup' },
-                        { caption: 'Objetivo', dataField: 'Objetive' },                        
+                        { caption: 'Objetivo', dataField: 'Objetive' },
                         {
                             dataField: 'Reached',
                             caption: '% Alcanzado',
@@ -6420,52 +6547,54 @@ function fnReportGoals() { //Report3
                             cssClass: 'bullet',
                         },
 
-                    ],
-                    sortByGroupSummaryInfo: [{
-                        summaryItem: 'count',
-                    }],
+                    ], 
+                    //sortByGroupSummaryInfo: [{
+                    //    summaryItem: 'SumUtilityByGroup',
+                    //}],
+                    //sortBy: 'SumUtilityByGroup',
                     summary: {
-                        groupItems: [{
-                            column: 'SellerName',
-                            summaryType: 'count',
-                            displayFormat: 'Vendedores: {0}'
-                        },
-                        {
-                            column: 'Utility',
-                            summaryType: 'sum',
-                            valueFormat: 'currency',
-                            //showInGroupFooter: true,
-                            alignByColumn: true,
-                            displayFormat: '{0}'
-                        },
-                        {
-                            column: 'UtilityUSD',
-                            summaryType: 'sum',
-                            valueFormat: 'currency',
-                            //showInGroupFooter: true,
-                            alignByColumn: true,
-                            displayFormat: '{0}'
-                        },
-                        {
-                            column: 'Objetive',
-                            summaryType: 'sum',
-                            valueFormat: 'currency',
-                            //showInGroupFooter: true,
-                            alignByColumn: true,
-                            displayFormat: '{0}'
-                        }
+                        groupItems: [
+                            {
+                                column: 'Utility',
+                                summaryType: 'sum',
+                                valueFormat: 'currency',
+                                //showInGroupFooter: true,
+                                alignByColumn: true,
+                                displayFormat: '{0}'
+                            },
+                            {
+                                column: 'SellerName',
+                                summaryType: 'count',
+                                displayFormat: 'Vendedores: {0}'
+                            },
+                            {
+                                column: 'UtilityUSD',
+                                summaryType: 'sum',
+                                valueFormat: 'currency',
+                                //showInGroupFooter: true,
+                                alignByColumn: true,
+                                displayFormat: '{0}'
+                            },
+                            {
+                                column: 'Objetive',
+                                summaryType: 'sum',
+                                valueFormat: 'currency',
+                                //showInGroupFooter: true,
+                                alignByColumn: true,
+                                displayFormat: '{0}'
+                            }
                         ],
                     }
                 }).dxDataGrid('instance');
-
+                                
                 $('#autoExpand').dxCheckBox({
-                    value: true,
+                    value: false,
                     text: 'Expandir todos los grupos',
                     onValueChanged(data: any) {
                         dataGrid.option('grouping.autoExpandAll', data.value);
                     },
                 });
-
+                                
                 //console.log(result);
 
                 $('#spinnerReports').hide();
@@ -6551,7 +6680,8 @@ function fnReportAudit() {
                         
                         { caption: 'Nro Carrito', dataField: 'CarNumber' },
                         { caption: 'Vendedor', dataField: 'SellerFullName' },
-                        { caption: 'Fecha', dataField: 'DateCredit', dataType: 'date', format: 'dd/MM/yyyy' },
+                        { caption: 'Fecha Venta', dataField: 'DateCredit', dataType: 'date', format: 'dd/MM/yyyy' },
+                        { caption: 'Fecha Vuelo', dataField: 'TravelDate', dataType: 'date', format: 'dd/MM/yyyy' },
                         /*{ caption: 'Cliente', dataField: 'ClientsFullName' },*/
                         { caption: 'Sucursal', dataField: 'BranchName' },
                         { caption: 'Producto', dataField: 'Product' },
@@ -6605,7 +6735,7 @@ function fnSelectReport() {
                 fnReportGoalsResumeMonth();
             }
             else if (report == 'Report3') {
-                fnReportGoals();
+                fnReportGoals("");
             }
             else if (report == 'Report4') {
                 fnReportGoalsResumeMonthColumns();

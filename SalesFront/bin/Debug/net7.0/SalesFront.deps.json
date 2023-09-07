@@ -9,7 +9,7 @@
       "SalesFront/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Authentication.JwtBearer": "6.0.11",
-          "Microsoft.TypeScript.MSBuild": "4.9.4"
+          "Microsoft.TypeScript.MSBuild": "5.1.5"
         },
         "runtime": {
           "SalesFront.dll": {}
@@ -83,7 +83,7 @@
           }
         }
       },
-      "Microsoft.TypeScript.MSBuild/4.9.4": {},
+      "Microsoft.TypeScript.MSBuild/5.1.5": {},
       "System.IdentityModel.Tokens.Jwt/6.10.0": {
         "dependencies": {
           "Microsoft.IdentityModel.JsonWebTokens": "6.10.0",
@@ -154,12 +154,12 @@
       "path": "microsoft.identitymodel.tokens/6.10.0",
       "hashPath": "microsoft.identitymodel.tokens.6.10.0.nupkg.sha512"
     },
-    "Microsoft.TypeScript.MSBuild/4.9.4": {
+    "Microsoft.TypeScript.MSBuild/5.1.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-HRuRwFqPik9OGy+SMRVFkbUx8dD+s/5jJ4Sq2p7ARNtchHVQqExIvLwfNBLqyFkNYL+/cbAXdzU5ZUZmnxQftQ==",
-      "path": "microsoft.typescript.msbuild/4.9.4",
-      "hashPath": "microsoft.typescript.msbuild.4.9.4.nupkg.sha512"
+      "sha512": "sha512-z/IBOSh3jAhdPGizpUEyikPfoHLn6I3BWDAAkdvfmdjA2WbmgzoKGBsZWdXvJmBZtj2H0JflYaY4cUU34gEosA==",
+      "path": "microsoft.typescript.msbuild/5.1.5",
+      "hashPath": "microsoft.typescript.msbuild.5.1.5.nupkg.sha512"
     },
     "System.IdentityModel.Tokens.Jwt/6.10.0": {
       "type": "package",

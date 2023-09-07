@@ -2109,32 +2109,7 @@
                             <span class="span">Auditoría</span>
                         </div>
                     </div>
-                </div>
-                
-                @*<div class="col-2">
-                    <input type="radio" id="Rep1" name="option" value="Report1" onclick="fnSelectReport()">
-		            <label for="Rep1">Reporte por día</label><br>
-                </div>
-
-                <div class="col-2">
-                    <input type="radio" id="Rep2" name="option" value="Report2" onclick="fnSelectReport()">
-		            <label for="Rep2">Reporte por meses</label><br>
-                </div>
-
-                <div class="col-2">
-                    <input type="radio" id="Rep3" name="option" value="Report3" onclick="fnSelectReport()">
-		            <label for="Rep3">Gestion por fechas</label><br>
-                </div> 
-                
-                <div class="col-3">
-                    <input type="radio" id="Rep4" name="option" value="Report4" onclick="fnSelectReport()">
-		            <label for="Rep4">Progresión mensual</label><br>
-                </div> 
-
-                <div class="col-2">
-                    <input type="radio" id="Rep5" name="option" value="Report5" onclick="fnSelectReport()">
-		            <label for="Rep5">Auditoría</label><br>
-                </div>  *@              
+                </div>    
                 
             </div>
 
@@ -2237,6 +2212,17 @@
                     <label for="DpickerReportGoalsEndR3">Fecha fin</label>
                     <input type="date" id="DpickerReportGoalsEndR3" />
                 </div>
+
+                <div class="col-md-4">
+                    <button class="Btn" onclick="fnReportGoals('Y')">
+                        <div class="sign">
+                            <i class="fa-solid fa-users-rectangle"></i>
+                        </div>
+                        <div class="text">Ranking</div>
+                    </button>
+                    <label id="LblorderReport3"></label>
+                </div>
+
             </div>
 
             <br/>

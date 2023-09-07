@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+.loginFail {
+    background-color: #D98880;
+    color: white;
+    padding: 30px;
+    border-radius: 20px;
+}
+
+.loginFail a{
+    background-color:white;
+    padding:10px;
+    color:white;
+    border-radius:50px;
+    width:90px
+}

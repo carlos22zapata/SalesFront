@@ -13,7 +13,7 @@ const iconDelete = '<i class="fa-solid fa-delete-left"></i>';
 const iconUpdate = '<i class="fa-solid fa-pencil"></i>';
 var timer;
 var ApiBackEndUrl = "https://mlapp.tecnovoz.com.ar:8092/api/";
-var FrontEnd = "https://mlapp.tecnovoz.com.ar:8090/";
+var FrontEnd = "https://localhost:7119/";
 function fnLoadSelect(nameControl, url) {
     return __awaiter(this, void 0, void 0, function* () {
         var dataWeb = sessionStorage.getItem("TecnoData");
@@ -3814,7 +3814,7 @@ function fnRefreshReport() {
         fnReportGoalsResumeMonth();
     }
     else if ($("#Report3").is(":visible")) {
-        fnReportGoals();
+        fnReportGoals("");
     }
     else if ($("#Report4").is(":visible")) {
         fnReportGoalsResumeMonthColumns();
@@ -4098,6 +4098,7 @@ function fnReportGoalsResumeMonthColumns() {
             var prevRecord = branchName === branchPrev && sellerName === sellerPrev;
             var dayOnly = moment(date).format('DD');
             var dayPrev = moment(datePrev).format('DD');
+            var totalDay = result[cont].TotalDay;
             if (!prevRecord) {
                 var missingDays = dayMonth - dayPrev;
                 if (missingDays > 0) {
@@ -4173,6 +4174,26 @@ function fnReportGoalsResumeMonthColumns() {
             sellerPrev = sellerName;
             datePrev = date;
         }
+        var newRowTotal = document.createElement("tr");
+        newRowTotal.id = "trTotal";
+        var newCellTotal = document.createElement("td");
+        newCellTotal.innerHTML = "Totales";
+        newRowTotal.append(newCellTotal);
+        $("#rowsTabReport4").append(newRowTotal);
+        var newCellTotal = document.createElement("td");
+        newCellTotal.innerHTML = "";
+        newRowTotal.append(newCellTotal);
+        $("#rowsTabReport4").append(newRowTotal);
+        let filteredResult;
+        for (var i = 1; i <= dayMonth; i++) {
+            var newCellTotal = document.createElement("td");
+            var day = Year_ + "-" + ((Month_ < 10) ? "0" + Month_ : "" + Month_) + "-" + ((i < 10) ? "0" + i : "" + i) + "T00:00:00";
+            filteredResult = result.filter((item) => item.Date === day);
+            newCellTotal.innerHTML = filteredResult.length == 0 ? "0" : filteredResult[0].TotalDay;
+            newCellTotal.classList.add('center');
+            newRowTotal.append(newCellTotal);
+            $("#rowsTabReport4").append(newRowTotal);
+        }
     });
 }
 let intervalId;
@@ -4213,9 +4234,9 @@ function fnReport1Resume() {
         </tbody>\n\
         </table>\n\
         <div class='row col-md-12'>\n\
-            <label id='lblTotalMonth' class='col-md-3'><strong>Total mes: </strong></label>\n\
-            <label id='lblTotalFortnight1' class='col-md-3'><strong>Primera quincena: </strong></label>\n\
-            <label id='lblTotalFortnight2' class='col-md-3'><strong>Segunda quincena: </strong></label>\n\
+            <label style='display:none' id='lblTotalMonth' class='col-md-3'><strong>Total mes: </strong></label>\n\
+            <label style='display:none' id='lblTotalFortnight1' class='col-md-3'><strong>Primera quincena: </strong></label>\n\
+            <label style='display:none' id='lblTotalFortnight2' class='col-md-3'><strong>Segunda quincena: </strong></label>\n\
             <label id='lblTotalAmount' class='col-md-3'><strong>Total general: </strong></label>\n\
         <div>";
         $("#Report1Resume").append(htmlTabla);
@@ -4502,7 +4523,7 @@ function fnReportGoalsResume() {
         $('#spinnerReports').hide();
     });
 }
-function fnReportGoals() {
+function fnReportGoals(order) {
     if ($('#gridContainer').is(':empty')) {
         var Today = new Date();
         var initDateString = moment(Today).format("YYYY-MM") + "-01";
@@ -4598,7 +4619,69 @@ function fnReportGoals() {
         };
         $("#TabReportGoalsT > tbody").empty();
         var cont = 0;
-        const dataGrid = $('#gridContainer').dxDataGrid({
+        var firstCol, secondCol;
+        const dataSource = new DevExpress.data.DataSource(result);
+        let dataGrid = undefined;
+        if (!order) {
+            firstCol = {};
+            secondCol = {
+                dataField: 'Branch',
+                groupIndex: 0,
+                caption: ''
+            };
+            $('#LblorderReport3').html('');
+        }
+        else {
+            var orderByLbl = $('#LblorderReport3');
+            var prueba = orderByLbl.html();
+            if (orderByLbl.html() != 'Ranking por vendedores') {
+                $('#gridContainer').dxDataGrid('instance').columnOption('Branch', 'groupIndex', undefined);
+                result.sort((a, b) => b.Reached - a.Reached);
+                for (let i = 0; i < result.length; i++) {
+                    result[i].Index = i + 1;
+                }
+                firstCol = {
+                    caption: 'Nro',
+                    dataField: 'Index'
+                };
+                secondCol = {
+                    caption: 'Sucursal',
+                    dataField: 'Branch'
+                };
+                orderByLbl.html('Ranking por vendedores');
+            }
+            else if (orderByLbl.html() == 'Ranking por vendedores') {
+                $('#gridContainer').dxDataGrid('instance').columnOption('Branch', 'groupIndex', undefined);
+                result.sort((a, b) => b.SumUtilityByGroup - a.SumUtilityByGroup);
+                result.sortIndex = -1;
+                result.forEach(function (item) {
+                    item.BranchAndSumUtilityByGroup = {
+                        SumUtilityByGroup: item.SumUtilityByGroup,
+                        Branch: item.Branch
+                    };
+                });
+                firstCol = {
+                    dataField: 'BranchAndSumUtilityByGroup.SumUtilityByGroup',
+                    groupIndex: 0,
+                    caption: '',
+                    groupCellTemplate: function (container, options) {
+                        console.log(options.data);
+                        if (options.data.items === null) {
+                            container.text(options.data.collapsedItems[0].Branch);
+                        }
+                        else if (options.data.items[0] != undefined) {
+                            container.text(options.data.items[0].Branch);
+                        }
+                    }
+                };
+                secondCol = {
+                    dataField: 'Branch',
+                    caption: ''
+                };
+                $('#LblorderReport3').html('Ranking por sucursal');
+            }
+        }
+        dataGrid = $('#gridContainer').dxDataGrid({
             dataSource: result,
             keyExpr: 'ID',
             allowColumnReordering: true,
@@ -4606,7 +4689,7 @@ function fnReportGoals() {
             rowAlternationEnabled: true,
             showBorders: true,
             grouping: {
-                autoExpandAll: true,
+                autoExpandAll: false,
             },
             export: {
                 enabled: true,
@@ -4634,11 +4717,8 @@ function fnReportGoals() {
                 e.cancel = true;
             },
             columns: [
-                {
-                    dataField: 'Branch',
-                    groupIndex: 0,
-                    caption: ''
-                },
+                firstCol,
+                secondCol,
                 { caption: 'Vendedor', dataField: 'SellerName' },
                 { caption: 'G. Booking', dataField: 'Amount', displayFormat: '{0:n0}' },
                 { caption: 'Utilidad sin auditar', dataField: 'Utility', displayFormat: '{0:n0}' },
@@ -4656,21 +4736,19 @@ function fnReportGoals() {
                     cssClass: 'bullet',
                 },
             ],
-            sortByGroupSummaryInfo: [{
-                    summaryItem: 'count',
-                }],
             summary: {
-                groupItems: [{
-                        column: 'SellerName',
-                        summaryType: 'count',
-                        displayFormat: 'Vendedores: {0}'
-                    },
+                groupItems: [
                     {
                         column: 'Utility',
                         summaryType: 'sum',
                         valueFormat: 'currency',
                         alignByColumn: true,
                         displayFormat: '{0}'
+                    },
+                    {
+                        column: 'SellerName',
+                        summaryType: 'count',
+                        displayFormat: 'Vendedores: {0}'
                     },
                     {
                         column: 'UtilityUSD',
@@ -4690,7 +4768,7 @@ function fnReportGoals() {
             }
         }).dxDataGrid('instance');
         $('#autoExpand').dxCheckBox({
-            value: true,
+            value: false,
             text: 'Expandir todos los grupos',
             onValueChanged(data) {
                 dataGrid.option('grouping.autoExpandAll', data.value);
@@ -4767,7 +4845,8 @@ function fnReportAudit() {
             columns: [
                 { caption: 'Nro Carrito', dataField: 'CarNumber' },
                 { caption: 'Vendedor', dataField: 'SellerFullName' },
-                { caption: 'Fecha', dataField: 'DateCredit', dataType: 'date', format: 'dd/MM/yyyy' },
+                { caption: 'Fecha Venta', dataField: 'DateCredit', dataType: 'date', format: 'dd/MM/yyyy' },
+                { caption: 'Fecha Vuelo', dataField: 'TravelDate', dataType: 'date', format: 'dd/MM/yyyy' },
                 { caption: 'Sucursal', dataField: 'BranchName' },
                 { caption: 'Producto', dataField: 'Product' },
                 { caption: 'Destino', dataField: 'Destination' },
@@ -4812,7 +4891,7 @@ function fnSelectReport() {
                 fnReportGoalsResumeMonth();
             }
             else if (report == 'Report3') {
-                fnReportGoals();
+                fnReportGoals("");
             }
             else if (report == 'Report4') {
                 fnReportGoalsResumeMonthColumns();

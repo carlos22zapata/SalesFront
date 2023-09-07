@@ -111,7 +111,7 @@
           }
         }
       },
-      "Microsoft.TypeScript.MSBuild/4.9.4": {
+      "Microsoft.TypeScript.MSBuild/5.1.5": {
         "type": "package",
         "build": {
           "build/Microsoft.TypeScript.MSBuild.props": {},
@@ -333,10 +333,10 @@
         "microsoft.identitymodel.tokens.nuspec"
       ]
     },
-    "Microsoft.TypeScript.MSBuild/4.9.4": {
-      "sha512": "HRuRwFqPik9OGy+SMRVFkbUx8dD+s/5jJ4Sq2p7ARNtchHVQqExIvLwfNBLqyFkNYL+/cbAXdzU5ZUZmnxQftQ==",
+    "Microsoft.TypeScript.MSBuild/5.1.5": {
+      "sha512": "z/IBOSh3jAhdPGizpUEyikPfoHLn6I3BWDAAkdvfmdjA2WbmgzoKGBsZWdXvJmBZtj2H0JflYaY4cUU34gEosA==",
       "type": "package",
-      "path": "microsoft.typescript.msbuild/4.9.4",
+      "path": "microsoft.typescript.msbuild/5.1.5",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -344,7 +344,7 @@
         "License.txt",
         "build/Microsoft.TypeScript.MSBuild.props",
         "build/Microsoft.TypeScript.MSBuild.targets",
-        "microsoft.typescript.msbuild.4.9.4.nupkg.sha512",
+        "microsoft.typescript.msbuild.5.1.5.nupkg.sha512",
         "microsoft.typescript.msbuild.nuspec",
         "tools/Microsoft.TypeScript.Default.props",
         "tools/Microsoft.TypeScript.targets",
@@ -363,6 +363,8 @@
         "tools/tsc/ja/diagnosticMessages.generated.json",
         "tools/tsc/ko/diagnosticMessages.generated.json",
         "tools/tsc/lib.d.ts",
+        "tools/tsc/lib.decorators.d.ts",
+        "tools/tsc/lib.decorators.legacy.d.ts",
         "tools/tsc/lib.dom.d.ts",
         "tools/tsc/lib.dom.iterable.d.ts",
         "tools/tsc/lib.es2015.collection.d.ts",
@@ -421,8 +423,12 @@
         "tools/tsc/lib.es2022.full.d.ts",
         "tools/tsc/lib.es2022.intl.d.ts",
         "tools/tsc/lib.es2022.object.d.ts",
+        "tools/tsc/lib.es2022.regexp.d.ts",
         "tools/tsc/lib.es2022.sharedmemory.d.ts",
         "tools/tsc/lib.es2022.string.d.ts",
+        "tools/tsc/lib.es2023.array.d.ts",
+        "tools/tsc/lib.es2023.d.ts",
+        "tools/tsc/lib.es2023.full.d.ts",
         "tools/tsc/lib.es5.d.ts",
         "tools/tsc/lib.es6.d.ts",
         "tools/tsc/lib.esnext.array.d.ts",
@@ -542,7 +548,7 @@
   "projectFileDependencyGroups": {
     "net7.0": [
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 6.0.11",
-      "Microsoft.TypeScript.MSBuild >= 4.9.4"
+      "Microsoft.TypeScript.MSBuild >= 5.1.5"
     ]
   },
   "packageFolders": {
@@ -558,6 +564,7 @@
       "outputPath": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
+        "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\NuGet.Config",
         "C:\\Users\\carlo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -565,7 +572,6 @@
         "net7.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -592,7 +598,7 @@
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "suppressParent": "All",
             "target": "Package",
-            "version": "[4.9.4, )"
+            "version": "[5.1.5, )"
           }
         },
         "imports": [
