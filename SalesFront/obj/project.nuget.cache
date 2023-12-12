@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "dsg7vlXHYVjypJhEnFRMirAepJmSJiQqWjh2ucF+dcDiBGlURE+wKrXJ4hNKED3xTqswACZKyHUcYRC8RJWYgg==",
+  "dgSpecHash": "bUWXkCHHCHBZ9v2KGD/mylC0Ew7O4+kgdyAX/zFRL8L2DkntCtgHTqbypHpo+jOwotthXo3UUuFj4WvE7E7EZw==",
   "success": true,
   "projectFilePath": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\SalesFront.csproj",
   "expectedPackageFiles": [
@@ -13,9 +13,7 @@
     "C:\\Users\\carlo\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.10.0\\microsoft.identitymodel.tokens.6.10.0.nupkg.sha512",
     "C:\\Users\\carlo\\.nuget\\packages\\microsoft.typescript.msbuild\\5.1.5\\microsoft.typescript.msbuild.5.1.5.nupkg.sha512",
     "C:\\Users\\carlo\\.nuget\\packages\\system.identitymodel.tokens.jwt\\6.10.0\\system.identitymodel.tokens.jwt.6.10.0.nupkg.sha512",
-    "C:\\Users\\carlo\\.nuget\\packages\\system.security.cryptography.cng\\4.5.0\\system.security.cryptography.cng.4.5.0.nupkg.sha512",
-    "C:\\Users\\carlo\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.10\\microsoft.windowsdesktop.app.ref.7.0.10.nupkg.sha512",
-    "C:\\Users\\carlo\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.10\\microsoft.aspnetcore.app.ref.7.0.10.nupkg.sha512"
+    "C:\\Users\\carlo\\.nuget\\packages\\system.security.cryptography.cng\\4.5.0\\system.security.cryptography.cng.4.5.0.nupkg.sha512"
   ],
   "logs": []
 }

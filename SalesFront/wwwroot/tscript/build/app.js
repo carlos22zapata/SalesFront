@@ -1515,7 +1515,10 @@ function fnSearchAdvancedSales() {
     }
 }
 function fnLoadSales() {
-    $('#TxtIdDateSaleBasicSearch').datepicker({
+    $('#dateSearchSalesIni').datepicker({
+        dateFormat: 'dd-mm-yy'
+    });
+    $('#dateSearchSalesEnd').datepicker({
         dateFormat: 'dd-mm-yy'
     });
     $('#spinnerSales').show();
@@ -1524,22 +1527,27 @@ function fnLoadSales() {
     var position = fnPositionSale();
     var skip = position[0];
     var take = position[1];
-    var dateSearch = $("#TxtIdDateSaleBasicSearch").val();
+    var dateIni = $("#dateSearchSalesIni").val();
+    var dateEnd = $("#dateSearchSalesEnd").val();
     var branchId = $('#SelectSaleBranchAdvancedSearch').val() || 0;
     var auditRecords = $('#SelectSaleAuditAdvancedSearch').val();
     var sellerIdF = $('#SelectSaleSellerFilter').val() == '' ? '0' :
         $('#lblSaleSellerFilter').html();
-    if (dateSearch === "") {
-        var Today = new Date();
-        var initDateString = moment(Today).format("YYYY-MM-DD");
-        $("#TxtIdDateSaleBasicSearch").val(initDateString);
+    var Today = new Date();
+    var dayOfWeek = Today.getDay();
+    var diffToMonday = (dayOfWeek >= 1) ? dayOfWeek - 1 : 6;
+    var mondayOfWeek = moment(Today).subtract(diffToMonday, 'days').format("YYYY-MM-DD");
+    var initDateString = moment(Today).format("YYYY-MM-DD");
+    if (dateIni === "") {
+        $("#dateSearchSalesIni").val(mondayOfWeek);
+        dateIni = $("#dateSearchSalesIni").val();
+    }
+    if (dateEnd === "") {
+        $("#dateSearchSalesEnd").val(initDateString);
+        dateEnd = $("#dateSearchSalesEnd").val();
     }
     var shoppingCarNumber = $('#TxtCarNumberSaleBasicSearch').val() == "" ? "-" : $('#TxtCarNumberSaleBasicSearch').val();
     var documentNumber = $('#TxtDocumSaleBasicSearch').val() == "" ? "-" : $('#TxtDocumSaleBasicSearch').val();
-    var date = '1900-01-01';
-    if ($('#isDateFilterSale').is(':checked')) {
-        date = dateSearch;
-    }
     let response = fetch(url, {
         method: 'GET',
         headers: {
@@ -1548,7 +1556,8 @@ function fnLoadSales() {
             SellerId: JSON.parse(dataWeb).userId,
             Authorization: JSON.parse(dataWeb).token,
             ShoppingCarNumber: shoppingCarNumber,
-            DateIni: date,
+            DateIni: dateIni,
+            DateEnd: dateEnd,
             DocumentNumber: documentNumber,
             BranchId: branchId.toString(),
             SellerIdF: sellerIdF.toString(),
@@ -1763,14 +1772,6 @@ $("#TxtSaleClient2").keyup(function () {
             searchResults.empty();
         }
     }, 500);
-});
-$('#isDateFilterSale').click(function () {
-    if ($(this).is(':checked')) {
-        $('#TxtIdDateSaleBasicSearch').prop('disabled', false);
-    }
-    else {
-        $('#TxtIdDateSaleBasicSearch').prop('disabled', true);
-    }
 });
 function fnOrderSales(origin) {
     var type = '';
@@ -2160,12 +2161,6 @@ function fnSalesDetailUpdate(carNum, carItem) {
                 $('#btnsModalSales').hide();
                 $('#warningSelectSaleDeail').show();
             }
-            else {
-                $("#ModalSalesDetail :input").attr("readonly", false);
-                $("#SelectSaleDeailProduct").attr("disabled", false);
-                $('#btnsModalSales').show();
-                $('#warningSelectSaleDeail').hide();
-            }
             fnAddSalesDetail(false);
         }));
     });
@@ -2199,6 +2194,10 @@ function fnAddSalesDetail(isNew) {
     });
 }
 function fnCleanSaleDetail() {
+    $("#ModalSalesDetail :input").attr("readonly", false);
+    $("#SelectSaleDeailProduct").attr("disabled", false);
+    $('#btnsModalSales').show();
+    $('#warningSelectSaleDeail').hide();
     var today = new Date();
     var stringCarNumber = $('#lblCarNumber').html().substring(0, 11);
     $('#TxtNumberSaleDetail').val(stringCarNumber);
@@ -4212,13 +4211,28 @@ if (checkbox) {
         intervalId = setInterval(fnReport1Resume, 300000);
     }
 }
+$(document).on('click', '#Treport1Resume th:eq(0)', function () {
+    let labelOrder = $("#lblOrderReport1").html();
+    if (labelOrder == "NA")
+        $("#lblOrderReport1").html("ND");
+    else
+        $("#lblOrderReport1").html("NA");
+    fnReport1Resume();
+});
+$(document).on('click', '#Treport1Resume th:eq(2)', function () {
+    let labelOrder = $("#lblOrderReport1").html();
+    if (labelOrder == "UA")
+        $("#lblOrderReport1").html("UD");
+    else
+        $("#lblOrderReport1").html("UA");
+    fnReport1Resume();
+});
 function fnReport1Resume() {
     if ($('#Report1Resume').is(':hidden')) {
         clearInterval(intervalId);
         return;
     }
     else {
-        console.log("Reporte visible desde la funci�n");
     }
     var table_ = "Treport1Resume";
     if (!$('#' + table_ + '').length) {
@@ -4251,9 +4265,10 @@ function fnReport1Resume() {
     }
     var dataWeb = sessionStorage.getItem("TecnoData");
     let url = ApiBackEndUrl + 'CreditDocuments/GetSalesWithSellersByDate';
-    var dateIni = $('#DpickerReportGoalsIniR1').val();
-    var dateEnd = $('#DpickerReportGoalsEndR1').val();
-    var userId = JSON.parse(dataWeb).userId;
+    let dateIni = $('#DpickerReportGoalsIniR1').val();
+    let dateEnd = $('#DpickerReportGoalsEndR1').val();
+    let userId = JSON.parse(dataWeb).userId;
+    let order = $("#lblOrderReport1").html();
     let response = fetch(url, {
         method: 'GET',
         headers: {
@@ -4261,6 +4276,7 @@ function fnReport1Resume() {
             dateEnd: dateEnd,
             CoinId: "2",
             SellerId: userId,
+            Order: order,
             Authorization: JSON.parse(dataWeb).token
         }
     })
@@ -4336,6 +4352,8 @@ function fnReport1Resume() {
                             newRow.style.display = 'none';
                             newRow.setAttribute('class', branchGroup);
                             newRow.setAttribute('name', branchGroupCar);
+                            newRow.classList.add("IconPointer");
+                            newRow.setAttribute('onclick', 'fnShowSaleDetail("' + shoppingCarNumber + '")');
                             var newCell = document.createElement("td");
                             newCell.innerHTML = "";
                             newRow.append(newCell);
@@ -4378,6 +4396,8 @@ function fnReport1Resume() {
                         newRow.style.display = 'none';
                         newRow.setAttribute('class', branchGroup);
                         newRow.setAttribute('name', branchGroupCar);
+                        newRow.classList.add("IconPointer");
+                        newRow.setAttribute('onclick', 'fnShowSaleDetail("' + shoppingCarNumber + '")');
                         var newCell = document.createElement("td");
                         newCell.innerHTML = "";
                         newRow.append(newCell);
@@ -4401,6 +4421,78 @@ function fnReport1Resume() {
         $('#lblTotalFortnight1').html('<strong>Primera quincena: ' + totalLastFortnight1.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + '</strong>');
         $('#lblTotalFortnight2').html('<strong>Segunda quincena: ' + totalLastFortnight2.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + '</strong>');
         $('#lblTotalAmount').html('<strong>Total general: ' + totalUtility.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + '</strong>');
+    });
+}
+function fnShowSaleDetail(shoppingNumber) {
+    return __awaiter(this, void 0, void 0, function* () {
+        fnCleanSaleDetail();
+        $('#lblSalesDetailId').html(shoppingNumber);
+        yield fnLoadSelect('SelectSaleDeailProduct', 'Products/GetProducts');
+        let url = ApiBackEndUrl + 'ItemsCreditDocuments/GetItemsCreditDocumentsByCarNumber';
+        var dataWeb = sessionStorage.getItem("TecnoData");
+        var roleId = JSON.parse(dataWeb).RoleId;
+        var isAdmin = false;
+        if (roleId == 1) {
+            $("#SectionAudit").show();
+            $('#TxtUtilityReport').prop('readonly', false);
+            isAdmin = true;
+        }
+        else {
+            $('#TxtUtilityReport').prop('readonly', true);
+            $("#SectionAudit").hide();
+        }
+        $('#TxtUtilityReport').prop('readonly', true);
+        $("#SectionAudit").hide();
+        let response = fetch(url, {
+            method: 'GET',
+            headers: {
+                CarNumber: shoppingNumber,
+                Authorization: JSON.parse(dataWeb).token
+            }
+        })
+            .then(response => response.json())
+            .then((result) => __awaiter(this, void 0, void 0, function* () {
+            result = result[0];
+            var creditDocumentId = result.creditDocumentId;
+            var saleDate = result.saleDate;
+            fnSalesDetail(creditDocumentId, shoppingNumber, saleDate);
+            var id_ = result.productsId;
+            var dateSale_ = (moment(result.saleDate).format('YYYY-MM-DD'));
+            var dateFlight_ = (moment(result.travelDate).format('YYYY-MM-DD'));
+            var destination_ = result.destinationsTo;
+            var dname_ = result.destinationsToName;
+            var amount_ = result.amount.toLocaleString('en-US', { minimumFractionDigits: 1 });
+            var utility_ = result.utility.toLocaleString('en-US', { minimumFractionDigits: 0 });
+            var mkup_ = result.mkup.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            var audit_ = result.audit;
+            var currency_ = result.currency.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            var auditedUtility = result.auditedUtility.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            var observation = result.observation;
+            var stringCurrency = currency_.replace(',', '');
+            var stringAuditedUtility = auditedUtility.replace(',', '');
+            var floatCurrency = parseFloat(stringCurrency);
+            var floatAuditedUtility = parseFloat(stringAuditedUtility);
+            var utilityUSD = (parseFloat(currency_) == 0 ? 0 : (floatAuditedUtility / floatCurrency).toFixed(2));
+            var stringUtilityUSD = utilityUSD.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            $('#SelectSaleDeailProduct').val(id_);
+            $('#DpickerDateSaleCarDetail').val(dateSale_);
+            $('#DpickerDateSaleDetail').val(dateFlight_);
+            $('#TxtSaleDeailTo').val(dname_);
+            $('#lblSaleDeailTo').html(destination_);
+            $('#TxtAmountSaleDetail').val(amount_);
+            $('#TxtUtilitySaleDetail').val(utility_);
+            $('#TxtMkupSaleDetail').val(mkup_);
+            $('#chkAudit').prop("checked", audit_);
+            $('#TxtCurrencySaleDetail').val(currency_);
+            $('#TxtUtilityReport').val(auditedUtility.toString());
+            $('#TxtUtilityUSD').val(stringUtilityUSD);
+            $('#TxtObservation').val(observation);
+            $("#ModalSalesDetail :input").attr("readonly", true);
+            $("#SelectSaleDeailProduct").attr("disabled", true);
+            $('#btnsModalSales').hide();
+            $('#warningSelectSaleDeail').show();
+            fnAddSalesDetail(false);
+        }));
     });
 }
 function fnSelectBranchReport1(groupName) {
@@ -4633,7 +4725,6 @@ function fnReportGoals(order) {
         }
         else {
             var orderByLbl = $('#LblorderReport3');
-            var prueba = orderByLbl.html();
             if (orderByLbl.html() != 'Ranking por vendedores') {
                 $('#gridContainer').dxDataGrid('instance').columnOption('Branch', 'groupIndex', undefined);
                 result.sort((a, b) => b.Reached - a.Reached);
@@ -4695,7 +4786,7 @@ function fnReportGoals(order) {
                 enabled: true,
             },
             searchPanel: {
-                visible: true,
+                visible: false
             },
             paging: {
                 pageSize: 20,
@@ -4720,11 +4811,30 @@ function fnReportGoals(order) {
                 firstCol,
                 secondCol,
                 { caption: 'Vendedor', dataField: 'SellerName' },
-                { caption: 'G. Booking', dataField: 'Amount', displayFormat: '{0:n0}' },
-                { caption: 'Utilidad sin auditar', dataField: 'Utility', displayFormat: '{0:n0}' },
-                { caption: 'Utilidad auditada', dataField: 'UtilityUSD', displayFormat: '{0:n0}' },
+                { caption: 'G. Booking', dataField: 'Amount',
+                    cellTemplate: function (container, options) {
+                        container.text(parseFloat(options.value).toFixed(2));
+                    }
+                },
+                {
+                    caption: 'Utilidad sin auditar', dataField: 'Utility',
+                    cellTemplate: function (container, options) {
+                        container.text(parseFloat(options.value).toFixed(2));
+                    }
+                },
+                {
+                    caption: 'Utilidad auditada', dataField: 'UtilityUSD',
+                    cellTemplate: function (container, options) {
+                        container.text(parseFloat(options.value).toFixed(2));
+                    }
+                },
                 { caption: 'Mkup(%)', dataField: 'Mkup' },
-                { caption: 'Objetivo', dataField: 'Objetive' },
+                {
+                    caption: 'Objetivo', dataField: 'Objetive',
+                    cellTemplate: function (container, options) {
+                        container.text(parseFloat(options.value).toFixed(2));
+                    }
+                },
                 {
                     dataField: 'Reached',
                     caption: '% Alcanzado',
@@ -4737,6 +4847,26 @@ function fnReportGoals(order) {
                 },
             ],
             summary: {
+                totalItems: [
+                    {
+                        column: 'Utility',
+                        summaryType: 'sum',
+                        valueFormat: 'currency',
+                        displayFormat: '{0}'
+                    },
+                    {
+                        column: 'UtilityUSD',
+                        summaryType: 'sum',
+                        valueFormat: 'currency',
+                        displayFormat: '{0}'
+                    },
+                    {
+                        column: 'Objetive',
+                        summaryType: 'sum',
+                        valueFormat: 'currency',
+                        displayFormat: '{0}'
+                    }
+                ],
                 groupItems: [
                     {
                         column: 'Utility',
@@ -4765,6 +4895,10 @@ function fnReportGoals(order) {
                         displayFormat: '{0}'
                     }
                 ],
+                sortByGroupSummaryInfo: [{
+                        summaryItem: 'sum desc',
+                        groupColumn: 'UtilityUSD'
+                    }]
             }
         }).dxDataGrid('instance');
         $('#autoExpand').dxCheckBox({
@@ -4821,7 +4955,7 @@ function fnReportAudit() {
                 enabled: true,
             },
             searchPanel: {
-                visible: true,
+                visible: false,
             },
             paging: {
                 pageSize: 20,
@@ -4850,9 +4984,24 @@ function fnReportAudit() {
                 { caption: 'Sucursal', dataField: 'BranchName' },
                 { caption: 'Producto', dataField: 'Product' },
                 { caption: 'Destino', dataField: 'Destination' },
-                { caption: 'G. Booking', dataField: 'Amount', displayFormat: '{0:n0}' },
-                { caption: 'G. Margin', dataField: 'Utility', displayFormat: '{0:n0}' },
-                { caption: 'Util. USD', dataField: 'UtilityUSD', displayFormat: '{0:n0}' },
+                {
+                    caption: 'G. Booking', dataField: 'Amount',
+                    cellTemplate: function (container, options) {
+                        container.text(parseFloat(options.value).toFixed(2));
+                    }
+                },
+                {
+                    caption: 'G. Margin', dataField: 'Utility',
+                    cellTemplate: function (container, options) {
+                        container.text(parseFloat(options.value).toFixed(2));
+                    }
+                },
+                {
+                    caption: 'Util. USD', dataField: 'UtilityUSD',
+                    cellTemplate: function (container, options) {
+                        container.text(parseFloat(options.value).toFixed(2));
+                    }
+                },
                 { caption: 'Auditado', dataField: 'Audit' },
             ],
             sortByGroupSummaryInfo: [{
@@ -5280,7 +5429,7 @@ function fnLoadConfigUsers() {
         .then(result => {
         $("#TabConfigUsersT > tbody").empty();
         for (var j in result) {
-            var id = result[j].id;
+            var id = result[j].userId;
             var firstName = result[j].firstName;
             var lastName = result[j].lastName;
             var docNum = result[j].documentNumber;
@@ -5315,7 +5464,7 @@ function fnLoadConfigUsers() {
             var btn2 = document.createElement("btnUserUpdate");
             btn2.innerHTML = iconUpdate;
             btn2.classList.add("btnGridUpdate");
-            btn2.setAttribute('onclick', 'fnUserUpdate(' + id + ')');
+            btn2.setAttribute('onclick', 'fnUserDetail(' + id + ')');
             btn2.setAttribute('data-title', 'Actualizar usuario');
             var newCell = document.createElement("td");
             newCell.appendChild(btn1);
@@ -5324,6 +5473,395 @@ function fnLoadConfigUsers() {
             $("#rowsConfigUsers").append(newRow);
         }
         $('#spinnerConfigUsers').hide();
+    });
+}
+function fnAddUser() {
+    fnCleanConfigUsers();
+    $('#ModalConfigUsers').modal('show');
+    $('#divSecretPassword').show();
+}
+function fnSaveOrUpdate() {
+    if ($('#divSecretPassword').is(':hidden')) {
+        fnSaveUser();
+    }
+    else {
+        fnUpdateUserConfig();
+    }
+}
+function fnSaveUser() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let data = [];
+        var nroDocument = $('#TxtNroDocumConfig').val();
+        var userConfig = $('#TxtUserConfig').val();
+        var email = $('#TxtEmailConfig').val();
+        var firstName = $('#TxtFirstNameConfig').val();
+        var lastName = $('#TxtLastNameConfig').val();
+        var dateBirth = $('#DateBirthConfig').val();
+        var typeDocument = $('#SelectTypeDocumentConfig').val();
+        var roleId = $('#SelectRoleConfig').val();
+        var branchesId = $('#SelectBranchConfig').val();
+        var password = $('#TxtPasswordConfig').val();
+        var passwordConfirm = $('#TxtPasswordConfirmConfig').val();
+        var chief = "0";
+        var isSeller = false;
+        if (nroDocument == "") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Complete todos los campos',
+                text: 'No puede estar vacio el n\u00FAmero de documento.'
+            });
+            return;
+        }
+        else if (userConfig == "") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Complete todos los campos',
+                text: 'No puede estar vacio el nombre de usuario.'
+            });
+            return;
+        }
+        else if (email == "") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Complete todos los campos',
+                text: 'No puede estar vacio el correo electr�nico.'
+            });
+            return;
+        }
+        else if (firstName == "") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Complete todos los campos',
+                text: 'No puede estar vacio el nombre.'
+            });
+            return;
+        }
+        else if (lastName == "") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Complete todos los campos',
+                text: 'No puede estar vacio el apellido.'
+            });
+            return;
+        }
+        else if (password !== passwordConfirm) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'La contrase\u00F1a y su confirmaci\u00F3n deben coincidir',
+                text: 'No son iguales la contrase\u00F1a y su confirmaci\u00F3n.'
+            });
+            return;
+        }
+        var passwordEncrypt = yield EncryptPassword(password);
+        data.push({
+            "userId": 0,
+            "firstName": firstName,
+            "lastName": lastName,
+            "dateBirth": dateBirth,
+            "typeDocument": typeDocument,
+            "documentNumber": nroDocument,
+            "userName": userConfig,
+            "emailId": email,
+            "password": passwordEncrypt,
+            "roleId": roleId,
+            "branchesId": branchesId,
+            "chief": chief,
+            "isSeller": isSeller,
+            "access": true,
+            "dateDenied": new Date("1900-01-01")
+        });
+        let url = ApiBackEndUrl + 'Users/insertUsers';
+        var dataWeb = sessionStorage.getItem("TecnoData");
+        let response = fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                Authorization: JSON.parse(dataWeb).token
+            },
+            body: JSON.stringify(data[0])
+        })
+            .then(response => {
+            if (!response.ok) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error se devolvio false',
+                    text: 'FALSO 1....'
+                });
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+            .then((result) => __awaiter(this, void 0, void 0, function* () {
+            if (!result) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error se devolvio false',
+                    text: 'FALSO....'
+                });
+                return;
+            }
+            fnCleanConfigUsers();
+            fnLoadConfigUsers();
+            $('#ModalConfigUsers').modal('hide');
+            Swal.fire({
+                icon: 'success',
+                title: 'Usuario insertado correctamente',
+                text: 'Se insert� el usuario de forma correcta.'
+            });
+        }))
+            .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ha ocurrido un error',
+                text: 'No se pudo insertar el usuario error: ' + error
+            });
+        });
+    });
+}
+function fnUserDetail(id) {
+    let url = ApiBackEndUrl + 'Users/GetUsersById';
+    var dataWeb = sessionStorage.getItem("TecnoData");
+    $('#lblUserIdConfig').html(id.toString());
+    $('#divAddBranchConfig').hide();
+    $('#divSecretPassword').hide();
+    let response = fetch(url, {
+        method: 'GET',
+        headers: {
+            Id: id.toString(),
+            Authorization: JSON.parse(dataWeb).token
+        }
+    })
+        .then(response => response.json())
+        .then(result => {
+        var roleId = result.roleId.toString();
+        var branchesId = result.branchesId.toString();
+        var documentNumber = result.documentNumber.toString();
+        var typeDocument = result.typeDocument;
+        var dateBirth = moment(result.dateBirth).format("YYYY-MM-DD");
+        var userName = result.userName;
+        var email = result.emailId;
+        var listBranches = result.listBranches;
+        var firstName = result.firstName;
+        var lastName = result.lastName;
+        fnLoadSelect('SelectRoleConfig', 'Users/GetRoles');
+        fnLoadSelect('SelectBranchConfig', 'Branches/GetBranches');
+        $('#SelectRoleConfig').val(roleId);
+        $('#SelectBranchConfig').val(branchesId);
+        $('#SelectTypeDocumentConfig').val(typeDocument);
+        $('#TxtNroDocumConfig').val(documentNumber);
+        $('#DateBirthConfig').val(dateBirth);
+        $('#TxtEmailConfig').val(email);
+        $('#TxtUserConfig').val(userName);
+        $('#TxtFirstNameConfig').val(firstName);
+        $('#TxtLastNameConfig').val(lastName);
+        $("#TabConfigUsersRoleConfigT > tbody").empty();
+        for (var i in result.listBranches) {
+            var LBranchId = result.listBranches[i].branchesId;
+            var LUserId = result.listBranches[i].userId;
+            var LBranchName = result.listBranches[i].branchesName;
+            var newRow = document.createElement("tr");
+            var newCell = document.createElement("td");
+            newCell.innerHTML = LBranchId;
+            newRow.append(newCell);
+            $("#rowsConfigUsersRoleConfig").append(newRow);
+            newCell.style.display = 'none';
+            var newCell = document.createElement("td");
+            newCell.innerHTML = LUserId;
+            newRow.append(newCell);
+            $("#rowsConfigUsersRoleConfig").append(newRow);
+            newCell.style.display = 'none';
+            var newCell = document.createElement("td");
+            newCell.innerHTML = LBranchName;
+            newRow.append(newCell);
+            $("#rowsConfigUsersRoleConfig").append(newRow);
+            var btn1 = document.createElement("btnDeleteBranchUserConfig");
+            btn1.innerHTML = iconDelete;
+            btn1.classList.add("btnGridDelete");
+            btn1.setAttribute('onclick', 'fnDeleteBranchUserConfig(' + LUserId + ',' + LBranchId + ')');
+            btn1.setAttribute('data-title', 'Desvincular sucursal');
+            var newCell = document.createElement("td");
+            newCell.appendChild(btn1);
+            newRow.append(newCell);
+            $("#rowsConfigUsersRoleConfig").append(newRow);
+        }
+    });
+    $('#ModalConfigUsers').modal('show');
+}
+function EncryptPassword(password) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let url = ApiBackEndUrl + 'Account/GetEncryptPassword';
+        let dataWeb = sessionStorage.getItem("TecnoData");
+        try {
+            let response = yield fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    passwordString: password,
+                    Authorization: JSON.parse(dataWeb).token
+                }
+            });
+            if (!response.ok) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ha ocurrido un error al intentar encriptar la contrase\u00F1a',
+                    text: 'FALSO 1....'
+                });
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+            let result = yield response.text();
+            return result;
+        }
+        catch (error) {
+            console.error('Ha ocurrido un error:', error);
+            throw error;
+        }
+    });
+}
+function fnAddBranchConfig() {
+    if ($('#lblUserIdConfig').html() == "0") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'No se puede agregar una sucursal',
+            text: 'Primero debe crear el usuario para luego asociar sus sucursales'
+        });
+        return;
+    }
+    if ($('#divAddBranchConfig').is(':visible')) {
+        let url = ApiBackEndUrl + 'Users/InsertUsersBranch';
+        var dataWeb = sessionStorage.getItem("TecnoData");
+        let data = [];
+        var branchId = $('#SelectBranchAddConfig').val();
+        var userId = $('#lblUserIdConfig').html();
+        data.push({
+            "UserId": userId,
+            "BranchesId": branchId
+        });
+        Swal.close();
+        let response = fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                Authorization: JSON.parse(dataWeb).token
+            },
+            body: JSON.stringify(data[0])
+        })
+            .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la red');
+            }
+            return response.json();
+        })
+            .then(result => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Transacci\u00F3n exitosa',
+                text: 'Sucursal agregada con exito al usuario!!!'
+            });
+            fnUserDetail(userId);
+        })
+            .catch(error => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Transacci\u00F3n exitosa',
+                text: 'Sucursal agregada con exito al usuario!!! (Catch...)'
+            });
+            fnUserDetail(userId);
+        });
+        $('#divAddBranchConfig').hide();
+    }
+    else {
+        $('#divAddBranchConfig').show();
+    }
+}
+function fnDeleteBranchUserConfig(UserId, BranchId) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Desea quitar esta sucursal del usuario seleccionado?',
+        text: 'Confirme su solicitud.',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'S\u00ED, eliminar!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let url = ApiBackEndUrl + 'Users/DeleteUsersBranch';
+            var data = [];
+            var dataWeb = sessionStorage.getItem("TecnoData");
+            data.push({
+                "UserId": UserId,
+                "BranchesId": BranchId
+            });
+            let response = fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    Authorization: JSON.parse(dataWeb).token
+                },
+                body: JSON.stringify(data[0])
+            })
+                .then(response => {
+                if (!response.ok) {
+                    Swal.fire('Se detecto un error!', 'el archivo no pudo ser borrado.', 'error');
+                    throw new Error('Error en la red');
+                }
+                return response.json();
+            })
+                .then(resultOk => {
+                fnUserDetail(UserId);
+                Swal.fire('Borrado!', 'Sucursal quitada al usuario satisfactoriamente.', 'success');
+            })
+                .catch(error => {
+                fnUserDetail(UserId);
+                Swal.fire('Borrado!', 'Sucursal quitada al usuario satisfactoriamente. (Catch...)', 'success');
+            });
+        }
+    });
+}
+function fnUpdateUserConfig() {
+    let url = ApiBackEndUrl + 'Users/UpdateUsers';
+    var dataWeb = sessionStorage.getItem("TecnoData");
+    var roleId = $('#SelectRoleConfig').val();
+    var branchesId = $('#SelectBranchConfig').val();
+    var documentNumber = $('#TxtNroDocumConfig').val();
+    var typeDocument = $('#SelectTypeDocumentConfig').val();
+    var dateBirth = $('#DateBirthConfig').val();
+    var userName = $('#TxtUserConfig').val();
+    var email = $('#TxtEmailConfig').val();
+    var userId = $('#lblUserIdConfig').html();
+    var firstName = $('#TxtFirstNameConfig').val();
+    var lastName = $('#TxtLastNameConfig').val();
+    var password = "";
+    var data = [];
+    data.push({
+        "UserId": userId,
+        "FirstName": firstName,
+        "LastName": lastName,
+        "DateBirth": dateBirth,
+        "TypeDocument": typeDocument,
+        "DocumentNumber": documentNumber,
+        "UserName": userName,
+        "EmailId": email,
+        "RoleId": roleId,
+        "BranchesId": branchesId,
+        "Password": password
+    });
+    console.log(JSON.stringify(data[0]));
+    let response = fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            Authorization: JSON.parse(dataWeb).token
+        },
+        body: JSON.stringify(data[0])
+    })
+        .then(response => {
+        if (response.ok) {
+            fnLoadConfigUsers();
+            Swal.fire({
+                icon: 'info',
+                title: 'Registro actualizado exitosamente!',
+                text: 'Se guard\u00F3 correctamente el cambio.'
+            });
+        }
     });
 }
 function fnPositionConfigUsers() {
@@ -5337,10 +5875,68 @@ function fnChangeDataGroupConfigUsers(num) {
     fnLoadConfigUsers();
 }
 function fnUsersDelete(id) {
-    alert("Borrar registro");
+    Swal.fire({
+        icon: 'warning',
+        title: 'Desea inactivar el registro usuario definitivamente?',
+        text: 'Confirme su solicitud.',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'S\u00ED, eliminar!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let url = ApiBackEndUrl + 'Users/DeleteUsers';
+            var dataWeb = sessionStorage.getItem("TecnoData");
+            let response = fetch(url, {
+                method: 'POST',
+                headers: {
+                    id: id.toString(),
+                    Authorization: JSON.parse(dataWeb).token
+                }
+            })
+                .then(result => {
+                if (result.status == 200) {
+                    fnLoadConfigUsers();
+                    Swal.fire('Borrado!', 'Registro borrado satisfactoriamente.', 'success');
+                }
+                else {
+                    Swal.fire('Se detecto un error!', 'el archivo no pudo ser borrado.', 'error');
+                }
+            })
+                .catch(error => {
+                Swal.fire('Se detecto un error!', 'Error en la solicitud al sitio remoto (API).', 'error');
+            });
+        }
+    });
 }
 function fnUserUpdate(id) {
     $('#ModalConfigUsers').modal('show');
+    $('#divSecretPassword').hide();
 }
 function fnCleanConfigUsers() {
+    var Today = new Date();
+    var TodayString = moment(Today).format("YYYY-MM-DD");
+    fnLoadSelect('SelectRoleConfig', 'Users/GetRoles');
+    fnLoadSelect('SelectBranchConfig', 'Branches/GetBranches');
+    $('#TxtNroDocumConfig').val('');
+    $('#SelectTypeDocumentConfig').val('1');
+    $('#DateBirthConfig').val(TodayString);
+    $('#TxtUserConfig').val('');
+    $('#TxtEmailConfig').val('');
+    $('#lblUserIdConfig').html('0');
+    $('#TxtFirstNameConfig').val('');
+    $('#TxtLastNameConfig').val('');
+    $("#TabConfigUsersRoleConfigT > tbody").empty();
+    $('#divAddBranchConfig').hide();
+}
+function fnSaveConfigUserPassword() {
+    var oldPassword = $('#TxtConfigUserPasswordAct').val();
+    var newPassword = $('#TxtConfigUserPasswordNew1').val();
+    var confirmPassword = $('#TxtConfigUserPasswordNew2').val();
+    if (newPassword != confirmPassword) {
+        Swal.fire({
+            icon: 'error',
+            title: 'La clave nueva no es igual a la confirmaci\u00F3n',
+            text: 'Revise los datos ingresados'
+        });
+    }
 }

@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="~/css/MasterRecords.css" />
 <link rel="stylesheet" href="~/css/TablesStyle.css" />
 <link rel="stylesheet" href="~/css/CheckBoxes.css" />
+<link rel="stylesheet" href="~/css/Datetimes.css" />
 <link rel="stylesheet" href="~/css/Buttons.css" />
 <link rel="stylesheet" href="~/css/RadioButtons.css" />
 <link rel="stylesheet" href="~/css/Loaders.css" />
@@ -445,33 +446,33 @@
                         
                         <div class="ModalInfo">
                             <div id="sellerIdModal" style="display:none">
-                                <label for="TxtIdSeller">Id</label>
-                                <input type="text" class="txtSmall" id="TxtIdSeller" value="0" readonly style="display:none" />
+                                <label for="TxtIdSellerX">Id</label>
+                                <input type="text" class="txtSmall" id="TxtIdSellerX" value="0" readonly style="display:none" />
                             </div>
 
                             <div>
-                                <label for="TxtFirstNameSeller">Nombre <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtFirstNameSeller" />
+                                <label for="TxtFirstNameSellerX">Nombre <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtFirstNameSellerX" />
                             </div>
 
                             <div>
-                                <label for="TxtLastNameSeller">Apellido  <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtLastNameSeller" />
+                                <label for="TxtLastNameSellerX">Apellido  <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtLastNameSellerX" />
                             </div>
 
                             <div>
-                                <label for="TxtEmailseller">Correo <a style="color:#A52A2A;">*</a></label>
-                                <input type="text" id="TxtEmailseller" />
+                                <label for="TxtEmailsellerX">Correo <a style="color:#A52A2A;">*</a></label>
+                                <input type="text" id="TxtEmailsellerX" />
                             </div>
 
                             <div>
-                                <label for="TxtDateSeller">Nacimiento</label>
-                                <input type="date" id="TxtDateSeller" />
+                                <label for="TxtDateSellerX">Nacimiento</label>
+                                <input type="date" id="TxtDateSellerX" />
                             </div>
 
                             <div>
-                                <label for="typeDocumentSelectSeller">Tipo de documento</label>
-                                <select id="typeDocumentSelectSeller" class="selectControl">
+                                <label for="typeDocumentSelectSellerX">Tipo de documento</label>
+                                <select id="typeDocumentSelectSellerX" class="selectControl">
                                     <option>DNI</option>
                                     <option>Cédula</option>
                                     <option>Pasaporte</option>
@@ -483,8 +484,8 @@
                                @* <label for="TxtDocumCliente">Documento  <a style="color:#A52A2A;">*</a></label>
                                 <input type="text" id="TxtDocumCliente" class="col-5" />*@
 
-                                <label for="TxtDocumSeller">Documento</label>
-                                <input type="text" id="TxtDocumSeller" />
+                                <label for="TxtDocumSellerX">Documento</label>
+                                <input type="text" id="TxtDocumSellerX" />
                             </div>
 
                             <div class="col-md-12">
@@ -1140,7 +1141,6 @@
                         <div id="warningSelectSaleDeail" class="alert alert-warning" role="alert" style="display:none">
                               ¡Advertencia! No se tiene acceso a editar la información.
                             </div>
-
                         </div>                        
 
                     </div>
@@ -1177,7 +1177,7 @@
                     <div class="sign">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
-                    <div class="text">Buscar</div>
+                    <div class="text">Buscar</div>                    
                 </button>
 
                 <button class="Btn" id="btnAdvancedSearchSales" onclick="fnSearchAdvancedSales()">
@@ -1205,8 +1205,20 @@
 
         <!--Busqueda básica de venta menú superior CAZA--> 
         <div id="divSearchSales" class="row SearchGeneral">
-                        
-            <h3>Busqueda</h3>                
+               
+            <div class="row col-12">
+                <h3 class="col-4">Busqueda</h3>  
+                <div class ="col-4">
+                    <label>Fecha desde</label>
+                    <input class="dtimes" type="date" id="dateSearchSalesIni"> </input>
+                </div>                
+
+                <div class ="col-4">
+                    <label>Fecha hasta</label>
+                    <input class="dtimes" type="date" id="dateSearchSalesEnd"> </input>
+                </div>
+                
+            </div>
             
             <div class="clientInfo row col-12">
                 <div class="SalesP1 col-4">    
@@ -1225,11 +1237,11 @@
                 </div>
                 
                 <div class="SalesP1 col-4">
-                    <div class="col-4" style="display: flex; align-items: flex-start; height:27px;">
+                    @* <div class="col-4" style="display: flex; align-items: flex-start; height:27px;">
                         <label for="TxtIdDateSaleBasicSearch">Fecha &nbsp;&nbsp;</label>
                         <input type="date" id="TxtIdDateSaleBasicSearch" disabled style="min-width:150px; height:28px;" />
                         <input type="checkbox" id="isDateFilterSale" />
-                    </div>
+                    </div> *@
 
                     <div class="SalesP1 Display" style="display:none;">
                         <label for="SelectSaleSellerFilter">Vendedor </label>
@@ -2085,12 +2097,12 @@
                             <span class="span">Reporte por día</span>
                         </div>
                     </div>
-                    <div class="option">
+                   @*  <div class="option">
                         <input class="input" id="Rep2" type="radio" name="option" value="Report2" onclick="fnSelectReport()">
                         <div class="btn">
                             <span class="span">Reporte por meses</span>
                         </div>
-                    </div>
+                    </div> *@
                     <div class="option">
                         <input class="input" id="Rep3" type="radio" name="option" value="Report3" onclick="fnSelectReport()">
                         <div class="btn">
@@ -2128,6 +2140,8 @@
                     &nbsp;
                     <label for="DpickerReportGoalsEnd">Fecha fin</label>
                     <input type="date" id="DpickerReportGoalsEndR1"/>
+
+                    <label id="lblOrderReport1" style="display:none;">NA</label>
                 </div>
 
                 <div class="col-md-6 row">
@@ -2174,7 +2188,7 @@
         </div>
 
         <!--Reporte 2 GM por día-->
-        <div id="Report2" style="display:none">
+        @* <div id="Report2" style="display:none">
 
             <div class="col-md-12 row">
                 <div class="col-md-4">
@@ -2197,7 +2211,7 @@
                   <div id="autoExpandR2" style="color:white;"></div>
                 </div>
               </div>
-        </div>
+        </div> *@
 
         <!--Reporte 3-->
         <div id="Report3" style="display:none">
@@ -2394,7 +2408,7 @@
 
                 <div id="btnsConfigUsers" class="btnsActions_ col-4">
                     <button class="btnActions" id="btnConfigUserSearch" onclick="fnSearchConfigUser()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    <button class="btnActions" id="btnConfigUserNew" onclick="fnAddConfigUser()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>
+                    <button class="btnActions" id="btnConfigUserNew" onclick="fnAddUser()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>
                 </div>
                 <br />
                 <hr />
@@ -2451,6 +2465,68 @@
         </div>
     </div>
 
+    <!--Sección de la configuración de las contraseñas de los usuarios (Inicio)-->
+    <div>
+        <div id="MasterConfigPassword" class="divMaster" style="display:none;">
+            <div class="row">
+                <div class="row col-12">
+                    <h3 class="col-8">Configuración de las contraseñas de los usuarios</h3>                    
+                </div>
+                
+                <br />
+                <hr />
+
+                <br />
+
+                <div>
+                    <div>
+                        <label class="col-12 col-sm-3" for="TxtConfigUserPasswordAct">Contraseña actual: </label>
+                        <input class="col-12 col-sm-3" type="password" id="TxtConfigUserPasswordAct" />
+                    </div>
+
+                    <div>
+                        <label class="col-12 col-sm-3" for="TxtConfigUserPasswordNew1">Contraseña nueva: </label>
+                        <input class="col-12 col-sm-3" type="password" id="TxtConfigUserPasswordNew1" />
+                    </div>
+
+                    <div>
+                        <label class="col-12 col-sm-3" for="TxtConfigUserPasswordNew2">Confirmar contraseña  </label>
+                        <input class="col-12 col-sm-3" type="password" id="TxtConfigUserPasswordNew2" />
+                    </div>
+
+                    <br/>
+                    @* CAZA *@
+
+                    <div>
+                        <div id="divConfigUserPassword" class="btnsActions_ col-4">
+                            <button class="Btn" id="btnConfigUserPassword" onclick="fnSaveConfigUserPassword()">
+                                <div class="sign">
+                                    <i class="fa-regular fa-floppy-disk"></i>
+                                </div>
+                                <div class="text">Actualizar</div>
+                            </button>
+                        </div>
+
+                        <div id="divConfigUserPassword" class="btnsActions_ col-4">
+                            <button class="Btn" id="btnConfigUserPassword" onclick="fnCleanConfigUserPassword()">
+                                <div class="sign">
+                                    <i class="fa-solid fa-arrows-rotate"></i>
+                                </div>
+                                <div class="text">Reiniciar</div>
+                            </button>
+                        </div>
+                    </div>
+                    
+
+                </div>
+
+            </div>
+
+            
+
+        </div>
+    </div>
+
     <!--Modal de configuración de usuarios (inicio)-->
     <div class="modal fade" id="ModalConfigUsers" tabindex="-1" aria-labelledby="ModalConfigUsers1" aria-hidden="true">
 
@@ -2464,37 +2540,126 @@
 
                 <div class="modal-body">
 
-                    <button class="btnActions" id="btnSaveHolidays" onclick="fnBtnSaveHolidays()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
-
+                    @* <button class="btnActions" id="btnSaveHolidays" onclick="fnBtnSaveHolidays()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                     *@
+                    <button class="Btn" id="btnUpdateUserConfig" onclick="fnSaveOrUpdate()">
+                                <div class="sign">
+                                <i class="fa-regular fa-floppy-disk"></i>
+                                </div>
+                                <div class="text">Guardar</div>
+                            </button>
                     <br />
 
                     <div class="ModalInfo">
 
+                        <div style="display:none;"> 
+                            <label id="lblUserIdConfig"></label>                            
+                        </div>
+
                         <div data-title="Rol que se asocia al usuario">
-                            <label for="rolSelect">Rol</label>
-                            <select id="rolSelect" class="selectControl" onclick="fnLoadSelect('rolSelect', 'Users/GetRoles')">
+                            <label for="SelectRoleConfig">Rol</label>
+                            <select id="SelectRoleConfig" class="selectControl" onclick="fnLoadSelect('rolSelect', 'Users/GetRoles')">
                             </select>
                         </div>
 
                         <div data-title="Sucursal que se asocia al usuario por defecto">
-                            <label for="branchConfigSelect">Sucursal def</label>
-                            <select id="branchConfigSelect" class="selectControl" onclick="fnLoadSelect('branchConfigSelect', 'Branches/GetBranches')">
+                            <label for="SelectBranchConfig">Sucursal principal</label>
+                            <select id="SelectBranchConfig" class="selectControl" onclick="fnLoadSelect('branchConfigSelect', 'Branches/GetBranches')">
                             </select>
                         </div>
 
-                        <div id="HolidaysIdModal" style="display:none;">
-                            <label for="TxtIdHolidays">Id moneda</label>
-                            <input type="text" class="txtSmall" id="TxtIdHolidays" value="0" readonly />
+                        <div>
+                            <label for="DateBirthConfig">Fecha de nacimiento </label>
+                            <input type="date" class="txtMedium" id="DateBirthConfig" />
                         </div>
 
                         <div>
-                            <label for="DpickerDateHolidays">Fecha valor <a style="color:#A52A2A;">*</a></label>
-                            <input type="date" id="DpickerDateHolidays" />
+                            <label for="SelectTypeDocumentConfig">Tipo de documento</label>
+                            <select id="SelectTypeDocumentConfig" class="selectControl">
+                                <option value="1">DNI</option>
+                                <option value="2">Cédula</option>
+                                <option value="3">Pasaporte</option>
+                                <option value="4">Licencia</option>
+                            </select>
+                        </div>
+
+                        <div data-title="Número de documento DNI o Pasaporte">
+                            <label for="TxtNroDocumConfig">Nro Documento</label>
+                            <input type="text" class="txtMedium" id="TxtNroDocumConfig" />
                         </div>
 
                         <div>
-                            <label for="DescriptionHolidays">Descripción <a style="color:#A52A2A;">*</a></label>
-                            <textarea rows="2" id="DescriptionHolidays"></textarea>
+                            <label for="TxtEmailConfig">Correo electrónico </label>
+                            <input type="text" class="txtMedium" id="TxtEmailConfig" />
+                        </div>
+
+                        <div>
+                            <label for="TxtUserConfig">Usuario del sistema </label>
+                            <input type="text" class="txtMedium" id="TxtUserConfig" />
+                        </div>
+
+                         <div>
+                            <label for="TxtFirstNameConfig">Nombre </label>
+                            <input type="text" class="txtMedium" id="TxtFirstNameConfig" />
+                        </div>
+
+                        <div>
+                            <label for="TxtLastNameConfig">Apellido </label>
+                            <input type="text" class="txtMedium" id="TxtLastNameConfig" />
+                        </div>
+
+                        <div id="divSecretPassword" style="display: none;">
+                            <div>
+                                <label for="TxtLastNameConfig">Contraseña </label>
+                                <input type="password" class="txtMedium" id="TxtPasswordConfig" />
+                            </div>
+
+                            <div>
+                                <label for="TxtLastNameConfig">Confirmar </label>
+                                <input type="password" class="txtMedium" id="TxtPasswordConfirmConfig" />
+                            </div>
+                        </div>
+                        
+                             
+                        <hr/>
+
+                        <div>
+                            <label>Sucursales asociadas al usuario</label>                        
+                        
+                            <button class="Btn" id="btnAddBranchConfig" onclick="fnAddBranchConfig()">
+                                <div class="sign">
+                                    <i class="fa-solid fa-plus"></i>
+                                </div>
+                                <div class="text">Nuevo</div>
+                            </button>
+                        </div>
+
+                        <div id="divAddBranchConfig" class="row alert alert-warning" role="alert" style="display:none">
+                            <span>Seleccione aquí una sucursal y vuleva a presionar el botón de +Nuevo</span>
+                            <label for="SelectBranchAddConfig">Sucursal</label>
+                            <select id="SelectBranchAddConfig" class="selectControl" onclick="fnLoadSelect('SelectBranchAddConfig', 'Branches/GetBranches')">
+                            </select>
+                        </div>
+
+                        <br/>
+
+                        <div id="TabConfigUsersRoleConfig" data-title="Sucursales asociadas al vendedor">
+                            
+                            <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                                   id="TabConfigUsersRoleConfigT"
+                                   data-toggle="table"
+                                   data-flat="true"
+                                   data-search="true">
+
+                                <thead class="bg-dark text-light">
+                                    <th style="display:none;">BranchId</th>
+                                    <th style="display:none;">UserId</th>
+                                    <th>Sucursal</th>
+                                    <th>Opciones</th>                                
+                                </thead>
+                                <tbody id="rowsConfigUsersRoleConfig">
+                                </tbody>
+                            </table>
                         </div>
 
                         <br />

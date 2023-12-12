@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\css\\CheckBoxes.css"
     },
     {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\Datetimes.css",
+      "PackagePath": "staticwebassets\\css\\Datetimes.css"
+    },
+    {
       "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\css\\Loaders.css",
       "PackagePath": "staticwebassets\\css\\Loaders.css"
     },
@@ -371,6 +375,14 @@
     {
       "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\app.js",
       "PackagePath": "staticwebassets\\tscript\\app.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\build\\Interfaces\\TypeDocuments.js",
+      "PackagePath": "staticwebassets\\tscript\\build\\Interfaces\\TypeDocuments.js"
+    },
+    {
+      "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\build\\Models\\Users.js",
+      "PackagePath": "staticwebassets\\tscript\\build\\Models\\Users.js"
     },
     {
       "Id": "C:\\Users\\carlo\\source\\repos\\Sales\\SalesFront\\SalesFront\\wwwroot\\tscript\\build\\app.js",

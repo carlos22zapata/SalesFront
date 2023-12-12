@@ -39,3 +39,4 @@ C:\Users\carlo\source\repos\Sales\SalesFront\SalesFront\obj\Debug\net7.0\refint\
 C:\Users\carlo\source\repos\Sales\SalesFront\SalesFront\obj\Debug\net7.0\SalesFront.pdb
 C:\Users\carlo\source\repos\Sales\SalesFront\SalesFront\obj\Debug\net7.0\SalesFront.genruntimeconfig.cache
 C:\Users\carlo\source\repos\Sales\SalesFront\SalesFront\obj\Debug\net7.0\ref\SalesFront.dll
+C:\Users\carlo\source\repos\Sales\SalesFront\SalesFront\obj\Debug\net7.0\SalesFront.sourcelink.json

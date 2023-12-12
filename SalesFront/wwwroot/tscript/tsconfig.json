@@ -6,11 +6,12 @@
     "esModuleInterop": true, /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
+    //"module": "es2015",
     "skipLibCheck": true,
     "strict": true, /* Enable all strict type-checking options. */
     "target": "es2016", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     //"types": [ "node" ],
-    "moduleResolution": "node"    
+    "moduleResolution": "node"
     //"paths": {
     //  "build": [ "./build" ],
     //  "front": [ "https://localhost:7119/" ]

@@ -7,15 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\tscript\NewFolder\**" />
     <Compile Remove="wwwroot\ts\**" />
-    <Content Remove="wwwroot\tscript\NewFolder\**" />
     <Content Remove="wwwroot\ts\**" />
-    <EmbeddedResource Remove="wwwroot\tscript\NewFolder\**" />
     <EmbeddedResource Remove="wwwroot\ts\**" />
-    <None Remove="wwwroot\tscript\NewFolder\**" />
     <None Remove="wwwroot\ts\**" />
-    <TypeScriptCompile Remove="wwwroot\tscript\NewFolder\**" />
     <TypeScriptCompile Remove="wwwroot\ts\**" />
   </ItemGroup>
 
@@ -43,6 +38,10 @@
 
   <ItemGroup>
     <EditorConfigFiles Remove="C:\Users\MyHP\source\repos\Sales\SalesFront\SalesFront\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\tscript\Models\" />
   </ItemGroup>
 
 </Project>
