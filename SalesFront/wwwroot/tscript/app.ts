@@ -24,10 +24,6 @@ declare let ExcelJS: any;
 declare let excelExporter: any;
 declare let DevExpress: any;
 
-//declare function require(moduleName: string): any;
-//const data = require('./build/appConfig.json');
-//console.log(data); 
-
 const iconDelete: string = '<i class="fa-solid fa-delete-left"></i>';
 const iconUpdate: string = '<i class="fa-solid fa-pencil"></i>';
 
@@ -48,16 +44,16 @@ var timer: any;
 //#endregion comandos TypeScript
 
 //############ Server mlapp ############
-//var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
-//var FrontEnd = "https://mlapp.tecnovoz.com.ar:8090/";
+//let ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
+//let FrontEnd = "https://mlapp.tecnovoz.com.ar:8090/";
 
 //############ Server t7 ############
-//var ApiBackEndUrl: string = "https://t7.tecnovoz.com.ar:8091/api/";
-//var FrontEnd: string = "https://t7.tecnovoz.com.ar:8090/";
+//let ApiBackEndUrl: string = "https://t7.tecnovoz.com.ar:8091/api/";
+//let FrontEnd: string = "https://t7.tecnovoz.com.ar:8090/";
 
 //############ Desarrollo ############
-var ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
-var FrontEnd: string = "https://localhost:7119/";
+let ApiBackEndUrl: string = "https://mlapp.tecnovoz.com.ar:8092/api/";
+let FrontEnd: string = "https://localhost:7119/";
 
 /*
  ##########################################################
@@ -77,12 +73,10 @@ var FrontEnd: string = "https://localhost:7119/";
  * @returns -->Retorna los datos de cada EndPoint y los pone en el ComboBox que se le indique
  */
 async function fnLoadSelect(nameControl: string, url: string) {
-    var dataWeb: any = sessionStorage.getItem("TecnoData");
+    let dataWeb: any = sessionStorage.getItem("TecnoData");
 
     nameControl = '#' + nameControl;
-    var selectControl = $(nameControl);
-
-    //alert(selectControl[0].childNodes.length);
+    let selectControl = $(nameControl);
 
     if (selectControl[0].childNodes.length > 1) { 
         //Evalúo si se trata de control de las sucursales, le doy otro tratamiento
@@ -195,7 +189,6 @@ async function fnLoadSelect(nameControl: string, url: string) {
 
             });
 }
-
 async function showDiv(divSelPrincipal: string) {
     hideAll();
     $('#' + divSelPrincipal).show();
@@ -220,6 +213,8 @@ async function showDiv(divSelPrincipal: string) {
         fnLoadHolidays();
     if (divSelPrincipal == "MasterConfigUsers")
         fnLoadConfigUsers();
+    if (divSelPrincipal == "MasterEnvelopes")
+        fnLoadEnvelopes();
 
     showMenu();
 }
@@ -386,6 +381,77 @@ function fnLoadBranchesOnDiv(){
 function fnSetNumberForBd(numberString: string): string {
     var numberStringNew = numberString.replace(/,/g, "");
     return numberStringNew;
+}
+
+/* ################ Esta función se usa para la carga de los vendedores en los 
+txt dinamicos que van apareciendo mientras se escribe ################ */
+
+var timerDynamicSearch; // Declaración del temporizador
+function dynamicSearchSellers(inputSelector: string, resultsSelector: string) {
+    $(inputSelector).keyup(function () {
+        clearTimeout(timer);
+
+        timerDynamicSearch = setTimeout(function () {
+            var inputValue = $(inputSelector).val();
+            var searchResults = $(resultsSelector);
+
+            if (inputValue != "") {
+                let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
+                var dataWeb: any = sessionStorage.getItem("TecnoData");
+                var select = "select * from Users where FirstName + ' ' + LastName like('%" + inputValue + "%') and Access = 1";
+                var skip = 1;
+                var take = 10;
+
+                let response = fetch(url,
+                    {
+                        method: 'GET',
+                        headers: {
+                            select: select.toString(),
+                            page: skip.toString(),
+                            pageSize: take.toString(),
+                            Authorization: JSON.parse(dataWeb).token
+                        }
+                    })
+                    .then(
+                        response => response.json())
+                    .then(
+                        result => {
+                            //console.log(result);
+
+                            // Mostrar los resultados en una lista debajo del input text
+                            searchResults.empty();
+                            var idSeller = 0;
+
+                            for (const result_ of result) {
+                                idSeller++;
+                                const li = document.createElement('li');
+                                li.id = idSeller.toString();
+                                li.setAttribute('idSaleSeller', result_.userId);
+                                li.textContent = result_.firstName + ' ' + result_.lastName;
+                                searchResults.append(li);
+
+                                //console.log(li);
+                            }
+                        });
+
+                //console.log(cliente_);
+            }
+            else {
+                searchResults.empty();
+            }
+        }, 500)
+    });
+}
+//Para cuando se elije un registro del listado que aparece
+function dynamicClickSellers(resultsSelector: string, inputSelector: string, labelSelector: string) {
+    $(resultsSelector).on('click', 'li', function (this: HTMLElement) {
+        let searchResults = $(resultsSelector);
+        let text = $(this).text();
+        let id = $(this).attr('idSaleSeller');
+        $(inputSelector).val(text);
+        $(labelSelector).html(id);
+        searchResults.empty();
+    });
 }
 
 //#endregion Funciones generales
@@ -790,6 +856,9 @@ function fnLoadClients() {
     var skip = position[0];
     var take = position[1];
 
+    dynamicSearchSellers("#TxtSaleSeller1", '#SearchResultsSaleSeller1');
+    dynamicClickSellers('#SearchResultsSaleSeller1', "#TxtSaleSeller1", "#lblSaleSeller1");
+
     let response = fetch(url,
         {
             method: 'GET',
@@ -875,7 +944,6 @@ function fnLoadClients() {
                     var newCell = document.createElement("td");
                     newCell.appendChild(btn1);
                     newCell.appendChild(btn2);
-                    //newCell.appendChild(btn3);
                     newRow.append(newCell);
                     $("#rowsClient").append(newRow);
 
@@ -887,12 +955,6 @@ function fnLoadClients() {
 
                 //console.log(result);
                 $('#spinnerClients').hide();
-
-                //$("#TabClientsT").tablesorter({
-                //    headers: {
-                //        0: { sorter: false } // deshabilita el ordenamiento de la primera columna (n\u00FAmeros)
-                //    }
-                //});
             });
 }
 
@@ -909,9 +971,7 @@ function fnCleanClient() {
     $('#TxtAdressCliente').val('');
     $('#TxtNationalitySelect').val('Argentina');
 
-    //$('#SellerSelectClient').empty();
-    //fnLoadSelect('SellerSelectClient', 'Account/GetUserSeller');
-    var dataWeb: any = sessionStorage.getItem("TecnoData");
+    let dataWeb: any = sessionStorage.getItem("TecnoData");
     $('#lblSaleSeller1').html(JSON.parse(dataWeb).userId);
     $('#TxtSaleSeller1').val(JSON.parse(dataWeb).SellerName);
 }
@@ -931,36 +991,35 @@ function fnSearchAdvancedClient() {
 }
 
 function fnSearchClient() {
-    var position = fnPositionClient();
-    var select = "select top " + position[1] + " * from Clients ";
-    var skip = position[0];
-    var take = position[1];
+    let position = fnPositionClient();
+    let select = "select top " + position[1] + " * from Clients ";
+    let skip = position[0];
+    let take = position[1];
 
     //Para saber donde estamos 
-    var locationView = "";
+    let locationView = "";
     if ($("#ModalSales").is(":visible") && $('#lblModalTypeSearch').html() == 'clientes')
         locationView = "General";
     else if ($("#MasterClients").is(":visible"))
         locationView = "Clients";
 
     if (locationView == "General") { //Si estamos en la busqueda del carrito de ventas
-        var txtSearch = $("#txtSearch").val();
+        let txtSearch = $("#txtSearch").val();
 
         if (txtSearch != "")
             select += "where FirstName + ' ' + LastName like('%" + txtSearch + "%') or DocumentNumber like('%" + txtSearch + "%')";
     }
     else if (locationView == "Clients") { //Si estamos en la vista de Clientes
         if ($("#divSearchClientAdvanced").is(":visible")) { //Si esta visible la busqueda avanzada
-            var fName: string = $('#TxtFirstNameClientAdvanced').val();
-            var lName: string = $('#TxtLastNameIdClientAdvanced').val();
-            var eMail1: string = $('#TxtEmail1ClientAdvanced').val();
-            var eMail2: string = $('#TxtEmail2ClientAdvanced').val();
-            var phone1: string = $('#TxtPhone1ClientAdvanced').val();
-            var phone2: string = $('#TxtPhone2ClientAdvanced').val();
-            var pDocument: string = $('#TxtDocumClientAdvanced').val();
+            let fName: string = $('#TxtFirstNameClientAdvanced').val();
+            let lName: string = $('#TxtLastNameIdClientAdvanced').val();
+            let eMail1: string = $('#TxtEmail1ClientAdvanced').val();
+            let eMail2: string = $('#TxtEmail2ClientAdvanced').val();
+            let phone1: string = $('#TxtPhone1ClientAdvanced').val();
+            let phone2: string = $('#TxtPhone2ClientAdvanced').val();
+            let pDocument: string = $('#TxtDocumClientAdvanced').val();
 
             if (fName + lName + eMail1 + eMail2 + phone1 + phone2 + pDocument == "") {
-                //select = select;
                 fnLoadClients();
                 return;
             }
@@ -1017,12 +1076,11 @@ function fnSearchClient() {
         }
         else { //Busqueda b\u00E1sica
 
-            var fName: string = $('#TxtFirstNameClientBasicSearch').val();
-            var lName: string = $('#TxtLastNameIdClientBasicSearch').val();
-            var pDocument: string = $('#TxtDocumClientBasicSearch').val();
+            let fName: string = $('#TxtFirstNameClientBasicSearch').val();
+            let lName: string = $('#TxtLastNameIdClientBasicSearch').val();
+            let pDocument: string = $('#TxtDocumClientBasicSearch').val();
 
             if (fName + lName + pDocument == "") {
-                //select = select;
                 fnLoadClients();
                 return;
             }
@@ -1428,69 +1486,69 @@ function fnClientsDelete(id: number) {
     });
 }
 
-$("#TxtSaleSeller1").keyup(function () {
-    clearTimeout(timer);
+//$("#TxtSaleSeller1").keyup(function () {
+//    clearTimeout(timer);
 
-    timer = setTimeout(function () {
-        var seller_ = $("#TxtSaleSeller1").val();
-        var searchResults = $('#SearchResultsSaleSeller1');
+//    timer = setTimeout(function () {
+//        var seller_ = $("#TxtSaleSeller1").val();
+//        var searchResults = $('#SearchResultsSaleSeller1');
 
-        if (seller_ != "") {
-            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
-            var dataWeb: any = sessionStorage.getItem("TecnoData");
-            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
-            var skip = 1;
-            var take = 10;
+//        if (seller_ != "") {
+//            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
+//            var dataWeb: any = sessionStorage.getItem("TecnoData");
+//            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
+//            var skip = 1;
+//            var take = 10;
 
-            let response = fetch(url,
-                {
-                    method: 'GET',
-                    headers: {
-                        select: select.toString(),
-                        page: skip.toString(),
-                        pageSize: take.toString(),
-                        Authorization: JSON.parse(dataWeb).token
-                    }
-                })
-                .then(
-                    response => response.json())
-                .then(
-                    result => {
-                        //console.log(result);
+//            let response = fetch(url,
+//                {
+//                    method: 'GET',
+//                    headers: {
+//                        select: select.toString(),
+//                        page: skip.toString(),
+//                        pageSize: take.toString(),
+//                        Authorization: JSON.parse(dataWeb).token
+//                    }
+//                })
+//                .then(
+//                    response => response.json())
+//                .then(
+//                    result => {
+//                        //console.log(result);
 
-                        // Mostrar los resultados en una lista debajo del input text
-                        searchResults.empty();
-                        var idSeller = 0;
+//                        // Mostrar los resultados en una lista debajo del input text
+//                        searchResults.empty();
+//                        var idSeller = 0;
 
-                        for (const result_ of result) {
-                            idSeller++;
-                            const li = document.createElement('li');
-                            li.id = idSeller.toString();
-                            li.setAttribute('idSaleSellerC', result_.userId);
-                            li.textContent = result_.firstName + ' ' + result_.lastName;
-                            searchResults.append(li);
+//                        for (const result_ of result) {
+//                            idSeller++;
+//                            const li = document.createElement('li');
+//                            li.id = idSeller.toString();
+//                            li.setAttribute('idSaleSellerC', result_.userId);
+//                            li.textContent = result_.firstName + ' ' + result_.lastName;
+//                            searchResults.append(li);
 
-                            //console.log(li);
-                        }
-                    });
+//                            //console.log(li);
+//                        }
+//                    });
 
-            //console.log(cliente_);
-        }
-        else {
-            searchResults.empty();
-        }
-    }, 500)
+//            //console.log(cliente_);
+//        }
+//        else {
+//            searchResults.empty();
+//        }
+//    }, 500)
 
-});
+//});
 
-$('#SearchResultsSaleSeller1').on('click', 'li', function (this: HTMLElement) {
-    var searchResults = $('#SearchResultsSaleSeller1');
-    var text = $(this).text();
-    var id = $(this).attr('idSaleSellerC');
-    $("#TxtSaleSeller1").val(text);
-    $("#lblSaleSeller1").text(id);
-    searchResults.empty();
-});
+//$('#SearchResultsSaleSeller1').on('click', 'li', function (this: HTMLElement) {
+//    var searchResults = $('#SearchResultsSaleSeller1');
+//    var text = $(this).text();
+//    var id = $(this).attr('idSaleSellerC');
+//    $("#TxtSaleSeller1").val(text);
+//    $("#lblSaleSeller1").text(id);
+//    searchResults.empty();
+//});
 
 function fnClientUpdate(id: number) {
 
@@ -1802,133 +1860,133 @@ function fnSelectSeller(nameControl: string) {
             });
 }
 
-$('#SearchResultsSaleSeller').on('click', 'li', function (this: HTMLElement) {
-    var searchResults = $('#SearchResultsSaleSeller');
-    var text = $(this).text();
-    var id = $(this).attr('idSaleSeller');
-    $("#TxtSaleSeller2").val(text);
-    $("#lblSaleSeller").text(id);
-    searchResults.empty();
-});
+//$('#SearchResultsSaleSeller').on('click', 'li', function (this: HTMLElement) {
+//    var searchResults = $('#SearchResultsSaleSeller');
+//    var text = $(this).text();
+//    var id = $(this).attr('idSaleSeller');
+//    $("#TxtSaleSeller2").val(text);
+//    $("#lblSaleSeller").text(id);
+//    searchResults.empty();
+//});
 
-$("#TxtSaleSeller2").keyup(function () {
-    clearTimeout(timer);
+//$("#TxtSaleSeller2").keyup(function () {
+//    clearTimeout(timer);
 
-    timer = setTimeout(function () {
-        var seller_ = $("#TxtSaleSeller2").val();
-        var searchResults = $('#SearchResultsSaleSeller');
+//    timer = setTimeout(function () {
+//        var seller_ = $("#TxtSaleSeller2").val();
+//        var searchResults = $('#SearchResultsSaleSeller');
 
-        if (seller_ != "") {
-            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
-            var dataWeb: any = sessionStorage.getItem("TecnoData");
-            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
-            var skip = 1;
-            var take = 10;
+//        if (seller_ != "") {
+//            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
+//            var dataWeb: any = sessionStorage.getItem("TecnoData");
+//            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
+//            var skip = 1;
+//            var take = 10;
 
-            let response = fetch(url,
-                {
-                    method: 'GET',
-                    headers: {
-                        select: select.toString(),
-                        page: skip.toString(),
-                        pageSize: take.toString(),
-                        Authorization: JSON.parse(dataWeb).token
-                    }
-                })
-                .then(
-                    response => response.json())
-                .then(
-                    result => {
-                        //console.log(result);
+//            let response = fetch(url,
+//                {
+//                    method: 'GET',
+//                    headers: {
+//                        select: select.toString(),
+//                        page: skip.toString(),
+//                        pageSize: take.toString(),
+//                        Authorization: JSON.parse(dataWeb).token
+//                    }
+//                })
+//                .then(
+//                    response => response.json())
+//                .then(
+//                    result => {
+//                        //console.log(result);
 
-                        // Mostrar los resultados en una lista debajo del input text
-                        searchResults.empty();
-                        var idSeller = 0;
+//                        // Mostrar los resultados en una lista debajo del input text
+//                        searchResults.empty();
+//                        var idSeller = 0;
 
-                        for (const result_ of result) {
-                            idSeller++;
-                            const li = document.createElement('li');
-                            li.id = idSeller.toString();
-                            li.setAttribute('idSaleSeller', result_.userId);
-                            li.textContent = result_.firstName + ' ' + result_.lastName;
-                            searchResults.append(li);
+//                        for (const result_ of result) {
+//                            idSeller++;
+//                            const li = document.createElement('li');
+//                            li.id = idSeller.toString();
+//                            li.setAttribute('idSaleSeller', result_.userId);
+//                            li.textContent = result_.firstName + ' ' + result_.lastName;
+//                            searchResults.append(li);
 
-                            //console.log(li);
-                        }
-                    });
+//                            //console.log(li);
+//                        }
+//                    });
 
-            //console.log(cliente_);
-        }
-        else {
-            searchResults.empty();
-        }
-    }, 500)
+//            //console.log(cliente_);
+//        }
+//        else {
+//            searchResults.empty();
+//        }
+//    }, 500)
 
-});
+//});
 
-$('#SearchResultsSaleSellerFilter').on('click', 'li', function (this: HTMLElement) {
-    var searchResults = $('#SearchResultsSaleSellerFilter');
-    var text = $(this).text();
-    var id = $(this).attr('idSaleSeller');
-    $("#SelectSaleSellerFilter").val(text);
-    $("#lblSaleSellerFilter").text(id);
-    searchResults.empty();
-});
+//$('#SearchResultsSaleSellerFilter').on('click', 'li', function (this: HTMLElement) {
+//    var searchResults = $('#SearchResultsSaleSellerFilter');
+//    var text = $(this).text();
+//    var id = $(this).attr('idSaleSeller');
+//    $("#SelectSaleSellerFilter").val(text);
+//    $("#lblSaleSellerFilter").text(id);
+//    searchResults.empty();
+//});
 
-$("#SelectSaleSellerFilter").keyup(function () {
-    clearTimeout(timer);
+//$("#SelectSaleSellerFilter").keyup(function () {
+//    clearTimeout(timer);
 
-    timer = setTimeout(function () {
-        var seller_ = $("#SelectSaleSellerFilter").val();
-        var searchResults = $('#SearchResultsSaleSellerFilter');
+//    timer = setTimeout(function () {
+//        var seller_ = $("#SelectSaleSellerFilter").val();
+//        var searchResults = $('#SearchResultsSaleSellerFilter');
 
-        if (seller_ != "") {
-            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
-            var dataWeb: any = sessionStorage.getItem("TecnoData");
-            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
-            var skip = 1;
-            var take = 10;
+//        if (seller_ != "") {
+//            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
+//            var dataWeb: any = sessionStorage.getItem("TecnoData");
+//            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
+//            var skip = 1;
+//            var take = 10;
 
-            let response = fetch(url,
-                {
-                    method: 'GET',
-                    headers: {
-                        select: select.toString(),
-                        page: skip.toString(),
-                        pageSize: take.toString(),
-                        Authorization: JSON.parse(dataWeb).token
-                    }
-                })
-                .then(
-                    response => response.json())
-                .then(
-                    result => {
-                        //console.log(result);
+//            let response = fetch(url,
+//                {
+//                    method: 'GET',
+//                    headers: {
+//                        select: select.toString(),
+//                        page: skip.toString(),
+//                        pageSize: take.toString(),
+//                        Authorization: JSON.parse(dataWeb).token
+//                    }
+//                })
+//                .then(
+//                    response => response.json())
+//                .then(
+//                    result => {
+//                        //console.log(result);
 
-                        // Mostrar los resultados en una lista debajo del input text
-                        searchResults.empty();
-                        var idSeller = 0;
+//                        // Mostrar los resultados en una lista debajo del input text
+//                        searchResults.empty();
+//                        var idSeller = 0;
 
-                        for (const result_ of result) {
-                            idSeller++;
-                            const li = document.createElement('li');
-                            li.id = idSeller.toString();
-                            li.setAttribute('idSaleSeller', result_.userId);
-                            li.textContent = result_.firstName + ' ' + result_.lastName;
-                            searchResults.append(li);
+//                        for (const result_ of result) {
+//                            idSeller++;
+//                            const li = document.createElement('li');
+//                            li.id = idSeller.toString();
+//                            li.setAttribute('idSaleSeller', result_.userId);
+//                            li.textContent = result_.firstName + ' ' + result_.lastName;
+//                            searchResults.append(li);
 
-                            //console.log(li);
-                        }
-                    });
+//                            //console.log(li);
+//                        }
+//                    });
 
-            //console.log(cliente_);
-        }
-        else {
-            searchResults.empty();
-        }
-    }, 500)
+//            //console.log(cliente_);
+//        }
+//        else {
+//            searchResults.empty();
+//        }
+//    }, 500)
 
-});
+//});
 
 //#endregion Secci\u00F3n de Vendedores
 
@@ -2087,10 +2145,6 @@ function fnSearchAdvancedSales() {
 
 function fnLoadSales() {
 
-    //$('#TxtIdDateSaleBasicSearch').datepicker({
-    //    dateFormat: 'dd-mm-yy'
-    //} as any);
-
     $('#dateSearchSalesIni').datepicker({
         dateFormat: 'dd-mm-yy'
     } as any);
@@ -2100,30 +2154,24 @@ function fnLoadSales() {
     } as any);
 
     $('#spinnerSales').show();
-    var dataWeb: any = sessionStorage.getItem("TecnoData");
+    let dataWeb: any = sessionStorage.getItem("TecnoData");
     let url = ApiBackEndUrl + 'CreditDocuments/GetCreditDocumentsClients';
-    var position = fnPositionSale();
-    var skip = position[0];
-    var take = position[1];
-    //var dateSearch = $("#TxtIdDateSaleBasicSearch").val();
-    var dateIni = $("#dateSearchSalesIni").val();
-    var dateEnd = $("#dateSearchSalesEnd").val();
-    var branchId = $('#SelectSaleBranchAdvancedSearch').val() || 0;
-    var auditRecords = $('#SelectSaleAuditAdvancedSearch').val();
-    var sellerIdF = $('#SelectSaleSellerFilter').val() == '' ? '0' :
+    let position = fnPositionSale();
+    let skip = position[0];
+    let take = position[1];
+    let dateIni = $("#dateSearchSalesIni").val();
+    let dateEnd = $("#dateSearchSalesEnd").val();
+    let branchId = $('#SelectSaleBranchAdvancedSearch').val() || 0;
+    let auditRecords = $('#SelectSaleAuditAdvancedSearch').val();
+    let sellerIdF = $('#SelectSaleSellerFilter').val() == '' ? '0' :
                         $('#lblSaleSellerFilter').html();
 
-    var Today = new Date();
-    var dayOfWeek = Today.getDay(); // 0 (domingo) - 6 (sábado)
-    var diffToMonday = (dayOfWeek >= 1) ? dayOfWeek - 1 : 6; // Si es domingo, el lunes más cercano es 6 días atrás
-    var mondayOfWeek = moment(Today).subtract(diffToMonday, 'days').format("YYYY-MM-DD");
-    var initDateString = moment(Today).format("YYYY-MM-DD");
-
-    //if (dateSearch === "") {
-    //    $("#TxtIdDateSaleBasicSearch").val(initDateString);
-    //    dateSearch = $("#TxtIdDateSaleBasicSearch").val();
-    //}        
-            
+    let Today = new Date();
+    let dayOfWeek = Today.getDay(); // 0 (domingo) - 6 (sábado)
+    let diffToMonday = (dayOfWeek >= 1) ? dayOfWeek - 1 : 6; // Si es domingo, el lunes más cercano es 6 días atrás
+    let mondayOfWeek = moment(Today).subtract(diffToMonday, 'days').format("YYYY-MM-DD");
+    let initDateString = moment(Today).format("YYYY-MM-DD");
+        
     if (dateIni === "") {
         $("#dateSearchSalesIni").val(mondayOfWeek);
         dateIni = $("#dateSearchSalesIni").val();
@@ -2133,17 +2181,19 @@ function fnLoadSales() {
         $("#dateSearchSalesEnd").val(initDateString);
         dateEnd = $("#dateSearchSalesEnd").val();
     }
-        
 
+    //Para la carga dinamica de los vendedores en la busqueda del modal
+    dynamicSearchSellers("#TxtSaleSeller2", '#SearchResultsSaleSeller');
+    dynamicClickSellers('#SearchResultsSaleSeller', "#TxtSaleSeller2", "#lblSaleSeller");
+
+    //Para activar la busqueda de los vendedores en la busqueda avanzada
+    dynamicSearchSellers("#SelectSaleSellerFilter", '#SearchResultsSaleSellerFilter');
+    dynamicClickSellers('#SearchResultsSaleSellerFilter', "#SelectSaleSellerFilter", "#lblSaleSellerFilter");
     
     //Defino los parametros de busqueda
-    var shoppingCarNumber = $('#TxtCarNumberSaleBasicSearch').val() == "" ? "-" : $('#TxtCarNumberSaleBasicSearch').val();
-    var documentNumber = $('#TxtDocumSaleBasicSearch').val() == "" ? "-" : $('#TxtDocumSaleBasicSearch').val(); 
+    let shoppingCarNumber = $('#TxtCarNumberSaleBasicSearch').val() == "" ? "-" : $('#TxtCarNumberSaleBasicSearch').val();
+    let documentNumber = $('#TxtDocumSaleBasicSearch').val() == "" ? "-" : $('#TxtDocumSaleBasicSearch').val(); 
     
-    //var date = '1900-01-01';
-    //if ($('#isDateFilterSale').is(':checked')) {
-    //    date = dateSearch;
-    //}    
     
     let response = fetch(url,
         {
@@ -2375,19 +2425,6 @@ function fnChangeDataGroupSales(num: number) {
     fnLoadSales();
 }
 
-//function validateInput(e: any) {
-//    var key = window.Event ? e.which : e.keyCode
-//    return (key >= 48 && key <= 57)
-//}
-
-//function validateNumberSale() {
-//    const lblLength = $('#TxtNumberSale').val().length;
-//    if (lblLength == 9)
-//        return true;
-//    else
-//        return false;
-//}
-
 function validarInputNumber(inputText: any) { //El parametro que se recibe debe venir sin el .val()
     var regex = /^[0-9]{3}-[0-9]{3}-[0-9]{3}$/;
     var resultX = regex.test(inputText.val());
@@ -2483,14 +2520,6 @@ $("#TxtSaleClient2").keyup(function () {
     }, 500)
 
 });
-
-//$('#isDateFilterSale').click(function (this: HTMLElement) {
-//    if ($(this).is(':checked')) {
-//        $('#TxtIdDateSaleBasicSearch').prop('disabled', false);
-//    } else {
-//        $('#TxtIdDateSaleBasicSearch').prop('disabled', true);
-//    }
-//});
 
 function fnOrderSales(origin: string) {
 
@@ -4943,6 +4972,10 @@ function fnLoadGoals() {
     var skip = position[0];
     var take = position[1];
 
+    //Para llenar los campos dinamicos de los vendedores 
+    dynamicSearchSellers("#TxtSaleSellerGoal", '#SearchResultsSaleSellerGoal');
+    dynamicClickSellers('#SearchResultsSaleSellerGoal', "#TxtSaleSellerGoal", "#lblSaleSellerGoal");
+
     let response = fetch(url,
         {
             method: 'GET',
@@ -5157,6 +5190,8 @@ function fnCleanGoal() {
     $('#selGoalSeller').hide();
     $('#selGoalBranch').hide();
     $('#TxtSaleSellerGoal').val('');
+    $('#SelectEnvelopeSeller').val('');
+    $('#SearchResultsSaleSellerGoal').empty();
 }
 
 function fnGoalSelect(sel: string) {
@@ -5230,69 +5265,69 @@ function fnGoalDelete(id_: number) {
     });
 }
 
-$('#SearchResultsSaleSellerGoal').on('click', 'li', function (this: HTMLElement) {
-    var searchResults = $('#SearchResultsSaleSellerGoal');
-    var text = $(this).text();
-    var id = $(this).attr('idSaleSellerGoal');
-    $("#TxtSaleSellerGoal").val(text);
-    $("#lblSaleSellerGoal").text(id);
-    searchResults.empty();
-});
+//$('#SearchResultsSaleSellerGoal').on('click', 'li', function (this: HTMLElement) {
+//    var searchResults = $('#SearchResultsSaleSellerGoal');
+//    var text = $(this).text();
+//    var id = $(this).attr('idSaleSellerGoal');
+//    $("#TxtSaleSellerGoal").val(text);
+//    $("#lblSaleSellerGoal").text(id);
+//    searchResults.empty();
+//});
 
-$("#TxtSaleSellerGoal").keyup(function () {
-    clearTimeout(timer);
+//$("#TxtSaleSellerGoal").keyup(function () {
+//    clearTimeout(timer);
 
-    timer = setTimeout(function () {
-        var seller_ = $("#TxtSaleSellerGoal").val();
-        var searchResults = $('#SearchResultsSaleSellerGoal');
+//    timer = setTimeout(function () {
+//        var seller_ = $("#TxtSaleSellerGoal").val();
+//        var searchResults = $('#SearchResultsSaleSellerGoal');
 
-        if (seller_ != "") {
-            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
-            var dataWeb: any = sessionStorage.getItem("TecnoData");
-            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
-            var skip = 1;
-            var take = 10;
+//        if (seller_ != "") {
+//            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
+//            var dataWeb: any = sessionStorage.getItem("TecnoData");
+//            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
+//            var skip = 1;
+//            var take = 10;
 
-            let response = fetch(url,
-                {
-                    method: 'GET',
-                    headers: {
-                        select: select.toString(),
-                        page: skip.toString(),
-                        pageSize: take.toString(),
-                        Authorization: JSON.parse(dataWeb).token
-                    }
-                })
-                .then(
-                    response => response.json())
-                .then(
-                    result => {
-                        //console.log(result);
+//            let response = fetch(url,
+//                {
+//                    method: 'GET',
+//                    headers: {
+//                        select: select.toString(),
+//                        page: skip.toString(),
+//                        pageSize: take.toString(),
+//                        Authorization: JSON.parse(dataWeb).token
+//                    }
+//                })
+//                .then(
+//                    response => response.json())
+//                .then(
+//                    result => {
+//                        //console.log(result);
 
-                        // Mostrar los resultados en una lista debajo del input text
-                        searchResults.empty();
-                        var idSeller = 0;
+//                        // Mostrar los resultados en una lista debajo del input text
+//                        searchResults.empty();
+//                        var idSeller = 0;
 
-                        for (const result_ of result) {
-                            idSeller++;
-                            const li = document.createElement('li');
-                            li.id = idSeller.toString();
-                            li.setAttribute('idSaleSellerGoal', result_.userId);
-                            li.textContent = result_.firstName + ' ' + result_.lastName;
-                            searchResults.append(li);
+//                        for (const result_ of result) {
+//                            idSeller++;
+//                            const li = document.createElement('li');
+//                            li.id = idSeller.toString();
+//                            li.setAttribute('idSaleSellerGoal', result_.userId);
+//                            li.textContent = result_.firstName + ' ' + result_.lastName;
+//                            searchResults.append(li);
 
-                            //console.log(li);
-                        }
-                    });
+//                            //console.log(li);
+//                        }
+//                    });
 
-            //console.log(cliente_);
-        }
-        else {
-            searchResults.empty();
-        }
-    }, 500)
+//            //console.log(cliente_);
+//        }
+//        else {
+//            searchResults.empty();
+//        }
+//    }, 500)
 
-});
+//});
 
 //#endregion Secci\u00F3n de Objetivos
 
@@ -7454,11 +7489,15 @@ function fnBtnSaveHolidays() {
 //#region Sobres
 
 function fnLoadEnvelopes() {
-    let url = ApiBackEndUrl + 'Payments/GetPayments';
-    var dataWeb: any = sessionStorage.getItem("TecnoData");
-    var position = fnPositionPayments();
-    var skip = position[0];
-    var take = position[1];
+    let url = ApiBackEndUrl + 'Envelopes/GetEnvelopes';
+    let dataWeb: any = sessionStorage.getItem("TecnoData");
+    let position = fnPositionEnvelopes();
+    let skip = position[0];
+    let take = position[1];
+
+    //Carga los valores para el txt de vendedores
+    dynamicSearchSellers("#SelectEnvelopeSeller", '#SearchResultsEnvelopeSeller');
+    dynamicClickSellers('#SearchResultsEnvelopeSeller', "#SelectEnvelopeSeller", "#lblEnvelopeSeller");
 
     let response = fetch(url,
         {
@@ -7474,14 +7513,319 @@ function fnLoadEnvelopes() {
         .then(
             result => {
 
-            })
+                $("#TabEnvelopesT > tbody").empty();
+
+                for (var j in result) {
+                    var id_ = result[j].id;
+                    var envelopeNum_ = result[j].envelopeNum;
+                    var date_ = result[j].date;
+                    var amount_ = result[j].amount;
+                    var sCNumber = result[j].ShoppingCarNumber;
+
+                    var newRow = document.createElement("tr");
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = id_;
+                    newRow.append(newCell);
+                    newCell.style.display = 'none';
+                    $("#rowsEnvelopes").append(newRow);
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = envelopeNum_;
+                    newRow.append(newCell);
+                    $("#rowsEnvelopes").append(newRow);
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = moment(date_).format("DD-MM-YYYY");
+                    newRow.append(newCell);
+                    $("#rowsEnvelopes").append(newRow);
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = amount_;
+                    newRow.append(newCell);
+                    $("#rowsEnvelopes").append(newRow);
+
+                    var newCell = document.createElement("td");
+                    newCell.innerHTML = sCNumber;
+                    newRow.append(newCell);
+                    $("#rowsEnvelopes").append(newRow);
+
+                    //Creo los dos botones para la tabla
+                    var btn1 = document.createElement("btnEnvelopeDelete");
+                    btn1.innerHTML = iconDelete;
+                    btn1.classList.add("btnGridDelete");
+                    btn1.setAttribute('onclick', 'fnEnvelopeDelete(' + id_ + ')');
+                    btn1.setAttribute('data-title', 'Borrar sobre');
+
+                    var btn2 = document.createElement("btnEnvelopeUpdate");
+                    btn2.innerHTML = iconUpdate;
+                    btn2.classList.add("btnGridUpdate");
+                    btn2.setAttribute('onclick', 'fnEnvelopeUpdate(' + id_ + ')');
+                    btn2.setAttribute('data-title', 'Actualizar sobre');
+
+                    var newCell = document.createElement("td");
+                    newCell.appendChild(btn1);
+                    newCell.appendChild(btn2);
+                    newRow.append(newCell);
+                    $("#rowsEnvelopes").append(newRow);
+                    //##################################
+                }
+
+                $('#spinnerEnvelopes').hide();
+            });
 }
 
-function fnPositionPayments() {
-    let Position = $('#PaymentsNPosition').val();
-    let Records = $('#selDataPaymentsGroup').html();
+function fnPositionEnvelopes(){
+    let Position = $('#EnvelopesNPosition').val();
+    let Records = $('#selDataEnvelopesGroup').html();
     return [Position, Records];
 }
+
+function fnEnvelopeDelete(id: number) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Desea borrar el registro con id: "' + id + '" definitivamente?',
+        text: 'Confirme su solicitud.',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'S\u00ED, eliminar!'
+    }).then((result: any) => {
+        if (result.isConfirmed) {
+            let url = ApiBackEndUrl + 'Envelopes/DeleteEnvelope';
+            var dataWeb: any = sessionStorage.getItem("TecnoData");
+
+            let response = fetch(url,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        id: id.toString(),
+                        Authorization: JSON.parse(dataWeb).token
+                    }
+                })
+                .then(response => response.json())
+                .then(
+                    result => {
+
+                        if (result == true) {
+
+                            Swal.fire(
+                                'Borrado!',
+                                'Registro borrado satisfactoriamente.',
+                                'success'
+                            );
+
+                            fnLoadHolidays();
+                        }
+                        else {
+                            Swal.fire(
+                                'Se detecto un error!',
+                                'el registro no pudo ser borrado.',
+                                'error'
+                            )
+                        }
+                    })
+                .catch(error => {
+                    Swal.fire(
+                        'Se detecto un error!',
+                        'Error en la solicitud al sitio remoto (API). Error: ' + error,
+                        'error'
+                    )
+                });
+
+
+        }
+
+
+    })
+}
+
+function fnEnvelopeUpdate() {
+
+}
+
+function fnAddEnvelopes() {
+    fnCleanEnvelope();
+    $('#ModalEnvelopes').modal('show');
+}
+
+function fnBtnSaveEnvelope() {
+    let data = [];
+
+    let id_ = $('#TxtIdEnvelope').val();
+    let date_ = $('#DpickerDateEnvelope').val();
+    let dateRecall_ = $('#DpickerDateRecallEnvelope').val();
+    let envelopeNum_ = $('#TxtEnvelopeNum').val();
+    let userId_ = $('#lblEnvelopeSeller').html();
+    let amount_ = $('#TxtEnvelopeAmount').val();
+    let sCNumber_ = $('#TxtEnvelopeSCNumber').val();
+    let seal_ = $('#TxtEnvelopeSeal').val();
+    let comment_ = $('#TxtEnvelopeComment').val();
+    
+    let url = ApiBackEndUrl + 'Envelopes/InsertEnvelope';
+    let dataWeb: any = sessionStorage.getItem("TecnoData");
+
+    let user_ = JSON.parse(dataWeb).userName;
+
+    //Validaciones de campos
+    if (envelopeNum_ == "" || envelopeNum_ == "0") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio y no puede ser cero el n\u00FAmero de sobre.'
+        });
+        return;
+    } else if (userId_ == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el vendedor.'
+        });
+        return;
+    } else if (amount_ == "" || amount_ == "0") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio y no puede ser cero el monto.'
+        });
+        return;
+    } else if (sCNumber_ == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el n\u00FAmero de carrito.'
+        });
+        return;
+    } else if (seal_ == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el n\u00FAmero de precinto.'
+        });
+        return;
+    }
+
+    data.push({
+        "id": 0,
+        "envelopeNum": envelopeNum_,
+        "userId": userId_,
+        "date": date_,
+        "amount": amount_,
+        "shoppingCarNumber": sCNumber_,
+        "comment": comment_,
+        "recallDate": dateRecall_,
+        "seal": seal_,
+        "insertUser": user_,
+        "dateInsertUser": new Date(),
+        "updateUser": "",
+        "dateUpdateUser": new Date()
+    });
+
+    let response = fetch(url,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                Authorization: JSON.parse(dataWeb).token
+            },
+            body: JSON.stringify(data[0])
+
+        })
+        .then(
+            response => response.json())
+        .then(
+            result => {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Registro agregado exitosamente!',
+                    text: 'Se guard\u00F3 correctamente el registro'
+                });
+
+                fnCleanEnvelope();
+                fnLoadEnvelopes();
+            });
+}
+
+function fnCleanEnvelope() {
+    let today: Date = new Date();
+    let todayString: string = moment(today).format("YYYY-MM-DD");
+    $("#DpickerDateEnvelope").val(todayString);
+    $("#DpickerDateRecallEnvelope").val(todayString);
+    $('#TxtEnvelopeNum').val('0');
+    $('#TxtEnvelopeUserId').val('');
+    $('#TxtEnvelopeAmount').val('');
+    $('#TxtEnvelopeSCNumber').val('');
+    $('#TxtEnvelopeSeal').val('');
+    $('#TxtEnvelopeComment').val('');
+    $('#SelectEnvelopeSeller').val('');
+    $('#lblEnvelopeSeller').html('');
+    $('#SearchResultsEnvelopeSeller').empty();
+}
+
+//####### Eventos para llenar los vendedores #######
+
+//$("#SelectEnvelopeSeller").keyup(function () {
+//    clearTimeout(timer);
+
+//    timer = setTimeout(function () {
+//        var seller_ = $("#SelectEnvelopeSeller").val();
+//        var searchResults = $('#SearchResultsEnvelopeSeller');
+
+//        if (seller_ != "") {
+//            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
+//            var dataWeb: any = sessionStorage.getItem("TecnoData");
+//            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
+//            var skip = 1;
+//            var take = 10;
+
+//            let response = fetch(url,
+//                {
+//                    method: 'GET',
+//                    headers: {
+//                        select: select.toString(),
+//                        page: skip.toString(),
+//                        pageSize: take.toString(),
+//                        Authorization: JSON.parse(dataWeb).token
+//                    }
+//                })
+//                .then(
+//                    response => response.json())
+//                .then(
+//                    result => {
+//                        //console.log(result);
+
+//                        // Mostrar los resultados en una lista debajo del input text
+//                        searchResults.empty();
+//                        var idSeller = 0;
+
+//                        for (const result_ of result) {
+//                            idSeller++;
+//                            const li = document.createElement('li');
+//                            li.id = idSeller.toString();
+//                            li.setAttribute('idSaleSeller', result_.userId);
+//                            li.textContent = result_.firstName + ' ' + result_.lastName;
+//                            searchResults.append(li);
+
+//                            //console.log(li);
+//                        }
+//                    });
+
+//            //console.log(cliente_);
+//        }
+//        else {
+//            searchResults.empty();
+//        }
+//    }, 500)
+
+//});
+
+//$('#SearchResultsEnvelopeSeller').on('click', 'li', function (this: HTMLElement) {
+//    let searchResults = $('#SearchResultsEnvelopeSeller');
+//    let text = $(this).text();
+//    let id = $(this).attr('idSaleSeller');
+//    $("#SelectEnvelopeSeller").val(text);
+//    $("#lblEnvelopeSeller").html(id);
+//    searchResults.empty();
+//});
 
 //#endregion
 

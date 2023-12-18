@@ -12,13 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const iconDelete = '<i class="fa-solid fa-delete-left"></i>';
 const iconUpdate = '<i class="fa-solid fa-pencil"></i>';
 var timer;
-var ApiBackEndUrl = "https://mlapp.tecnovoz.com.ar:8092/api/";
-var FrontEnd = "https://localhost:7119/";
+let ApiBackEndUrl = "https://mlapp.tecnovoz.com.ar:8092/api/";
+let FrontEnd = "https://localhost:7119/";
 function fnLoadSelect(nameControl, url) {
     return __awaiter(this, void 0, void 0, function* () {
-        var dataWeb = sessionStorage.getItem("TecnoData");
+        let dataWeb = sessionStorage.getItem("TecnoData");
         nameControl = '#' + nameControl;
-        var selectControl = $(nameControl);
+        let selectControl = $(nameControl);
         if (selectControl[0].childNodes.length > 1) {
             if (nameControl == '#SelectSaleBranchAdvancedSearch') {
                 if ($("#SelectSaleBranchAdvancedSearch option").length > 1) {
@@ -123,6 +123,8 @@ function showDiv(divSelPrincipal) {
             fnLoadHolidays();
         if (divSelPrincipal == "MasterConfigUsers")
             fnLoadConfigUsers();
+        if (divSelPrincipal == "MasterEnvelopes")
+            fnLoadEnvelopes();
         showMenu();
     });
 }
@@ -262,6 +264,58 @@ function fnLoadBranchesOnDiv() {
 function fnSetNumberForBd(numberString) {
     var numberStringNew = numberString.replace(/,/g, "");
     return numberStringNew;
+}
+var timerDynamicSearch;
+function dynamicSearchSellers(inputSelector, resultsSelector) {
+    $(inputSelector).keyup(function () {
+        clearTimeout(timer);
+        timerDynamicSearch = setTimeout(function () {
+            var inputValue = $(inputSelector).val();
+            var searchResults = $(resultsSelector);
+            if (inputValue != "") {
+                let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
+                var dataWeb = sessionStorage.getItem("TecnoData");
+                var select = "select * from Users where FirstName + ' ' + LastName like('%" + inputValue + "%') and Access = 1";
+                var skip = 1;
+                var take = 10;
+                let response = fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        select: select.toString(),
+                        page: skip.toString(),
+                        pageSize: take.toString(),
+                        Authorization: JSON.parse(dataWeb).token
+                    }
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                    searchResults.empty();
+                    var idSeller = 0;
+                    for (const result_ of result) {
+                        idSeller++;
+                        const li = document.createElement('li');
+                        li.id = idSeller.toString();
+                        li.setAttribute('idSaleSeller', result_.userId);
+                        li.textContent = result_.firstName + ' ' + result_.lastName;
+                        searchResults.append(li);
+                    }
+                });
+            }
+            else {
+                searchResults.empty();
+            }
+        }, 500);
+    });
+}
+function dynamicClickSellers(resultsSelector, inputSelector, labelSelector) {
+    $(resultsSelector).on('click', 'li', function () {
+        let searchResults = $(resultsSelector);
+        let text = $(this).text();
+        let id = $(this).attr('idSaleSeller');
+        $(inputSelector).val(text);
+        $(labelSelector).html(id);
+        searchResults.empty();
+    });
 }
 function LogIn(user, password) {
     if (user == "") {
@@ -532,6 +586,8 @@ function fnLoadClients() {
     var position = fnPositionClient();
     var skip = position[0];
     var take = position[1];
+    dynamicSearchSellers("#TxtSaleSeller1", '#SearchResultsSaleSeller1');
+    dynamicClickSellers('#SearchResultsSaleSeller1', "#TxtSaleSeller1", "#lblSaleSeller1");
     let response = fetch(url, {
         method: 'GET',
         headers: {
@@ -618,7 +674,7 @@ function fnCleanClient() {
     $('#typeDocumentSelect').val('DNI');
     $('#TxtAdressCliente').val('');
     $('#TxtNationalitySelect').val('Argentina');
-    var dataWeb = sessionStorage.getItem("TecnoData");
+    let dataWeb = sessionStorage.getItem("TecnoData");
     $('#lblSaleSeller1').html(JSON.parse(dataWeb).userId);
     $('#TxtSaleSeller1').val(JSON.parse(dataWeb).SellerName);
 }
@@ -634,29 +690,29 @@ function fnSearchAdvancedClient() {
     }
 }
 function fnSearchClient() {
-    var position = fnPositionClient();
-    var select = "select top " + position[1] + " * from Clients ";
-    var skip = position[0];
-    var take = position[1];
-    var locationView = "";
+    let position = fnPositionClient();
+    let select = "select top " + position[1] + " * from Clients ";
+    let skip = position[0];
+    let take = position[1];
+    let locationView = "";
     if ($("#ModalSales").is(":visible") && $('#lblModalTypeSearch').html() == 'clientes')
         locationView = "General";
     else if ($("#MasterClients").is(":visible"))
         locationView = "Clients";
     if (locationView == "General") {
-        var txtSearch = $("#txtSearch").val();
+        let txtSearch = $("#txtSearch").val();
         if (txtSearch != "")
             select += "where FirstName + ' ' + LastName like('%" + txtSearch + "%') or DocumentNumber like('%" + txtSearch + "%')";
     }
     else if (locationView == "Clients") {
         if ($("#divSearchClientAdvanced").is(":visible")) {
-            var fName = $('#TxtFirstNameClientAdvanced').val();
-            var lName = $('#TxtLastNameIdClientAdvanced').val();
-            var eMail1 = $('#TxtEmail1ClientAdvanced').val();
-            var eMail2 = $('#TxtEmail2ClientAdvanced').val();
-            var phone1 = $('#TxtPhone1ClientAdvanced').val();
-            var phone2 = $('#TxtPhone2ClientAdvanced').val();
-            var pDocument = $('#TxtDocumClientAdvanced').val();
+            let fName = $('#TxtFirstNameClientAdvanced').val();
+            let lName = $('#TxtLastNameIdClientAdvanced').val();
+            let eMail1 = $('#TxtEmail1ClientAdvanced').val();
+            let eMail2 = $('#TxtEmail2ClientAdvanced').val();
+            let phone1 = $('#TxtPhone1ClientAdvanced').val();
+            let phone2 = $('#TxtPhone2ClientAdvanced').val();
+            let pDocument = $('#TxtDocumClientAdvanced').val();
             if (fName + lName + eMail1 + eMail2 + phone1 + phone2 + pDocument == "") {
                 fnLoadClients();
                 return;
@@ -699,9 +755,9 @@ function fnSearchClient() {
             }
         }
         else {
-            var fName = $('#TxtFirstNameClientBasicSearch').val();
-            var lName = $('#TxtLastNameIdClientBasicSearch').val();
-            var pDocument = $('#TxtDocumClientBasicSearch').val();
+            let fName = $('#TxtFirstNameClientBasicSearch').val();
+            let lName = $('#TxtLastNameIdClientBasicSearch').val();
+            let pDocument = $('#TxtDocumClientBasicSearch').val();
             if (fName + lName + pDocument == "") {
                 fnLoadClients();
                 return;
@@ -1014,53 +1070,6 @@ function fnClientsDelete(id) {
         }
     });
 }
-$("#TxtSaleSeller1").keyup(function () {
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-        var seller_ = $("#TxtSaleSeller1").val();
-        var searchResults = $('#SearchResultsSaleSeller1');
-        if (seller_ != "") {
-            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
-            var dataWeb = sessionStorage.getItem("TecnoData");
-            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
-            var skip = 1;
-            var take = 10;
-            let response = fetch(url, {
-                method: 'GET',
-                headers: {
-                    select: select.toString(),
-                    page: skip.toString(),
-                    pageSize: take.toString(),
-                    Authorization: JSON.parse(dataWeb).token
-                }
-            })
-                .then(response => response.json())
-                .then(result => {
-                searchResults.empty();
-                var idSeller = 0;
-                for (const result_ of result) {
-                    idSeller++;
-                    const li = document.createElement('li');
-                    li.id = idSeller.toString();
-                    li.setAttribute('idSaleSellerC', result_.userId);
-                    li.textContent = result_.firstName + ' ' + result_.lastName;
-                    searchResults.append(li);
-                }
-            });
-        }
-        else {
-            searchResults.empty();
-        }
-    }, 500);
-});
-$('#SearchResultsSaleSeller1').on('click', 'li', function () {
-    var searchResults = $('#SearchResultsSaleSeller1');
-    var text = $(this).text();
-    var id = $(this).attr('idSaleSellerC');
-    $("#TxtSaleSeller1").val(text);
-    $("#lblSaleSeller1").text(id);
-    searchResults.empty();
-});
 function fnClientUpdate(id) {
 }
 const txtNameCliente = $('#TxtFirstNameCliente');
@@ -1287,100 +1296,6 @@ function fnSelectSeller(nameControl) {
         }
     });
 }
-$('#SearchResultsSaleSeller').on('click', 'li', function () {
-    var searchResults = $('#SearchResultsSaleSeller');
-    var text = $(this).text();
-    var id = $(this).attr('idSaleSeller');
-    $("#TxtSaleSeller2").val(text);
-    $("#lblSaleSeller").text(id);
-    searchResults.empty();
-});
-$("#TxtSaleSeller2").keyup(function () {
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-        var seller_ = $("#TxtSaleSeller2").val();
-        var searchResults = $('#SearchResultsSaleSeller');
-        if (seller_ != "") {
-            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
-            var dataWeb = sessionStorage.getItem("TecnoData");
-            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
-            var skip = 1;
-            var take = 10;
-            let response = fetch(url, {
-                method: 'GET',
-                headers: {
-                    select: select.toString(),
-                    page: skip.toString(),
-                    pageSize: take.toString(),
-                    Authorization: JSON.parse(dataWeb).token
-                }
-            })
-                .then(response => response.json())
-                .then(result => {
-                searchResults.empty();
-                var idSeller = 0;
-                for (const result_ of result) {
-                    idSeller++;
-                    const li = document.createElement('li');
-                    li.id = idSeller.toString();
-                    li.setAttribute('idSaleSeller', result_.userId);
-                    li.textContent = result_.firstName + ' ' + result_.lastName;
-                    searchResults.append(li);
-                }
-            });
-        }
-        else {
-            searchResults.empty();
-        }
-    }, 500);
-});
-$('#SearchResultsSaleSellerFilter').on('click', 'li', function () {
-    var searchResults = $('#SearchResultsSaleSellerFilter');
-    var text = $(this).text();
-    var id = $(this).attr('idSaleSeller');
-    $("#SelectSaleSellerFilter").val(text);
-    $("#lblSaleSellerFilter").text(id);
-    searchResults.empty();
-});
-$("#SelectSaleSellerFilter").keyup(function () {
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-        var seller_ = $("#SelectSaleSellerFilter").val();
-        var searchResults = $('#SearchResultsSaleSellerFilter');
-        if (seller_ != "") {
-            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
-            var dataWeb = sessionStorage.getItem("TecnoData");
-            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
-            var skip = 1;
-            var take = 10;
-            let response = fetch(url, {
-                method: 'GET',
-                headers: {
-                    select: select.toString(),
-                    page: skip.toString(),
-                    pageSize: take.toString(),
-                    Authorization: JSON.parse(dataWeb).token
-                }
-            })
-                .then(response => response.json())
-                .then(result => {
-                searchResults.empty();
-                var idSeller = 0;
-                for (const result_ of result) {
-                    idSeller++;
-                    const li = document.createElement('li');
-                    li.id = idSeller.toString();
-                    li.setAttribute('idSaleSeller', result_.userId);
-                    li.textContent = result_.firstName + ' ' + result_.lastName;
-                    searchResults.append(li);
-                }
-            });
-        }
-        else {
-            searchResults.empty();
-        }
-    }, 500);
-});
 function fnAddSales() {
     fnCleanSale();
     $('#ModalSales').modal('show');
@@ -1522,22 +1437,22 @@ function fnLoadSales() {
         dateFormat: 'dd-mm-yy'
     });
     $('#spinnerSales').show();
-    var dataWeb = sessionStorage.getItem("TecnoData");
+    let dataWeb = sessionStorage.getItem("TecnoData");
     let url = ApiBackEndUrl + 'CreditDocuments/GetCreditDocumentsClients';
-    var position = fnPositionSale();
-    var skip = position[0];
-    var take = position[1];
-    var dateIni = $("#dateSearchSalesIni").val();
-    var dateEnd = $("#dateSearchSalesEnd").val();
-    var branchId = $('#SelectSaleBranchAdvancedSearch').val() || 0;
-    var auditRecords = $('#SelectSaleAuditAdvancedSearch').val();
-    var sellerIdF = $('#SelectSaleSellerFilter').val() == '' ? '0' :
+    let position = fnPositionSale();
+    let skip = position[0];
+    let take = position[1];
+    let dateIni = $("#dateSearchSalesIni").val();
+    let dateEnd = $("#dateSearchSalesEnd").val();
+    let branchId = $('#SelectSaleBranchAdvancedSearch').val() || 0;
+    let auditRecords = $('#SelectSaleAuditAdvancedSearch').val();
+    let sellerIdF = $('#SelectSaleSellerFilter').val() == '' ? '0' :
         $('#lblSaleSellerFilter').html();
-    var Today = new Date();
-    var dayOfWeek = Today.getDay();
-    var diffToMonday = (dayOfWeek >= 1) ? dayOfWeek - 1 : 6;
-    var mondayOfWeek = moment(Today).subtract(diffToMonday, 'days').format("YYYY-MM-DD");
-    var initDateString = moment(Today).format("YYYY-MM-DD");
+    let Today = new Date();
+    let dayOfWeek = Today.getDay();
+    let diffToMonday = (dayOfWeek >= 1) ? dayOfWeek - 1 : 6;
+    let mondayOfWeek = moment(Today).subtract(diffToMonday, 'days').format("YYYY-MM-DD");
+    let initDateString = moment(Today).format("YYYY-MM-DD");
     if (dateIni === "") {
         $("#dateSearchSalesIni").val(mondayOfWeek);
         dateIni = $("#dateSearchSalesIni").val();
@@ -1546,8 +1461,12 @@ function fnLoadSales() {
         $("#dateSearchSalesEnd").val(initDateString);
         dateEnd = $("#dateSearchSalesEnd").val();
     }
-    var shoppingCarNumber = $('#TxtCarNumberSaleBasicSearch').val() == "" ? "-" : $('#TxtCarNumberSaleBasicSearch').val();
-    var documentNumber = $('#TxtDocumSaleBasicSearch').val() == "" ? "-" : $('#TxtDocumSaleBasicSearch').val();
+    dynamicSearchSellers("#TxtSaleSeller2", '#SearchResultsSaleSeller');
+    dynamicClickSellers('#SearchResultsSaleSeller', "#TxtSaleSeller2", "#lblSaleSeller");
+    dynamicSearchSellers("#SelectSaleSellerFilter", '#SearchResultsSaleSellerFilter');
+    dynamicClickSellers('#SearchResultsSaleSellerFilter', "#SelectSaleSellerFilter", "#lblSaleSellerFilter");
+    let shoppingCarNumber = $('#TxtCarNumberSaleBasicSearch').val() == "" ? "-" : $('#TxtCarNumberSaleBasicSearch').val();
+    let documentNumber = $('#TxtDocumSaleBasicSearch').val() == "" ? "-" : $('#TxtDocumSaleBasicSearch').val();
     let response = fetch(url, {
         method: 'GET',
         headers: {
@@ -3534,6 +3453,8 @@ function fnLoadGoals() {
     var position = fnPositionGoal();
     var skip = position[0];
     var take = position[1];
+    dynamicSearchSellers("#TxtSaleSellerGoal", '#SearchResultsSaleSellerGoal');
+    dynamicClickSellers('#SearchResultsSaleSellerGoal', "#TxtSaleSellerGoal", "#lblSaleSellerGoal");
     let response = fetch(url, {
         method: 'GET',
         headers: {
@@ -3711,6 +3632,8 @@ function fnCleanGoal() {
     $('#selGoalSeller').hide();
     $('#selGoalBranch').hide();
     $('#TxtSaleSellerGoal').val('');
+    $('#SelectEnvelopeSeller').val('');
+    $('#SearchResultsSaleSellerGoal').empty();
 }
 function fnGoalSelect(sel) {
     if (sel == 'S') {
@@ -3758,53 +3681,6 @@ function fnGoalDelete(id_) {
         }
     });
 }
-$('#SearchResultsSaleSellerGoal').on('click', 'li', function () {
-    var searchResults = $('#SearchResultsSaleSellerGoal');
-    var text = $(this).text();
-    var id = $(this).attr('idSaleSellerGoal');
-    $("#TxtSaleSellerGoal").val(text);
-    $("#lblSaleSellerGoal").text(id);
-    searchResults.empty();
-});
-$("#TxtSaleSellerGoal").keyup(function () {
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-        var seller_ = $("#TxtSaleSellerGoal").val();
-        var searchResults = $('#SearchResultsSaleSellerGoal');
-        if (seller_ != "") {
-            let url = ApiBackEndUrl + 'Account/DynamicGetUserSeller';
-            var dataWeb = sessionStorage.getItem("TecnoData");
-            var select = "select * from Users where FirstName + ' ' + LastName like('%" + seller_ + "%')";
-            var skip = 1;
-            var take = 10;
-            let response = fetch(url, {
-                method: 'GET',
-                headers: {
-                    select: select.toString(),
-                    page: skip.toString(),
-                    pageSize: take.toString(),
-                    Authorization: JSON.parse(dataWeb).token
-                }
-            })
-                .then(response => response.json())
-                .then(result => {
-                searchResults.empty();
-                var idSeller = 0;
-                for (const result_ of result) {
-                    idSeller++;
-                    const li = document.createElement('li');
-                    li.id = idSeller.toString();
-                    li.setAttribute('idSaleSellerGoal', result_.userId);
-                    li.textContent = result_.firstName + ' ' + result_.lastName;
-                    searchResults.append(li);
-                }
-            });
-        }
-        else {
-            searchResults.empty();
-        }
-    }, 500);
-});
 function fnRefreshReport() {
     if ($("#Report1").is(":visible")) {
         fnReport1Resume();
@@ -5389,11 +5265,13 @@ function fnBtnSaveHolidays() {
     });
 }
 function fnLoadEnvelopes() {
-    let url = ApiBackEndUrl + 'Payments/GetPayments';
-    var dataWeb = sessionStorage.getItem("TecnoData");
-    var position = fnPositionPayments();
-    var skip = position[0];
-    var take = position[1];
+    let url = ApiBackEndUrl + 'Envelopes/GetEnvelopes';
+    let dataWeb = sessionStorage.getItem("TecnoData");
+    let position = fnPositionEnvelopes();
+    let skip = position[0];
+    let take = position[1];
+    dynamicSearchSellers("#SelectEnvelopeSeller", '#SearchResultsEnvelopeSeller');
+    dynamicClickSellers('#SearchResultsEnvelopeSeller', "#SelectEnvelopeSeller", "#lblEnvelopeSeller");
     let response = fetch(url, {
         method: 'GET',
         headers: {
@@ -5404,12 +5282,202 @@ function fnLoadEnvelopes() {
     })
         .then(response => response.json())
         .then(result => {
+        $("#TabEnvelopesT > tbody").empty();
+        for (var j in result) {
+            var id_ = result[j].id;
+            var envelopeNum_ = result[j].envelopeNum;
+            var date_ = result[j].date;
+            var amount_ = result[j].amount;
+            var sCNumber = result[j].ShoppingCarNumber;
+            var newRow = document.createElement("tr");
+            var newCell = document.createElement("td");
+            newCell.innerHTML = id_;
+            newRow.append(newCell);
+            newCell.style.display = 'none';
+            $("#rowsEnvelopes").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = envelopeNum_;
+            newRow.append(newCell);
+            $("#rowsEnvelopes").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = moment(date_).format("DD-MM-YYYY");
+            newRow.append(newCell);
+            $("#rowsEnvelopes").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = amount_;
+            newRow.append(newCell);
+            $("#rowsEnvelopes").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = sCNumber;
+            newRow.append(newCell);
+            $("#rowsEnvelopes").append(newRow);
+            var btn1 = document.createElement("btnEnvelopeDelete");
+            btn1.innerHTML = iconDelete;
+            btn1.classList.add("btnGridDelete");
+            btn1.setAttribute('onclick', 'fnEnvelopeDelete(' + id_ + ')');
+            btn1.setAttribute('data-title', 'Borrar sobre');
+            var btn2 = document.createElement("btnEnvelopeUpdate");
+            btn2.innerHTML = iconUpdate;
+            btn2.classList.add("btnGridUpdate");
+            btn2.setAttribute('onclick', 'fnEnvelopeUpdate(' + id_ + ')');
+            btn2.setAttribute('data-title', 'Actualizar sobre');
+            var newCell = document.createElement("td");
+            newCell.appendChild(btn1);
+            newCell.appendChild(btn2);
+            newRow.append(newCell);
+            $("#rowsEnvelopes").append(newRow);
+        }
+        $('#spinnerEnvelopes').hide();
     });
 }
-function fnPositionPayments() {
-    let Position = $('#PaymentsNPosition').val();
-    let Records = $('#selDataPaymentsGroup').html();
+function fnPositionEnvelopes() {
+    let Position = $('#EnvelopesNPosition').val();
+    let Records = $('#selDataEnvelopesGroup').html();
     return [Position, Records];
+}
+function fnEnvelopeDelete(id) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Desea borrar el registro con id: "' + id + '" definitivamente?',
+        text: 'Confirme su solicitud.',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'S\u00ED, eliminar!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let url = ApiBackEndUrl + 'Envelopes/DeleteEnvelope';
+            var dataWeb = sessionStorage.getItem("TecnoData");
+            let response = fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    id: id.toString(),
+                    Authorization: JSON.parse(dataWeb).token
+                }
+            })
+                .then(response => response.json())
+                .then(result => {
+                if (result == true) {
+                    Swal.fire('Borrado!', 'Registro borrado satisfactoriamente.', 'success');
+                    fnLoadHolidays();
+                }
+                else {
+                    Swal.fire('Se detecto un error!', 'el registro no pudo ser borrado.', 'error');
+                }
+            })
+                .catch(error => {
+                Swal.fire('Se detecto un error!', 'Error en la solicitud al sitio remoto (API). Error: ' + error, 'error');
+            });
+        }
+    });
+}
+function fnEnvelopeUpdate() {
+}
+function fnAddEnvelopes() {
+    fnCleanEnvelope();
+    $('#ModalEnvelopes').modal('show');
+}
+function fnBtnSaveEnvelope() {
+    let data = [];
+    let id_ = $('#TxtIdEnvelope').val();
+    let date_ = $('#DpickerDateEnvelope').val();
+    let dateRecall_ = $('#DpickerDateRecallEnvelope').val();
+    let envelopeNum_ = $('#TxtEnvelopeNum').val();
+    let userId_ = $('#lblEnvelopeSeller').html();
+    let amount_ = $('#TxtEnvelopeAmount').val();
+    let sCNumber_ = $('#TxtEnvelopeSCNumber').val();
+    let seal_ = $('#TxtEnvelopeSeal').val();
+    let comment_ = $('#TxtEnvelopeComment').val();
+    let url = ApiBackEndUrl + 'Envelopes/InsertEnvelope';
+    let dataWeb = sessionStorage.getItem("TecnoData");
+    let user_ = JSON.parse(dataWeb).userName;
+    if (envelopeNum_ == "" || envelopeNum_ == "0") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio y no puede ser cero el n\u00FAmero de sobre.'
+        });
+        return;
+    }
+    else if (userId_ == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el vendedor.'
+        });
+        return;
+    }
+    else if (amount_ == "" || amount_ == "0") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio y no puede ser cero el monto.'
+        });
+        return;
+    }
+    else if (sCNumber_ == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el n\u00FAmero de carrito.'
+        });
+        return;
+    }
+    else if (seal_ == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el n\u00FAmero de precinto.'
+        });
+        return;
+    }
+    data.push({
+        "id": 0,
+        "envelopeNum": envelopeNum_,
+        "userId": userId_,
+        "date": date_,
+        "amount": amount_,
+        "shoppingCarNumber": sCNumber_,
+        "comment": comment_,
+        "recallDate": dateRecall_,
+        "seal": seal_,
+        "insertUser": user_,
+        "dateInsertUser": new Date(),
+        "updateUser": "",
+        "dateUpdateUser": new Date()
+    });
+    let response = fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            Authorization: JSON.parse(dataWeb).token
+        },
+        body: JSON.stringify(data[0])
+    })
+        .then(response => response.json())
+        .then(result => {
+        Swal.fire({
+            icon: 'info',
+            title: 'Registro agregado exitosamente!',
+            text: 'Se guard\u00F3 correctamente el registro'
+        });
+        fnCleanEnvelope();
+        fnLoadEnvelopes();
+    });
+}
+function fnCleanEnvelope() {
+    let today = new Date();
+    let todayString = moment(today).format("YYYY-MM-DD");
+    $("#DpickerDateEnvelope").val(todayString);
+    $("#DpickerDateRecallEnvelope").val(todayString);
+    $('#TxtEnvelopeNum').val('0');
+    $('#TxtEnvelopeUserId').val('');
+    $('#TxtEnvelopeAmount').val('');
+    $('#TxtEnvelopeSCNumber').val('');
+    $('#TxtEnvelopeSeal').val('');
+    $('#TxtEnvelopeComment').val('');
+    $('#SelectEnvelopeSeller').val('');
+    $('#lblEnvelopeSeller').html('');
+    $('#SearchResultsEnvelopeSeller').empty();
 }
 function fnLoadConfigUsers() {
     let url = ApiBackEndUrl + 'Users/GetUsers';

@@ -123,6 +123,8 @@ function showDiv(divSelPrincipal) {
             fnLoadHolidays();
         if (divSelPrincipal == "MasterConfigUsers")
             fnLoadConfigUsers();
+        if (divSelPrincipal == "MasterEnvelopes")
+            fnLoadEnvelopes();
         showMenu();
     });
 }
@@ -5389,11 +5391,11 @@ function fnBtnSaveHolidays() {
     });
 }
 function fnLoadEnvelopes() {
-    let url = ApiBackEndUrl + 'Payments/GetPayments';
-    var dataWeb = sessionStorage.getItem("TecnoData");
-    var position = fnPositionPayments();
-    var skip = position[0];
-    var take = position[1];
+    let url = ApiBackEndUrl + 'Envelopes/GetEnvelopes';
+    let dataWeb = sessionStorage.getItem("TecnoData");
+    let position = fnPositionEnvelopes();
+    let skip = position[0];
+    let take = position[1];
     let response = fetch(url, {
         method: 'GET',
         headers: {
@@ -5404,12 +5406,199 @@ function fnLoadEnvelopes() {
     })
         .then(response => response.json())
         .then(result => {
+        $("#TabEnvelopesT > tbody").empty();
+        for (var j in result) {
+            var id_ = result[j].id;
+            var envelopeNum_ = result[j].envelopeNum;
+            var date_ = result[j].date;
+            var amount_ = result[j].amount;
+            var sCNumber = result[j].ShoppingCarNumber;
+            var newRow = document.createElement("tr");
+            var newCell = document.createElement("td");
+            newCell.innerHTML = id_;
+            newRow.append(newCell);
+            newCell.style.display = 'none';
+            $("#rowsEnvelopes").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = envelopeNum_;
+            newRow.append(newCell);
+            $("#rowsEnvelopes").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = moment(date_).format("DD-MM-YYYY");
+            newRow.append(newCell);
+            $("#rowsEnvelopes").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = amount_;
+            newRow.append(newCell);
+            $("#rowsEnvelopes").append(newRow);
+            var newCell = document.createElement("td");
+            newCell.innerHTML = sCNumber;
+            newRow.append(newCell);
+            $("#rowsEnvelopes").append(newRow);
+            var btn1 = document.createElement("btnEnvelopeDelete");
+            btn1.innerHTML = iconDelete;
+            btn1.classList.add("btnGridDelete");
+            btn1.setAttribute('onclick', 'fnEnvelopeDelete(' + id_ + ')');
+            btn1.setAttribute('data-title', 'Borrar sobre');
+            var btn2 = document.createElement("btnEnvelopeUpdate");
+            btn2.innerHTML = iconUpdate;
+            btn2.classList.add("btnGridUpdate");
+            btn2.setAttribute('onclick', 'fnEnvelopeUpdate(' + id_ + ')');
+            btn2.setAttribute('data-title', 'Actualizar sobre');
+            var newCell = document.createElement("td");
+            newCell.appendChild(btn1);
+            newCell.appendChild(btn2);
+            newRow.append(newCell);
+            $("#rowsEnvelopes").append(newRow);
+        }
+        $('#spinnerEnvelopes').hide();
     });
 }
-function fnPositionPayments() {
-    let Position = $('#PaymentsNPosition').val();
-    let Records = $('#selDataPaymentsGroup').html();
+function fnPositionEnvelopes() {
+    let Position = $('#EnvelopesNPosition').val();
+    let Records = $('#selDataEnvelopesGroup').html();
     return [Position, Records];
+}
+function fnEnvelopeDelete(id) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Desea borrar el registro con id: "' + id + '" definitivamente?',
+        text: 'Confirme su solicitud.',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'S\u00ED, eliminar!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let url = ApiBackEndUrl + 'Envelopes/DeleteEnvelope';
+            var dataWeb = sessionStorage.getItem("TecnoData");
+            let response = fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    id: id.toString(),
+                    Authorization: JSON.parse(dataWeb).token
+                }
+            })
+                .then(response => response.json())
+                .then(result => {
+                if (result == true) {
+                    Swal.fire('Borrado!', 'Registro borrado satisfactoriamente.', 'success');
+                    fnLoadHolidays();
+                }
+                else {
+                    Swal.fire('Se detecto un error!', 'el registro no pudo ser borrado.', 'error');
+                }
+            })
+                .catch(error => {
+                Swal.fire('Se detecto un error!', 'Error en la solicitud al sitio remoto (API). Error: ' + error, 'error');
+            });
+        }
+    });
+}
+function fnEnvelopeUpdate() {
+}
+function fnAddEnvelopes() {
+    fnCleanEnvelope();
+    $('#ModalEnvelopes').modal('show');
+}
+function fnBtnSaveEnvelope() {
+    let data = [];
+    let id_ = $('#TxtIdEnvelope').val();
+    let date_ = $('#DpickerDateEnvelope').val();
+    let dateRecall_ = $('#DpickerDateRecallEnvelope').val();
+    let envelopeNum_ = $('#TxtEnvelopeNum').val();
+    let userId_ = $('#TxtEnvelopeUserId').val();
+    let amount_ = $('#TxtEnvelopeAmount').val();
+    let sCNumber_ = $('#TxtEnvelopeSCNumber').val();
+    let seal_ = $('#TxtEnvelopeSeal').val();
+    let comment_ = $('#TxtEnvelopeComment').val();
+    let url = ApiBackEndUrl + 'Envelopes/InsertEnvelope';
+    let dataWeb = sessionStorage.getItem("TecnoData");
+    let user_ = JSON.parse(dataWeb).userName;
+    if (envelopeNum_ == "" || envelopeNum_ == "0") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio y no puede ser cero el n\u00FAmero de sobre.'
+        });
+        return;
+    }
+    else if (userId_ == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el vendedor.'
+        });
+        return;
+    }
+    else if (amount_ == "" || amount_ == "0") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio y no puede ser cero el monto.'
+        });
+        return;
+    }
+    else if (sCNumber_ == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el n\u00FAmero de carrito.'
+        });
+        return;
+    }
+    else if (seal_ == "") {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Complete todos los campos',
+            text: 'No puede estar vacio el n\u00FAmero de precinto.'
+        });
+        return;
+    }
+    data.push({
+        "id": 0,
+        "envelopeNum": envelopeNum_,
+        "userId": userId_,
+        "date": date_,
+        "amount": amount_,
+        "shoppingCarNumber": sCNumber_,
+        "comment": comment_,
+        "recallDate": dateRecall_,
+        "seal": seal_,
+        "insertUser": user_,
+        "dateInsertUser": new Date(),
+        "updateUser": "",
+        "dateUpdateUser": new Date()
+    });
+    let response = fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            Authorization: JSON.parse(dataWeb).token
+        },
+        body: JSON.stringify(data[0])
+    })
+        .then(response => response.json())
+        .then(result => {
+        Swal.fire({
+            icon: 'info',
+            title: 'Registro agregado exitosamente!',
+            text: 'Se guard\u00F3 correctamente el registro'
+        });
+        fnCleanEnvelope();
+        fnLoadEnvelopes();
+    });
+}
+function fnCleanEnvelope() {
+    let today = new Date();
+    let todayString = moment(today).format("YYYY-MM-DD");
+    $("#DpickerDateEnvelope").val(todayString);
+    $("#DpickerDateRecallEnvelope").val(todayString);
+    $('#TxtEnvelopeNum').val('0');
+    $('#TxtEnvelopeUserId').val('');
+    $('#TxtEnvelopeAmount').val('');
+    $('#TxtEnvelopeSCNumber').val('');
+    $('#TxtEnvelopeSeal').val('');
+    $('#TxtEnvelopeComment').val('');
 }
 function fnLoadConfigUsers() {
     let url = ApiBackEndUrl + 'Users/GetUsers';

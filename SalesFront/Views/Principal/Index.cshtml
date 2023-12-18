@@ -2382,13 +2382,167 @@
                 </div>
 
                 <div id="btnsEnvelopes" class="btnsActions_ col-4">
-                    <button class="btnActions" id="btnEnvelopesSearch" onclick="fnSearchEnvelopes()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    <button class="btnActions" id="btnEnvelopesNew" onclick="fnAddEnvelopes()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button>
+                    @* <button class="btnActions" id="btnEnvelopesSearch" onclick="fnSearchEnvelopes()" data-title="Buscar registro"><i class="fa-solid fa-magnifying-glass"></i></button> *@
+                    @* <button class="btnActions" id="btnEnvelopesNew" onclick="fnAddEnvelopes()" data-title="Agregar nuevo registro"><i class="fa-solid fa-plus"></i></button> *@
+                    
+                    <button class="Btn observer" id="btnEnvelopesNew" onclick="fnAddEnvelopes()">
+                        <div class="sign">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                        <div class="text">Agregar</div>
+                    </button>
                 </div>
                 <br />
                 <hr />
             </div>
             
+            <!--Tabla de sobres-->
+            <div id="TabEnvelopes" class="container">
+
+                <table class="table bg-white table-striped table-hover table-sortable TableDes"
+                       id="TabEnvelopesT"
+                       data-toggle="table"
+                       data-flat="true"
+                       data-search="true">
+
+                    <thead class="bg-dark text-light">
+                    <th style="display:none;">Id</th>
+                    <th>Nro Sobre</th>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Carrito</th>
+                    <th width="10%">Opciones</th>
+                    </thead>
+                    <tbody id="rowsEnvelopes">
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-2">
+                        <a onclick="fnChangeDataGroupEnvelopes(5)" data-title="Registros por página">5</a>
+                        &nbsp;
+                        <a onclick="fnChangeDataGroupEnvelopes(10)" data-title="Registros por página">10</a>
+                        &nbsp;
+                        <a onclick="fnChangeDataGroupEnvelopes(15)" data-title="Registros por página">15</a>
+                        &nbsp;
+                        <a onclick="fnChangeDataGroupEnvelopes(20)" data-title="Registros por página">20</a>
+                        &nbsp;&nbsp;&nbsp;
+                        <label id="selDataEnvelopesGroup" style="display:none;">5</label>
+                    </div>
+
+                    &nbsp;&nbsp;
+
+                    <div data-title="Cantidad de registros por página" class="col-1">
+                        <input id="EnvelopesNPosition" type="number" value="1"
+                               min="1" max="99" class="numberPosition"
+                               onchange="fnLoadEnvelopes()" />
+                    </div>
+
+                    &nbsp;&nbsp;
+
+                </div>
+
+            </div>
+
+            <!-- Modal sobres -->
+            <div class="modal fade" id="ModalEnvelopes" tabindex="-1" aria-labelledby="ModalEnvelopes1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title"> <i class="fa-solid fa-square-up-right"></i> Nuevo sobre</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-title="Cerrar formulario"></button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <button class="btnActions" id="btnEnvelopeSave" onclick="fnBtnSaveEnvelope()" data-title="Guardar registro"><i class="fa-regular fa-floppy-disk"></i></button>
+                            <button class="btnActions" id="btnEnvelopeClean" onclick="fnCleanEnvelope()" data-title="Limpiar campos"><i class="fa-solid fa-arrows-rotate"></i></button>
+
+                            <div class="ModalInfo">
+                                <div id="EnvelopeIdModal" style="display:none;">
+                                    <label for="TxtIdEnvelope">Id</label>
+                                    <input type="text" class="txtSmall" id="TxtIdEnvelope" value="0" readonly />
+                                </div>
+
+                                <div>
+                                    <label for="DpickerDateEnvelope">Fecha <a style="color:#A52A2A;">*</a></label>
+                                    <input type="date" id="DpickerDateEnvelope" />
+                                </div>
+
+                                <div>
+                                    <label for="DpickerDateRecallEnvelope">Fecha ret <a style="color:#A52A2A;">*</a></label>
+                                    <input type="date" id="DpickerDateRecallEnvelope" />
+                                </div>
+
+                                <div>
+                                    <label for="TxtEnvelopeNum">Sobre Nro <a style="color:#A52A2A;">*</a></label>
+                                    <input type="text" id="TxtEnvelopeNum" value="0" />
+                                </div>
+
+                               @*  <div>
+                                    <label for="TxtEnvelopeUserId">Vendedor <a style="color:#A52A2A;">*</a></label>
+                                    <input type="text" id="TxtEnvelopeUserId" value="0" />
+                                </div> *@
+
+                                <div class="col-md-12">
+                                    <label for="SelectEnvelopeSeller" class="col-4">Vendedor <a style="color:#A52A2A;">*</a></label>
+                                    <input type="text" class="txtMedium col-7" id="SelectEnvelopeSeller" autocomplete="off" placeholder="Vendedor" />
+                                    <label id="lblEnvelopeSeller" style="display:none;"></label>
+                                    <ul id="SearchResultsEnvelopeSeller"></ul>
+                                </div>
+
+                                @* <div class="col-md-12">
+                                    <label for="SelectSaleSeller" class="col-4">Vendedor <a style="color:#A52A2A;">*</a></label>
+                                    <input type="text" class="txtMedium col-7" id="TxtSaleSeller2" autocomplete="off" placeholder="Vendedor" />
+                                    <label id="lblSaleSeller" style="display:none;"></label>
+                                    <ul id="SearchResultsSaleSeller"></ul>
+                                </div> *@
+                                
+                                <div>
+                                    <label for="TxtEnvelopeAmount">Monto <a style="color:#A52A2A;">*</a></label>
+                                    <input type="text" id="TxtEnvelopeAmount" value="0.00" />
+                                </div>
+
+                                <div id="EnvelopeNumCarModal">
+                                    <label for="TxtEnvelopeNumber">
+                                        Número
+                                        <a style="color:#A52A2A;">*</a> &nbsp;
+                                        <i id="lblEnvelopeNumber" class="fa-solid fa-triangle-exclamation" style="color:#A52A2A; display:none;" data-title="Formato del número incorrecto!!!"></i>
+                                        <i id="lblEnvelopeNumberOk" class="fa-regular fa-circle-check" style="color:#27AE60; display:none;" data-title="Formato correcto!"></i>
+                                    </label>
+                                    <input type="text" class="txtMedium" id="TxtEnvelopeNumber"
+                                           placeholder="000-000-000"
+                                           minlength="11" maxlength="11"
+                                           data-title="Inserte 9 números en bloques de 3 divididos por un guión, Ejemplo 000-000-000"
+                                           onblur="lostFocusNumberSale()" />
+                                </div>
+
+                                <div>
+                                    <label for="TxtEnvelopeSeal">Precinto </label>
+                                    <input type="text" id="TxtEnvelopeSeal" value="0.00" />
+                                </div>
+
+                                <div>
+                                    <label for="TxtEnvelopeComment">Observación </label>
+                                    <input type="text" id="TxtEnvelopeComment" value="0.00" />
+                                </div>
+
+                                
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="row">
+                                <h5 class="col-md-4 alignRight">Id2: </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <!--Sección de los sobres (Fin)-->
